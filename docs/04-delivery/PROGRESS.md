@@ -3,7 +3,7 @@
 Claude Code updates this file at the end of every session (`/log`). The user signs gates.
 
 **Current phase:** 2 — UX design
-**Next step:** User reviews `docs/02-design/ux-spec.md` (esp. §8 open questions). Then Phase 2 step 3:
+**Next step:** UX spec §8 decisions agreed (UX-1–UX-7). Phase 2 step 3:
 plan (plan mode) scaffolding Next.js (TypeScript strict, Tailwind, shadcn/ui, ESLint) and clickable
 low-fi prototypes with hardcoded data under `src/app/(prototype)` for S1–S8. Then 2 prototype reviews →
 `docs/02-design/prototype-feedback.md`. Remind the user to book the 2 reviewers.

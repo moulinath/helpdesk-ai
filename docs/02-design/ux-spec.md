@@ -36,7 +36,7 @@ flowchart TD
   C -.later.-> D[S3 Status page via link]
   D -->|no reply yet| D1[Status: Received / In progress]
   D -->|reply sent| E[Reply shown]
-  E --> F[Rate reply: helpful / not helpful]
+  E --> F[Rate reply: 1–5 CSAT]
   D -->|bad or expired link| G[S8 Not found]
 ```
 
@@ -99,7 +99,8 @@ Conventions for every screen:
 ### S1 · Submit ticket — US-01 · core
 - **Purpose:** let Sofia report a problem in under 2 minutes, on a phone.
 - **Route:** `/` (or `/support`).
-- **Content:** heading "Contact support", one-line intro, then the form:
+- **Content:** "Larkfield Goods" wordmark (text, teal accent; fictional brand, UX-6), heading "Contact
+  support", one-line intro, then the form:
   - **Name**, required.
   - **Email**, required, with the hint "We'll only use this to tell you about this request".
   - **Subject**, 5–120 characters.
@@ -175,12 +176,13 @@ Conventions for every screen:
     only by colour.
   - Her original description, collapsible.
   - **The reply**, once sent: agent first name, date, and the body.
-  - **Rating**, after the reply (US-10): "Did this answer help?" with **Yes / No** buttons and an
-    optional comment (≤ 500 characters). Once rated: "Thanks for your feedback" plus the rating she
-    gave.
+  - **Rating**, after the reply (US-10): "How satisfied are you with this reply?" on a **1–5 CSAT
+    scale** (radio group, 1 = Very dissatisfied … 5 = Very satisfied, every point labelled in text)
+    and an optional comment (≤ 500 characters). Once rated: "Thanks for your feedback" plus the
+    rating she gave.
 - **Never shown:** AI labels, priority, sentiment, summary, unapproved drafts (US-07 AC2).
-- **Components:** `Card`, a custom stepper (`ol` with `aria-current="step"`), `Button`, `Textarea`,
-  `Collapsible`.
+- **Components:** `Card`, a custom stepper (`ol` with `aria-current="step"`), `RadioGroup`, `Button`,
+  `Textarea`, `Collapsible`.
 
 ```
 ┌───────────────────────────────┐
@@ -196,8 +198,10 @@ Conventions for every screen:
 │ Reply from Daniel · 30 Oct    │
 │ Hi Sofia, …                   │
 │                               │
-│ Did this answer help?         │
-│ [ Yes ] [ No ]                │
+│ How satisfied are you with    │
+│ this reply?                   │
+│ (1) (2) (3) (4) (5)           │
+│ Very dissatisfied … Very sat. │
 │ Comment (optional) [_______]  │
 └───────────────────────────────┘
 ```
@@ -208,7 +212,7 @@ Conventions for every screen:
 | Empty (no reply yet) | "No reply yet. We'll post it here as soon as an agent has replied." |
 | Error (invalid/expired link) | S8 Not found |
 | Error (rating failed) | "We couldn't save your rating. Please try again." Selection kept |
-| Already rated | Buttons replaced by the recorded rating; no second rating (US-10 AC2) |
+| Already rated | Scale replaced by the recorded rating; no second rating (US-10 AC2) |
 
 ### S4 · Agent sign-in — US-12 · supporting
 - **Content:** "Agent sign-in", email and password fields, a **Sign in** button. Demo credentials are
@@ -234,8 +238,10 @@ Conventions for every screen:
   - AI state, under the priority: **AI · unconfirmed** or **✓ Confirmed (Amara)**.
   - Low confidence: **⚠ Low confidence**.
   - Needs triage: **AI unavailable**, with priority shown as **High (default)**.
-- **Refresh:** a manual **Refresh** button, plus a polite notice "3 new tickets. Refresh to see them"
-  (assumed: checked every 30 s). The list never re-orders under the cursor.
+- **Refresh (UX-3, hybrid):** the app checks every 30 s. New tickets show a polite notice "3 new
+  tickets · Refresh". A new **Urgent** ticket shows a prominent amber notice "1 new urgent ticket ·
+  Refresh" (text and icon, announced with `aria-live="assertive"`). The list never re-orders until
+  the agent clicks Refresh.
 - **Components:** `Table`, `Badge`, `Tabs`, `Button`, `Tooltip`.
 
 ```
@@ -265,8 +271,8 @@ Conventions for every screen:
   losing control.
 - **Route:** `/agent/tickets/[ref]`.
 - **Layout (desktop two-column):**
-  - **Left, the ticket:** reference, subject, received time, customer first name (no email shown by
-    default; "Show contact" reveals it), **summary block** for long tickets ("AI summary · check the
+  - **Left, the ticket:** reference, subject, received time, customer first name (full name and email hidden by
+    default; **Show contact** reveals them and logs who revealed them and when, UX-5), **summary block** for long tickets ("AI summary · check the
     full message"), and the **full message**, always visible.
   - **Right, the triage panel:**
     - **Category** select · **Priority** select · **Sentiment** (read-only), each with the AI value
@@ -288,8 +294,9 @@ Conventions for every screen:
   - Non-English: "**Non-English ticket:** no draft generated. Reply manually."
   - No FAQ match: "**No FAQ match:** write a personal reply." The editor starts empty.
 - **Approve flow:** a confirmation step for the send ("Send this reply to the customer?") with the
-  final text shown. After sending: a toast "Reply sent · HD-24817", and the next ticket in the queue
-  opens (assumed; or back to the queue, to be checked in the prototype review).
+  final text shown. After sending: **back to the queue** with a toast "Reply sent · HD-24817" (UX-4).
+  Rationale (product owner): "agents need at least a split-second to recoup". It also shows any new
+  urgent ticket before the agent picks the next one.
 - **Components:** `Select`, `Badge`, `Collapsible`, `Textarea` (or a simple rich-text field), `Button`,
   `AlertDialog`, `Sheet`, `Alert`, `Toast`.
 
@@ -321,7 +328,7 @@ Conventions for every screen:
 | Needs triage / non-English / no FAQ match | Banners above |
 | Error (send failed) | "Reply not sent. Please try again." Text kept; ticket status unchanged |
 | Error (approve empty) | "Write a reply before sending" (US-06 AC5) |
-| Already replied | Read-only view: sent reply, who sent it, edit level, label history |
+| Already replied | Read-only view: sent reply, who sent it, edit level, label history, contact reveals |
 
 ### S7 · Team-lead dashboard — US-08 · supporting
 - **Route:** `/agent/dashboard` (lead role only; agents get 403 with a link back to the queue).
@@ -332,7 +339,8 @@ Conventions for every screen:
   3. **Draft outcome:** approved unchanged / minor edit / major edit / unused (bar, %).
   4. **Override rate** by category (table), with links to the tickets.
   5. **Median time** to acknowledgement and to first reply (stat tiles).
-  6. **Needs triage** count · **Product feedback** count · **Helpful rating %** (stat tiles).
+  6. **Needs triage** count · **Product feedback** count · **CSAT**: average score and % rating 4–5
+     (stat tiles).
 - **Empty:** each widget shows "No tickets in this period", never zero-filled charts (US-08 AC4).
 - **Error:** per-widget error with retry; other widgets still render.
 
@@ -348,12 +356,12 @@ Conventions for every screen:
 | --- | --- | --- | --- |
 | **AI badge** | Text badge "AI-suggested", neutral colour, never alarming | Every AI value (S5, S6) | US-03, US-04 |
 | **Confirmation state** | "AI · unconfirmed" → "✓ Confirmed by <name>" after confirm or override | S5, S6 | US-05, US-06 |
-| **Confidence** | Shown as a **word**: High / Medium / Low confidence. The exact % is in a tooltip and in the "Why?" panel. Bands are **assumed** at High ≥ 0.85, Medium 0.6–0.85, Low < 0.6; set in Phase 3 and tuned in `/eval` | S5 (Low only), S6 (all) | US-03, US-05 |
+| **Confidence** | Shown as a **word**: High / Medium / Low confidence. The exact % is in a tooltip and in the "Why?" panel. Bands (agreed, UX-1): High ≥ 0.85, Medium 0.60–0.85, Low < 0.60; recalibrated after `/eval` | S5 (Low only), S6 (all) | US-03, US-05 |
 | **"Why?"** | Collapsible with the one-line reason; for drafts, the cited FAQ entries | S6 | US-03, US-04 |
 | **One-click override** | AI value pre-selected in an editable `Select`; changing it is an override; one **Confirm labels** button when the AI is right | S6 | US-06 |
 | **Low-confidence banner** | Amber `Alert` with text and icon; asks for a full read | S5 (badge), S6 (banner) | US-05 AC3 |
 | **AI unavailable** | Grey badge "AI unavailable"; priority shows "High (default)"; banner on S6 | S5, S6 | US-09 |
-| **Summary block** | Boxed, labelled "AI summary · check the full message"; full text always below | S5 (one line), S6 | US-03 AC2 |
+| **Summary block** | Shown when the description is **> 125 words** (UX-2); boxed, labelled "AI summary · check the full message"; full text always below | S5 (one line), S6 | US-03 AC2 |
 | **Draft label and sources** | "AI-suggested draft" plus FAQ source chips; "No FAQ match" when empty | S6 | US-04 |
 | **Edit level** | Recorded silently on approval (none / minor / major); shown only afterwards, in the read-only view and the dashboard, so it doesn't nudge agents to approve drafts unchanged (RAID R10) | S6 (read-only), S7 | US-06 |
 | **Send confirmation** | `AlertDialog` showing the final text before sending | S6 | US-06 AC2 |
@@ -374,13 +382,15 @@ Customers never see the words "AI", "model" or "triage".
 | Link warning | "Anyone with this link can see your request. Don't share it." |
 | Status names | Received · In progress · Replied |
 | Status page: no reply yet | "No reply yet. We'll post it here as soon as an agent has replied." |
-| Rating prompt | "Did this answer help?" |
+| Rating prompt | "How satisfied are you with this reply?" (1 Very dissatisfied · 2 Dissatisfied · 3 Neutral · 4 Satisfied · 5 Very satisfied) |
 | Rating thanks | "Thanks for your feedback." |
 | Agent: AI unavailable | "AI unavailable: set the category and priority yourself. No draft was generated." |
 | Agent: low confidence | "Low confidence: the AI wasn't sure about this one. Read the full message before confirming." |
 | Agent: no FAQ match | "No FAQ match: write a personal reply." |
 | Agent: KB no answer | "Not in the knowledge base. Check with your team lead." |
 | Agent: empty queue | "No open tickets. Nice work." |
+| Agent: new tickets | "{n} new tickets · Refresh" / "{n} new urgent ticket(s) · Refresh" |
+| Agent: reply sent | "Reply sent · {ref}" |
 | Agent: send confirm | "Send this reply to the customer? They'll see it on their status page." |
 | Not found | "We can't find that page. If you're looking for a support request, use the link from your confirmation." |
 
@@ -412,14 +422,14 @@ Customers never see the words "AI", "model" or "triage".
 | S1–S3, S8 (customer) | **Mobile-first**, 360 px and up | Single column; full-width buttons; the private link wraps and the copy button stays reachable |
 | S4–S7 (agent/lead) | **Desktop**, ≥ 1024 px; works at tablet width (768 px) | S6 two-column → stacked below 1024 px (ticket, triage, reply); S5 table → hides the Sentiment and Age columns below 768 px; S7 widgets in a 2-column grid → 1 column |
 
-## 8. Open questions and assumptions
+## 8. Decisions (agreed with the product owner, 2026-10-30)
 
-| # | Item | Proposal | Status |
+| # | Item | Decision | Status |
 | --- | --- | --- | --- |
-| UX-1 | Confidence word bands | High ≥ 0.85 · Medium 0.6–0.85 · Low < 0.6 | Assumed; set in Phase 3, tuned in `/eval` |
-| UX-2 | Long-ticket summary threshold | Description > ~150 words | Assumed; check in prototype review |
-| UX-3 | Queue refresh | Manual refresh + "n new tickets" notice, checked every 30 s | Assumed |
-| UX-4 | After sending a reply | Open the next ticket in the queue (vs return to the queue) | Ask the prototype reviewers |
-| UX-5 | Customer contact details on S6 | Hidden behind "Show contact" (data minimisation) | Assumed |
-| UX-6 | Visual style | shadcn/ui defaults, neutral palette; priority colours red/amber/grey, always with text | Assumed; refined after prototypes |
-| UX-7 | Rating scale | Yes/No + optional comment (simplest; matches US-10) | Assumed |
+| UX-1 | Confidence word bands | High ≥ 0.85 · Medium 0.60–0.85 · Low < 0.60 | Agreed; recalibrate after `/eval` (models tend to be overconfident) |
+| UX-2 | Long-ticket summary threshold | Shown when the description is **> 125 words** (PO's number) | Agreed; prototype shows tickets at ~110 and ~140 words |
+| UX-3 | Queue refresh | **Hybrid:** check every 30 s; polite "n new tickets" notice; prominent, announced notice for new Urgent tickets; rows never move without the agent's click | Agreed |
+| UX-4 | After sending a reply | **Back to the queue** with a toast. PO: "agents need at least a split-second to recoup" | Agreed; reviewers' expectation noted in prototype review |
+| UX-5 | Customer contact details on S6 | Hidden behind **Show contact**; each reveal logged (who, when) | Agreed |
+| UX-6 | Visual style | shadcn/ui defaults, light mode only; light brand on customer screens: fictional **"Larkfield Goods"**, teal accent (contrast-checked). Dark mode on roadmap | Agreed; brand name changeable |
+| UX-7 | Rating scale | **1–5 CSAT** ("How satisfied are you with this reply?") + optional comment. Chosen by PO over the proposed Yes/No | Agreed; US-10 and US-08 updated |

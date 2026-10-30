@@ -108,7 +108,7 @@ handling is a pass/fail guardrail, not a goal to improve.
 | Guardrail | Urgent tickets missed by the AI | n/a | 0 | playbook | **Measured**: `/eval` |
 | Counter-metric | Sampled approved replies that are correct and policy-consistent | n/a | ≥ 90% | product owner | **Measured**: lead/PO review of a sample |
 | CX | Customer Effort Score ("How easy was it to get your issue handled?", 1–7) | n/a | set at UAT planning | — | **Measured in UAT** |
-| CX | Customer reply rating (US-10) | n/a | set at UAT planning | — | **Measured** in-product |
+| CX | Customer reply rating, 1–5 CSAT (US-10) | n/a | set at UAT planning | — | **Measured** in-product |
 
 **Why the counter-metric exists:** fast handling and high approval rates are also what rubber-stamping
 looks like (automation bias, RAID R10). Reviewing a sample of approved replies for correctness checks
@@ -163,7 +163,7 @@ Personas: **Sofia Martínez** (customer), **Daniel Kim** (new agent, primary), *
 1. Suggest a **category** (7), **priority** (Urgent/High/Normal) and **sentiment** for each ticket, each
    with a confidence level and a one-line reason.
 2. **Flag likely-urgent tickets** so they rise to the top of the queue.
-3. **Summarise long tickets** in 25 words or fewer (when the description is over ~150 words, assumed),
+3. **Summarise long tickets** in 25 words or fewer (when the description is over 125 words, agreed at UX review),
    labelled AI-suggested, with the full text always visible.
 4. **Draft a reply grounded only in the FAQ**, citing the FAQ entry used.
 5. **Answer agents' questions from the FAQ** (US-11, Could), citing the entry, or say "not in the

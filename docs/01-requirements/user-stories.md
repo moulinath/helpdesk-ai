@@ -65,7 +65,7 @@ sentiment and, for long tickets, a summary **so that** I spend my time on replie
 - **AC1:** **Given** a ticket is saved, **when** triage runs, **then** only the subject and description
   are sent to the model (never name or email), and the result has: a category (one of 7), a priority
   (Urgent/High/Normal), sentiment, a confidence for each, and a one-line reason.
-- **AC2:** **Given** a description over ~150 words (assumed), **then** triage also returns a summary of
+- **AC2:** **Given** a description over 125 words (agreed at UX review, UX-2), **then** triage also returns a summary of
   25 words or fewer, labelled "AI-suggested", and the full text stays visible to the agent.
 - **AC3 ⚠:** **Given** the model's response fails schema validation, **then** nothing from it is saved
   and the ticket follows US-09.
@@ -167,7 +167,7 @@ whether urgent issues are handled and whether the AI is helping.
 - **AC2:** **Given** replied tickets, **then** I see the share of drafts approved unchanged / minor edit
   / major edit / unused, and the label override rate by category.
 - **AC3:** **Given** tickets, **then** I see median time to acknowledgement and to first reply, and the
-  count of "Needs triage" and "Product feedback" tickets.
+  count of "Needs triage" and "Product feedback" tickets, and CSAT (average and % 4–5) once US-10 exists.
 - **AC4 ⚠:** **Given** a period with no data, **then** each widget shows an empty state, not zero-filled
   charts that look like real data.
 - **AC5:** **Given** charts, **then** each has a text or table alternative (WCAG 2.2 AA).
@@ -175,10 +175,12 @@ whether urgent issues are handled and whether the AI is helping.
 ## US-10 · Customer rates reply — Should · Sprint 2 *(promoted from Could at interview)*
 **As** Sofia, **I want** to rate the reply I received **so that** the retailer knows whether it helped.
 
-- **AC1:** **Given** a reply on my status page, **then** I can rate it once (helpful / not helpful) and
-  optionally add a comment of up to 500 characters.
+- **AC1:** **Given** a reply on my status page, **then** I can rate it once on a 1–5 CSAT scale ("How
+  satisfied are you with this reply?", every point labelled) and optionally add a comment of up to 500
+  characters. *(Changed from helpful / not helpful at UX review, 2026-10-30, PO decision UX-7.)*
 - **AC2 ⚠:** **Given** I've already rated, **then** I can't rate again, and I see my earlier rating.
-- **AC3:** **Given** ratings exist, **then** the dashboard (US-08) shows the helpful rate.
+- **AC3:** **Given** ratings exist, **then** the dashboard (US-08) shows the average CSAT and the % of
+  ratings that are 4 or 5.
 
 ## US-11 · Ask the knowledge base (agent-only) — Could · Sprint 2 *(added at interview)*
 **As** Daniel, **I want** to ask a policy question in plain language **so that** I get the answer from

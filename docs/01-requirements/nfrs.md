@@ -30,5 +30,5 @@ Sources:
 - **NFR-16 reads together with the BRD counter-metric:** at least 90% of sampled approved replies are
   correct. Accuracy alone isn't treated as proof of value.
 - **Thresholds set in Phase 3:** the low-confidence threshold, the edit-size thresholds (none / minor /
-  major), and the long-ticket summary threshold (~150 words, assumed).
+  major), (the long-ticket summary threshold is now fixed at 125 words, UX-2).
 - **The public demo needs NFR-12 before it goes live** (release checklist, Phase 7).
