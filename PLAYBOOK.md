@@ -34,8 +34,9 @@ code the user doesn't understand; over-claiming AI's role in the CV; customer da
    agents spend ~4 min reading/routing each ticket; urgent issues share the queue with routine ones;
    customers wait hours for acknowledgement. Label all such figures "assumed".
 2. Write `docs/01-requirements/BRD.md`.
-3. Write `personas.md`: Priya (customer), Arjun (support agent), Meera (team lead), each with a
-   current-vs-future journey.
+3. Write `personas.md`: Sofia Martínez (customer), Daniel Kim (new agent, primary), Amara Okafor
+   (experienced agent), Priya Shah (team lead), each with a current-vs-future journey. (Names changed
+   at the PO's request in the BA interview, 2026-10-30.)
 4. Write `user-stories.md`: INVEST stories, Given/When/Then acceptance criteria, MoSCoW priority.
    Starting backlog: US-01 to US-10 as listed in `PROGRESS.md`.
 5. Write `nfrs.md`: triage p95 < 5 s; submit < 1 s; WCAG 2.2 AA; only ticket text sent to AI; AI output
