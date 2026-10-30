@@ -3,10 +3,12 @@
 Claude Code updates this file at the end of every session (`/log`). The user signs gates.
 
 **Current phase:** 2 — UX design
-**Next step:** UX spec §8 decisions agreed (UX-1–UX-7). Phase 2 step 3:
-plan (plan mode) scaffolding Next.js (TypeScript strict, Tailwind, shadcn/ui, ESLint) and clickable
-low-fi prototypes with hardcoded data under `src/app/(prototype)` for S1–S8. Then 2 prototype reviews →
-`docs/02-design/prototype-feedback.md`. Remind the user to book the 2 reviewers.
+**Next step:** Phase 2 step 3. Run `/next`, then in plan mode propose scaffolding the Next.js app
+(App Router, TypeScript strict, Tailwind, shadcn/ui, ESLint) at the repo root on a branch, and clickable
+low-fi prototypes with hardcoded data under `src/app/(prototype)` for screens S1–S8 per
+`docs/02-design/ux-spec.md` (incl. §8 decisions UX-1–UX-7, "Larkfield Goods" teal brand, sample
+tickets at ~110 and ~140 words). Then check the prototypes with the `ux-accessibility-reviewer`
+subagent and run 2 prototype reviews → `docs/02-design/prototype-feedback.md`.
 **Blocked on:** nothing
 
 | Phase | Status | Gate | Signed off by user |
@@ -39,6 +41,7 @@ low-fi prototypes with hardcoded data under `src/app/(prototype)` for S1–S8. T
 
 ## Open decisions for the user
 - Book 2 prototype reviewers and 4–6 UAT participants now (2-week target, RAID R11).
+- Glance at the 4 Mermaid flows in `docs/02-design/ux-spec.md` on GitHub to confirm they render.
 - Before Phase 4 (~day 5–6): confirm the Anthropic API key is created with a spend limit (RAID I1/D1).
 - Start of Phase 4 (before CI): make the repo public after a full-history secret scan and enabling
   GitHub secret scanning (free Actions minutes + branch protection). Agreed in principle 2026-10-30.

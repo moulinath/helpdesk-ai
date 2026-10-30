@@ -67,3 +67,30 @@ and governed. Claude Code appends entries via `/log`; the user can edit them.
   - A traceability row first pointed US-01's rate limit at the wrong NFR; fixed before commit.
 - **Standup:** done Phase 1 + Gate 1 / next: Phase 2 UX spec / blocked: none (book prototype
   reviewers; API key needed ~day 5–6)
+
+### 2026-10-30 · Phase 2 · UX spec and UX decisions
+- **Asked:** plan and write the UX spec; then go through the open UX questions one at a time; wrap up.
+- **Produced:** `docs/02-design/ux-spec.md`:
+  - 5 testable CX principles and 4 Mermaid flows.
+  - 8 screens (S1–S8), each with a low-fi wireframe and loading, empty and error states.
+  - AI trust-cue table, microcopy, WCAG 2.2 AA notes, responsive rules.
+  - §8 decisions UX-1 to UX-7.
+
+  Carried the decisions into `user-stories.md` (US-03, US-08, US-10), `BRD.md` and `nfrs.md`.
+- **Human changes / corrections:**
+  - Summary threshold set to 125 words (BA proposed ~150).
+  - Rating changed to 1–5 CSAT over the BA's recommended Yes/No. US-10 AC1/AC3 and US-08 AC3 updated
+    and annotated as a post-Gate-1 change.
+  - Chose back-to-queue after sending, with a wellbeing rationale ("agents need at least a split-second
+    to recoup").
+  - Accepted: hybrid queue refresh, logged contact reveal, defaults plus light brand, the confidence
+    bands.
+- **What went wrong / caught:**
+  - The BA suggested "Northwind" as the fictional brand. That's Microsoft's well-known sample company,
+    so the BA corrected itself and replaced it with "Larkfield Goods".
+  - The first pass of decision edits left a stale "helpful / not helpful" label in a flow diagram and
+    "~150 words" in three requirements docs. Caught by a grep and fixed.
+  - The NFR threshold note was garbled by a sed replacement and tidied in a follow-up commit.
+  - Mermaid rendering on GitHub not yet visually checked.
+- **Standup:** done UX spec + decisions / next: plan Next.js scaffold + clickable prototypes / blocked:
+  none (prototype reviewers still to book)
