@@ -3,16 +3,17 @@
 Claude Code updates this file at the end of every session (`/log`). The user signs gates.
 
 **Current phase:** 2 — UX design
-**Next step:** Phase 2 step 1: run `/next`, plan (plan mode) and write `docs/02-design/ux-spec.md`
-(customer + agent flows, 4 screens, empty/loading/error states, AI trust cues) from the Gate 1
-requirements. Remind the user to book 2 prototype reviewers.
+**Next step:** User reviews `docs/02-design/ux-spec.md` (esp. §8 open questions). Then Phase 2 step 3:
+plan (plan mode) scaffolding Next.js (TypeScript strict, Tailwind, shadcn/ui, ESLint) and clickable
+low-fi prototypes with hardcoded data under `src/app/(prototype)` for S1–S8. Then 2 prototype reviews →
+`docs/02-design/prototype-feedback.md`. Remind the user to book the 2 reviewers.
 **Blocked on:** nothing
 
 | Phase | Status | Gate | Signed off by user |
 | --- | --- | --- | --- |
 | 0 Setup | Done | Repo, CLAUDE.md, CI skeleton (deferred to Phase 4) | 2026-10-30, with risks R7, R8 |
 | 1 Requirements | Done | Gate 1: MVP scope + stories with acceptance criteria | 2026-10-30, approved |
-| 2 UX design | Not started (next) | Gate 2: UX spec + prototype feedback applied | — |
+| 2 UX design | In progress (spec drafted) | Gate 2: UX spec + prototype feedback applied | — |
 | 3 Architecture | Not started | Gate 3: architecture + 5 ADRs reviewed | — |
 | 4 Build (Sprint 1) | Not started | Sprint 1 demo | — |
 | 4 Build (Sprint 2) | Not started | Sprint 2 demo | — |
