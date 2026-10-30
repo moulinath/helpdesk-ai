@@ -35,3 +35,5 @@ Claude Code updates this file at the end of every session (`/log`). The user sig
 
 ## Open decisions for the user
 - Before Phase 4: confirm the Anthropic API key is created with a spend limit (RAID I1/D1).
+- Start of Phase 4 (before CI): make the repo public after a full-history secret scan and enabling
+  GitHub secret scanning (free Actions minutes + branch protection). Agreed in principle 2026-10-30.
