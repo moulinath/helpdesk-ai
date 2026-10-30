@@ -2,14 +2,14 @@
 
 Claude Code updates this file at the end of every session (`/log`). The user signs gates.
 
-**Current phase:** 0 — Setup
-**Next step:** User signs off Gate 0 (`docs/04-delivery/gates/gate-0.md`). Once signed, start Phase 1:
-the BA interview (10–12 questions, one at a time) with the user as product owner.
+**Current phase:** 1 — Requirements
+**Next step:** Phase 1 step 1: run `/next`, plan the BA interview in plan mode, then interview the user
+(10–12 questions, one at a time) as product owner for the fictional mid-size online retailer.
 **Blocked on:** nothing
 
 | Phase | Status | Gate | Signed off by user |
 | --- | --- | --- | --- |
-| 0 Setup | Gate prepared | Repo, CLAUDE.md, CI skeleton | — |
+| 0 Setup | Done | Repo, CLAUDE.md, CI skeleton (deferred to Phase 4) | 2026-10-30, with risks R7, R8 |
 | 1 Requirements | Not started | Gate 1: MVP scope + stories with acceptance criteria | — |
 | 2 UX design | Not started | Gate 2: UX spec + prototype feedback applied | — |
 | 3 Architecture | Not started | Gate 3: architecture + 5 ADRs reviewed | — |
@@ -34,6 +34,4 @@ the BA interview (10–12 questions, one at a time) with the user as product own
 | US-10 Customer rates reply (Could) | Not started | |
 
 ## Open decisions for the user
-- Gate 0: approve, approve with risks, or reject (see `gates/gate-0.md`).
-- Gate 0 lists "CI skeleton" but the playbook builds CI in Phase 4 — accept the deferral?
 - Before Phase 4: confirm the Anthropic API key is created with a spend limit (RAID I1/D1).

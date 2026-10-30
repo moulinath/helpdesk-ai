@@ -18,7 +18,7 @@ Prepared by Claude Code on 2026-10-30. Criteria from `PLAYBOOK.md` (Phase 0) and
 - No CI until Phase 4; Phases 1–3 are docs and prototypes only, so the exposure is low.
 
 ## Decision
-- [ ] Approve  - [ ] Approve with risks (as above)  - [ ] Reject
+- [ ] Approve  - [x] Approve with risks (as above)  - [ ] Reject
 
-**Decision:**
-**Date:**
+**Decision:** Approved with risks by the user (product owner). API key and CI skeleton deferred to Phase 4; risks logged as R7 and R8.
+**Date:** 2026-10-30

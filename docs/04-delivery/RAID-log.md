@@ -10,6 +10,7 @@
 | R5 | Over-claiming AI's role in CV | L | H | Dev log records who did what | User | Open |
 | R6 | Customer PII in prompts | L | H | Only ticket text sent; fictional demo data | Claude Code | Open |
 | R7 | API key still unavailable when Phase 4 starts, blocking US-03/US-04 and the AI eval | L | H | AI client behind an interface with a mock; "Needs triage" fallback (US-09) lets Sprint 1 proceed without a live key | Claude Code | Open |
+| R8 | No CI until Phase 4 (accepted at Gate 0); a regression in early scaffolding goes unnoticed | L | L | Phases 1–3 are docs and prototypes; CI is the first Phase 4 task, before any story | Claude Code | Accepted |
 
 ## Assumptions
 | ID | Assumption | Validated? |

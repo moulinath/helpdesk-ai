@@ -36,3 +36,12 @@ and governed. Claude Code appends entries via `/log`; the user can edit them.
   flagged in the gate pack for the user to decide.
 - **Standup:** done Phase 0 setup / next: Gate 0 sign-off, then Phase 1 BA interview / blocked: none
   (API key needed only from Phase 4)
+
+### 2026-10-30 · Phase 0 · Gate 0 signed
+- **Asked:** sign off Gate 0.
+- **Produced:** recorded the decision in `gates/gate-0.md`; added R8 (no CI until Phase 4, accepted);
+  moved `PROGRESS.md` to Phase 1.
+- **Human changes / corrections:** user approved with risks and accepted deferring both the API key and
+  the CI skeleton to Phase 4.
+- **What went wrong:** n/a
+- **Standup:** done Gate 0 / next: Phase 1 BA interview / blocked: none
