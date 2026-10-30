@@ -3,15 +3,15 @@
 Claude Code updates this file at the end of every session (`/log`). The user signs gates.
 
 **Current phase:** 1 — Requirements
-**Next step:** Phase 1 steps 2–5: plan (plan mode) and then write `BRD.md`, `personas.md`,
-`user-stories.md` (US-01–US-11; US-10 now Should, US-11 "Ask the KB" Could) and `nfrs.md` in
-`docs/01-requirements/`, all from `interview-notes.md`. Then `/gate` for Gate 1.
+**Next step:** User signs off Gate 1 (`docs/04-delivery/gates/gate-1.md`). On approval: update the
+CLAUDE.md MVP scope and PLAYBOOK sprint lists (US-10 Should, US-11 Could, US-12 Must), then start
+Phase 2 (UX spec) with `/next`.
 **Blocked on:** nothing
 
 | Phase | Status | Gate | Signed off by user |
 | --- | --- | --- | --- |
 | 0 Setup | Done | Repo, CLAUDE.md, CI skeleton (deferred to Phase 4) | 2026-10-30, with risks R7, R8 |
-| 1 Requirements | In progress (interview done) | Gate 1: MVP scope + stories with acceptance criteria | — |
+| 1 Requirements | Gate prepared | Gate 1: MVP scope + stories with acceptance criteria | — |
 | 2 UX design | Not started | Gate 2: UX spec + prototype feedback applied | — |
 | 3 Architecture | Not started | Gate 3: architecture + 5 ADRs reviewed | — |
 | 4 Build (Sprint 1) | Not started | Sprint 1 demo | — |
@@ -34,6 +34,7 @@ Claude Code updates this file at the end of every session (`/log`). The user sig
 | US-09 AI fallback "Needs triage" | Not started | |
 | US-10 Customer rates reply (Should, promoted at interview) | Not started | |
 | US-11 Ask the knowledge base, agent-only (Could) | Not started | |
+| US-12 Agent sign-in (Must, proposed at Gate 1) | Not started | |
 
 ## Open decisions for the user
 - Book 2 prototype reviewers and 4–6 UAT participants now (2-week target, RAID R11).
