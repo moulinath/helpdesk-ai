@@ -40,7 +40,7 @@ Prepared by Claude Code on 2026-10-30. Criteria from `PLAYBOOK.md` (Phase 1).
 2. Mark Gate 1 signed in `PROGRESS.md`, move to Phase 2, and add a dev-log entry.
 
 ## Decision
-- [ ] Approve  - [ ] Approve with risks / changes  - [ ] Reject
+- [x] Approve  - [ ] Approve with risks / changes  - [ ] Reject
 
-**Decision:**
-**Date:**
+**Decision:** Approved by the user (product owner), including US-12 and the new story assumptions (RAID A5). MVP scope frozen.
+**Date:** 2026-10-30

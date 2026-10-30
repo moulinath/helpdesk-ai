@@ -24,6 +24,7 @@
 | A2 | The FAQ is fixed and correct for the MVP; nobody edits it in-app | Yes (PO, interview Q6) |
 | A3 | Operation size: ~300 tickets/day, 8 agents, 1 lead; ~4 min to read/route a ticket (all assumed) | No (assumed figures) |
 | A4 | English-only MVP; non-English tickets go to a human with no AI draft | Yes (PO, interview Q11) |
+| A5 | Story-level values: field limits, 5 tickets/10 min/IP rate limit, ≥ 128-bit status token, "Needs triage" treated as High, browser support (NFR-17) | Accepted by PO at Gate 1; values still assumed, not measured |
 
 ## Issues
 | ID | Issue | Raised | Owner | Status |

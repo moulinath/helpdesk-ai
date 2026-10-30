@@ -25,9 +25,13 @@ a small dashboard. Every AI decision is visible, overridable and logged. AI neve
 customer without human approval.
 
 ## MVP scope (frozen at Gate 1 — changes need the user's explicit approval)
-- In: ticket submission, AI triage + draft reply, agent queue with approve/edit, customer status page,
-  agent auth, team-lead dashboard, AI fallback ("Needs triage").
-- Out (roadmap only): email ingestion, SLA engine, multi-tenancy, payments, mobile apps.
+- In (Must): ticket submission, AI triage (incl. long-ticket summary) + FAQ-grounded draft reply, agent
+  queue with approve/edit, customer status page, agent sign-in (US-12), team-lead dashboard, AI fallback
+  ("Needs triage").
+- Should: customer rates reply (US-10). Could: agent-only "Ask the knowledge base" (US-11).
+- Out (roadmap only): email ingestion, SLA engine, multi-tenancy, payments, mobile apps, in-app FAQ
+  editing, product-feedback routing, customer-facing chatbot, suggested answers on the submit form.
+- Source of truth for scope: `docs/01-requirements/BRD.md` §6–7 (Gate 1, 2026-10-30).
 
 ## Tech stack
 - Next.js (App Router) + TypeScript (strict)

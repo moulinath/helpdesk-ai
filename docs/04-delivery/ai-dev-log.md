@@ -45,3 +45,25 @@ and governed. Claude Code appends entries via `/log`; the user can edit them.
   the CI skeleton to Phase 4.
 - **What went wrong:** n/a
 - **Standup:** done Gate 0 / next: Phase 1 BA interview / blocked: none
+
+### 2026-10-30 · Phase 1 · BA interview, requirements, Gate 1 signed
+- **Asked:** run the BA interview; write the BRD, personas, user stories and NFRs; prepare Gate 1.
+- **Produced:** `interview-notes.md` (12 questions, with follow-ups), `BRD.md`, `personas.md`,
+  `user-stories.md` (12 stories, 54 acceptance criteria), `nfrs.md` (17 NFRs), `gates/gate-1.md`; RAID
+  A2–A5, R9–R13; scope and sprint lists updated in `CLAUDE.md` and `PLAYBOOK.md` after sign-off.
+- **Human changes / corrections:**
+  - **Background:** user accepted the BA's assumed figures for operation size and pain points; the BA
+    nudged the user to give their own answers on goals and AI boundaries.
+  - **Answers in the user's own words:** goals; product-feedback category; long-ticket summaries;
+    "AI must not raise or lower priority"; $5 cap; 2-week target; UX/CX worry; the no-go rule.
+  - **Targets:** user raised the new-agent time to ~2 min and draft approval to ≥ 85%, and lowered the
+    proposed quality counter-metric from 95% to 90%.
+  - **Changes the user asked for:** more ethnically diverse persona names; a chatbot (narrowed to an
+    agent-only "Ask the KB" as a Could after BA pushback); US-10 promoted to Should.
+- **What went wrong / caught:**
+  - The user's "AI must not raise priority" conflicted with the priority-sorted queue. The BA surfaced
+    the conflict and the user chose "AI sets the initial priority only".
+  - The original backlog had no story for agent auth, although the charter has it in scope. Added US-12.
+  - A traceability row first pointed US-01's rate limit at the wrong NFR; fixed before commit.
+- **Standup:** done Phase 1 + Gate 1 / next: Phase 2 UX spec / blocked: none (book prototype
+  reviewers; API key needed ~day 5–6)

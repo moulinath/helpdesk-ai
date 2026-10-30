@@ -38,7 +38,7 @@ code the user doesn't understand; over-claiming AI's role in the CV; customer da
    (experienced agent), Priya Shah (team lead), each with a current-vs-future journey. (Names changed
    at the PO's request in the BA interview, 2026-10-30.)
 4. Write `user-stories.md`: INVEST stories, Given/When/Then acceptance criteria, MoSCoW priority.
-   Starting backlog: US-01 to US-10 as listed in `PROGRESS.md`.
+   Starting backlog: US-01 to US-10 as listed in `PROGRESS.md` (US-11 and US-12 added at Gate 1).
 5. Write `nfrs.md`: triage p95 < 5 s; submit < 1 s; WCAG 2.2 AA; only ticket text sent to AI; AI output
    validated before saving; graceful fallback when AI is unavailable.
 
@@ -84,10 +84,11 @@ Use plan mode.
 ## Phase 4 — Build (two sprints of about 4 days)
 
 1. Write `docs/04-delivery/sprint-plan.md`:
-   - Sprint 1: CI pipeline, US-01, US-02, US-03, US-09. Demo: a ticket is submitted, saved, triaged, or
-     safely falls back.
-   - Sprint 2: US-04, US-05, US-06, US-07, US-08 (US-10 if time). Demo: agent approves an AI draft,
-     customer sees reply, lead sees dashboard.
+   - Sprint 1: CI pipeline, US-01, US-02, US-03, US-09, US-12. Demo: a ticket is submitted, saved,
+     triaged, or safely falls back; agents must sign in.
+   - Sprint 2: US-04, US-05, US-06, US-07, US-08, US-10 (Should), US-11 if time (Could). Demo: agent
+     approves an AI draft, customer sees and rates the reply, lead sees dashboard.
+   - (Sprint lists updated at Gate 1, 2026-10-30.)
 2. **CI first:** `.github/workflows/ci.yml` running install, typecheck, lint, Vitest with coverage, Prisma
    migrate against a test database, Playwright against the built app, axe scan. Fail on any error.
 3. Implement each story with `/story US-XX`.
