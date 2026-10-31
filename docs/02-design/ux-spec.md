@@ -2,8 +2,8 @@
 
 | | |
 | --- | --- |
-| Version | 1.0 (draft for Gate 2) |
-| Date | 2026-10-30 |
+| Version | 1.1 (prototype feedback F3–F5 applied, for Gate 2) |
+| Date | 2026-10-31 |
 | Inputs | [BRD](../01-requirements/BRD.md) · [personas](../01-requirements/personas.md) · [user stories](../01-requirements/user-stories.md) · [NFRs](../01-requirements/nfrs.md) |
 | Prototype | Built 2026-10-31: `/prototype` (code in `src/app/(prototype)/prototype`). URL map and review script in [prototype-feedback.md](prototype-feedback.md) |
 
@@ -49,7 +49,7 @@ flowchart TD
   C --> D{AI triage present?}
   D -->|yes| E[Review AI labels + reason]
   D -->|Needs triage| E2[Set category + priority manually]
-  E -->|correct| F[Confirm labels]
+  E -->|correct| F[Mark labels as checked]
   E -->|wrong| G[Override in one click, logged]
   F --> H[Review AI draft + cited FAQ]
   G --> H
@@ -138,8 +138,9 @@ Conventions for every screen:
 - **Purpose:** prove receipt instantly (P1) and give Sofia a way back.
 - **Content:**
   - "Thanks, we've got your request" and the **reference `HD-24817`** in large type.
-  - "Your private link" with a **Copy link** button and a short warning: "Anyone with this link can
-    see your request".
+  - "Your private link", a line saying what it's for ("Use this link to check your request and read
+    our reply. Save it or copy it somewhere safe."), a **Copy link** button and a short warning:
+    "Anyone with this link can see your request, so keep it private." (F4)
   - **What happens next:** "An agent will review your request and reply here. You can check the
     status at any time using your link."
   - Nothing about AI and no time promise.
@@ -152,6 +153,8 @@ Conventions for every screen:
 │   Reference  HD-24817         │
 │                               │
 │ Your private link             │
+│ Use this link to check your   │
+│ request and read our reply.   │
 │ [https://…/t/9fK2…] [Copy]    │
 │ ⓘ Anyone with this link can   │
 │   see your request.           │
@@ -235,7 +238,7 @@ Conventions for every screen:
   is fixed for the MVP, so there are no sort controls to misuse.
 - **Badges:**
   - Priority badge: text plus icon plus colour, e.g. `▲ Urgent`, never colour alone.
-  - AI state, under the priority: **AI · unconfirmed** or **✓ Confirmed by Amara**.
+  - AI state, under the priority: **AI suggestion · not checked** or **✓ Checked by Amara** (F5).
   - Low confidence: **⚠ Low confidence**.
   - Needs triage: **AI unavailable**, with priority shown as **High (default)**.
 - **Refresh (UX-3, hybrid):** the app checks every 30 s. New tickets show a polite notice "3 new
@@ -278,8 +281,8 @@ Conventions for every screen:
     - **Category** select · **Priority** select · **Sentiment** (read-only), each with the AI value
       pre-selected and labelled **AI-suggested · High/Medium/Low confidence** (§4).
     - **Why?** disclosure with the one-line reason.
-    - **Confirm labels** button: one click when the AI is right. Changing a select counts as an
-      override; on save it's logged and the badge becomes "Confirmed by Daniel".
+    - **Mark labels as checked** button: one click when the AI is right. Changing a select counts as
+      an override; on save it's logged and the badge becomes "Checked by Daniel".
   - **Below, the reply:**
     - **Draft editor** pre-filled with the AI draft, labelled **AI-suggested draft**.
     - **Sources:** chips for the cited FAQ entries; clicking one opens the entry in a side sheet.
@@ -309,7 +312,7 @@ Conventions for every screen:
 │ │ Charged twice for order 5521.    │ │   AI-suggested · High confidence │
 │ └──────────────────────────────────┘ │ Sentiment  Upset (AI)            │
 │ Full message                         │ ▸ Why? "Two identical charges…"  │
-│ I ordered on Monday and my bank …    │ [ Confirm labels ]               │
+│ I ordered on Monday and my bank …    │ [ Mark labels as checked ]       │
 │ …                                    │                                  │
 ├──────────────────────────────────────┴──────────────────────────────────┤
 │ Reply   AI-suggested draft                                  ▸ Ask the KB│
@@ -355,13 +358,13 @@ Conventions for every screen:
 | Cue | Spec | Where | Story |
 | --- | --- | --- | --- |
 | **AI badge** | Text badge "AI-suggested", neutral colour, never alarming | Every AI value (S5, S6) | US-03, US-04 |
-| **Confirmation state** | "AI · unconfirmed" → "✓ Confirmed by <name>" after confirm or override | S5, S6 | US-05, US-06 |
+| **Confirmation state** | "AI suggestion · not checked" → "✓ Checked by <name>" after checking or override (F5) | S5, S6 | US-05, US-06 |
 | **Confidence** | Shown as a **word**: High / Medium / Low confidence. The exact % is in a tooltip and in the "Why?" panel. Bands (agreed, UX-1): High ≥ 0.85, Medium 0.60–0.85, Low < 0.60; recalibrated after `/eval` | S5 (Low only), S6 (all) | US-03, US-05 |
 | **"Why?"** | Collapsible with the one-line reason; for drafts, the cited FAQ entries | S6 | US-03, US-04 |
-| **One-click override** | AI value pre-selected in an editable `Select`; changing it is an override; one **Confirm labels** button when the AI is right | S6 | US-06 |
+| **One-click override** | AI value pre-selected in an editable `Select`; changing it is an override; one **Mark labels as checked** button when the AI is right | S6 | US-06 |
 | **Low-confidence banner** | Amber `Alert` with text and icon; asks for a full read | S5 (badge), S6 (banner) | US-05 AC3 |
 | **AI unavailable** | Grey badge "AI unavailable"; priority shows "High (default)"; banner on S6 | S5, S6 | US-09 |
-| **Summary block** | Shown when the description is **> 125 words** (UX-2); boxed, labelled "AI summary · check the full message"; full text always below | S5 (one line), S6 | US-03 AC2 |
+| **Summary block** | Shown when the description is **> 100 words** (UX-2); boxed, labelled "AI summary · check the full message"; full text always below | S5 (one line), S6 | US-03 AC2 |
 | **Draft label and sources** | "AI-suggested draft" plus FAQ source chips; "No FAQ match" when empty | S6 | US-04 |
 | **Edit level** | Recorded silently on approval (none / minor / major); shown only afterwards, in the read-only view and the dashboard, so it doesn't nudge agents to approve drafts unchanged (RAID R10) | S6 (read-only), S7 | US-06 |
 | **Send confirmation** | `AlertDialog` showing the final text before sending | S6 | US-06 AC2 |
@@ -379,7 +382,8 @@ Customers never see the words "AI", "model" or "triage".
 | Form error: too short | "Please add a bit more detail (at least 20 characters)." |
 | Confirmation: heading | "Thanks, we've got your request" |
 | Confirmation: next steps | "An agent will review your request and reply here. You can check the status at any time using your link." |
-| Link warning | "Anyone with this link can see your request. Don't share it." |
+| Link purpose | "Use this link to check your request and read our reply. Save it or copy it somewhere safe." |
+| Link warning | "Anyone with this link can see your request, so keep it private." |
 | Status names | Received · In progress · Replied |
 | Status page: no reply yet | "No reply yet. We'll post it here as soon as an agent has replied." |
 | Rating prompt | "How satisfied are you with this reply?" (1 Very dissatisfied · 2 Dissatisfied · 3 Neutral · 4 Satisfied · 5 Very satisfied) |
@@ -427,7 +431,7 @@ Customers never see the words "AI", "model" or "triage".
 | # | Item | Decision | Status |
 | --- | --- | --- | --- |
 | UX-1 | Confidence word bands | High ≥ 0.85 · Medium 0.60–0.85 · Low < 0.60 | Agreed; recalibrate after `/eval` (models tend to be overconfident) |
-| UX-2 | Long-ticket summary threshold | Shown when the description is **> 125 words** (PO's number) | Agreed; prototype shows tickets at ~110 and ~140 words |
+| UX-2 | Long-ticket summary threshold | Shown when the description is **> 100 words**. Was 125 (PO's number); lowered after both prototype reviewers missed the summary on a 111-word ticket (F3) | Agreed 2026-10-31 |
 | UX-3 | Queue refresh | **Hybrid:** check every 30 s; polite "n new tickets" notice; prominent, announced notice for new Urgent tickets; rows never move without the agent's click | Agreed |
 | UX-4 | After sending a reply | **Back to the queue** with a toast. PO: "agents need at least a split-second to recoup" | Agreed; reviewers' expectation noted in prototype review |
 | UX-5 | Customer contact details on S6 | Hidden behind **Show contact**; each reveal logged (who, when) | Agreed |

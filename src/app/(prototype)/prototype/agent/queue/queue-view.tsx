@@ -12,6 +12,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AiStateBadge, PriorityBadge } from "../../_components/badges";
 import { useProtoState } from "../../_components/prototype-bar";
+import { useSubmission, withSubmission } from "../../_components/submission";
 import {
   INCOMING_NEW,
   INCOMING_URGENT,
@@ -52,6 +53,7 @@ export function QueueView() {
   const [notice, setNotice] = useState<"new" | "urgent" | null>(null);
   const [refreshed, setRefreshed] = useState(false);
   const toasted = useRef(false);
+  const submission = useSubmission();
 
   // UX-4: after sending, the agent lands back here with a toast.
   useEffect(() => {
@@ -70,7 +72,9 @@ export function QueueView() {
 
   if (state === "loading") return <QueueSkeleton />;
 
-  const all = state === "empty" ? TICKETS.filter((t) => t.reply) : [...extra, ...TICKETS];
+  const all = (state === "empty" ? TICKETS.filter((t) => t.reply) : [...extra, ...TICKETS]).map((t) =>
+    withSubmission(t, submission),
+  );
   const open = sortQueue(all.filter((t) => !t.reply && t.ref !== sent));
   const needsTriage = open.filter((t) => !t.triage);
   const replied = all.filter((t) => t.reply);

@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useProtoState } from "../_components/prototype-bar";
+import { saveSubmission } from "../_components/submission";
 
 const MAX = 5000;
 
@@ -101,6 +102,7 @@ export function SubmitForm() {
         setServerError(state === "error-server" ? "server" : "rate-limit");
         return;
       }
+      saveSubmission(values);
       router.push("/prototype/support/confirmation");
     }, 700);
   }

@@ -163,7 +163,7 @@ Personas: **Sofia Martínez** (customer), **Daniel Kim** (new agent, primary), *
 1. Suggest a **category** (7), **priority** (Urgent/High/Normal) and **sentiment** for each ticket, each
    with a confidence level and a one-line reason.
 2. **Flag likely-urgent tickets** so they rise to the top of the queue.
-3. **Summarise long tickets** in 25 words or fewer (when the description is over 125 words, agreed at UX review),
+3. **Summarise long tickets** in 25 words or fewer (when the description is over 100 words; agreed at UX review as 125, lowered to 100 after prototype review on 2026-10-31),
    labelled AI-suggested, with the full text always visible.
 4. **Draft a reply grounded only in the FAQ**, citing the FAQ entry used.
 5. **Answer agents' questions from the FAQ** (US-11, Could), citing the entry, or say "not in the

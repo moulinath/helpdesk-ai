@@ -142,7 +142,7 @@ export function ReplyPanel({ ticket, pending, failSend, labelsConfirmed }: Props
           </AlertDialogHeader>
           {!labelsConfirmed && (
             <p className="rounded-md border border-amber-400 bg-amber-50 p-2 text-sm text-amber-950">
-              The labels aren&apos;t confirmed yet. Sending will confirm them as they are, and that&apos;s logged.
+              The labels aren&apos;t checked yet. Sending will mark them as checked as they are, and that&apos;s logged.
             </p>
           )}
           <div className="max-h-64 overflow-y-auto rounded-md border bg-muted/40 p-3 text-sm whitespace-pre-line">{text}</div>

@@ -108,7 +108,7 @@ export type Ticket = {
 export const AGENT = { firstName: "Daniel", fullName: "Daniel Kim", email: "daniel@larkfield.example" };
 export const LEAD = { firstName: "Priya", fullName: "Priya Shah", email: "priya@larkfield.example" };
 
-export const SUMMARY_WORD_THRESHOLD = 125; // UX-2
+export const SUMMARY_WORD_THRESHOLD = 100; // UX-2 (was 125; lowered after prototype review F3)
 
 export function wordCount(text: string): number {
   return text.trim().split(/\s+/).filter(Boolean).length;
@@ -230,6 +230,8 @@ export const TICKETS: readonly Ticket[] = [
       sentiment: "Calm",
       confidence: { category: 0.94, priority: 0.9, sentiment: 0.88 },
       reason: "Wants to return unworn boots for a refund within the 30-day window.",
+      summary:
+        "Ashby boots rub her heel; unworn, boxed, 2 weeks old. Wants a refund, not exchange. Asks how to return and refund timing.",
       draft:
         "Hi Hannah,\n\nI'm sorry the boots aren't comfortable. As they're unworn and within 30 days, you can return them for a full refund. Print a free returns label from your order page and drop the parcel at any partner shop.\n\nOnce we've approved the return, the refund goes back to your card within 2 working days. Your bank may take a further 3–5 working days to show it.\n\nBest wishes,\nDaniel",
       sources: ["FAQ 5", "FAQ 3"],
@@ -309,7 +311,7 @@ export const TICKETS: readonly Ticket[] = [
       body: "Hi Aisha,\n\nI'm sorry we sent the wrong colour. I've arranged for a navy scarf to go out today by express delivery, and there's no need to send the grey one back.\n\nBest wishes,\nDaniel",
       editLevel: "major",
     },
-    labelHistory: ["29 Oct 16:21 · AI suggested Returns & refunds / Normal", "29 Oct 16:45 · Confirmed by Daniel"],
+    labelHistory: ["29 Oct 16:21 · AI suggested Returns & refunds / Normal", "29 Oct 16:45 · Checked by Daniel"],
     contactReveals: [],
   },
   {
@@ -341,7 +343,7 @@ export const TICKETS: readonly Ticket[] = [
       editLevel: "minor",
     },
     rating: { score: 4, comment: "Quick, thanks." },
-    labelHistory: ["29 Oct 14:03 · AI suggested Account / Normal", "29 Oct 14:28 · Confirmed by Amara"],
+    labelHistory: ["29 Oct 14:03 · AI suggested Account / Normal", "29 Oct 14:28 · Checked by Amara"],
     contactReveals: ["29 Oct 14:25 · Amara"],
   },
 ];
@@ -408,7 +410,7 @@ export const HD_24817_REPLIED: Ticket = {
     body: "Hi Sofia,\n\nI'm sorry about the double charge on order 5521. I've checked, and the second £89.00 payment was taken by mistake, so I've refunded it today. Refunds reach your original payment method within 2 working days, and your bank may take a few more days to show it.\n\nYou don't need to do anything else. If it hasn't appeared by next Friday, reply here and I'll chase it for you.\n\nBest wishes,\nDaniel",
     editLevel: "major",
   },
-  labelHistory: ["30 Oct 10:42 · AI suggested Payment & billing / Urgent", "30 Oct 10:58 · Confirmed by Daniel"],
+  labelHistory: ["30 Oct 10:42 · AI suggested Payment & billing / Urgent", "30 Oct 10:58 · Checked by Daniel"],
   contactReveals: [],
 };
 

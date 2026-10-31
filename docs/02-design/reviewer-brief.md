@@ -60,7 +60,7 @@ Two ways to run it:
 >
 > - **Task 1–3:** Did anything confuse you or slow you down? What did you expect the "private link"
 >   on the confirmation page to be for?
-> - **Task 4:** Which ticket did you pick, and why? What did you take "AI · unconfirmed" to mean?
+> - **Task 4:** Which ticket did you pick, and why? What did you take "AI suggestion · not checked" to mean?
 > - **Task 5:** Did you open "Why?" or the sources? After sending, you landed back on the list. Was
 >   that what you expected?
 > - **Task 6:** HD-24805 has a short summary at the top and HD-24802 doesn't. Was the summary useful?

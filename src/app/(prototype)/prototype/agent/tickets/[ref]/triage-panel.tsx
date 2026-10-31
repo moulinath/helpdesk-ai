@@ -40,8 +40,8 @@ export function TriagePanel({ ticket, pending, onConfirmedChange }: Props) {
     setSaved({ category, priority });
     setMessage(
       catChanged || priChanged
-        ? `Override saved and logged. Labels confirmed by ${AGENT.firstName}.`
-        : `Labels confirmed by ${AGENT.firstName}.`,
+        ? `Override saved and logged. Labels checked by ${AGENT.firstName}.`
+        : `Labels checked by ${AGENT.firstName}.`,
     );
   }
 
@@ -163,12 +163,12 @@ export function TriagePanel({ ticket, pending, onConfirmedChange }: Props) {
       <Button onClick={save} variant={dirty ? "default" : "outline"} aria-disabled={!dirty} className="h-9">
         {!dirty ? (
           <>
-            <CheckIcon aria-hidden="true" /> Labels confirmed
+            <CheckIcon aria-hidden="true" /> Labels checked
           </>
         ) : catChanged || priChanged || !ai ? (
           "Save labels"
         ) : (
-          "Confirm labels"
+          "Mark labels as checked"
         )}
       </Button>
       <p aria-live="polite" className="sr-only">

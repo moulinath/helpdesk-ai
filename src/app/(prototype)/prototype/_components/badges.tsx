@@ -37,14 +37,14 @@ export function AiStateBadge({ state }: { state: AiState }) {
       return (
         <Badge variant="outline" className="h-6 text-muted-foreground">
           <SparklesIcon aria-hidden="true" />
-          AI · unconfirmed
+          AI suggestion · not checked
         </Badge>
       );
     case "confirmed":
       return (
         <Badge variant="outline" className="h-6 border-emerald-300 bg-emerald-50 text-emerald-900">
           <CheckIcon aria-hidden="true" />
-          Confirmed by {state.by}
+          Checked by {state.by}
         </Badge>
       );
     case "low-confidence":

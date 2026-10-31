@@ -1,10 +1,15 @@
 "use client";
 
 import { CheckIcon, CopyIcon } from "lucide-react";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";
 
-export function CopyLink({ url }: { url: string }) {
+const noSubscribe = () => () => {};
+
+/** Copies a working link to this deployment (F4: the made-up support.larkfieldgoods.example address opened an empty page). */
+export function CopyLink({ path }: { path: string }) {
+  const origin = useSyncExternalStore(noSubscribe, () => window.location.origin, () => "");
+  const url = `${origin}${path}`;
   const [result, setResult] = useState<"copied" | "failed" | null>(null);
   const copied = result === "copied";
 

@@ -20,10 +20,10 @@ const describe: Record<string, string> = {
 
 const ticketScenarios = [
   ["HD-24817", "Urgent, high confidence, FAQ-grounded draft"],
-  ["HD-24811", "Already confirmed by Amara"],
+  ["HD-24811", "Already checked by Amara"],
   ["HD-24809", "AI unavailable: needs triage, no draft"],
   ["HD-24805", "Low confidence; 135 words, so the AI summary shows"],
-  ["HD-24802", "111 words, so no summary (UX-2 threshold is 125)"],
+  ["HD-24802", "111 words, so the AI summary shows (UX-2 threshold is 100)"],
   ["HD-24799", "Non-English: no draft"],
   ["HD-24795", "No FAQ match: empty editor"],
   ["HD-24790", "Already replied: read-only view"],

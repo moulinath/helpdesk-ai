@@ -12,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { useProtoState } from "../../_components/prototype-bar";
 import { StatusStepper } from "../../_components/status-stepper";
+import { useSubmission, withSubmission } from "../../_components/submission";
 import type { Ticket } from "../../_data/sample";
 
 const SCALE = ["Very dissatisfied", "Dissatisfied", "Neutral", "Satisfied", "Very satisfied"] as const;
@@ -29,8 +30,9 @@ export function StatusSkeleton() {
 }
 
 // Customers never see AI labels, priority, sentiment, summary or unapproved drafts (US-07 AC2).
-export function StatusView({ ticket }: { ticket: Ticket }) {
+export function StatusView({ ticket: sample }: { ticket: Ticket }) {
   const state = useProtoState();
+  const ticket = withSubmission(sample, useSubmission());
   if (state === "loading") return <StatusSkeleton />;
 
   return (

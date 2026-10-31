@@ -33,10 +33,11 @@ export default function ConfirmationPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
-            <CopyLink url={`https://support.larkfieldgoods.example/t/${ticket.token}`} />
+            <p>Use this link to check your request and read our reply. Save it or copy it somewhere safe.</p>
+            <CopyLink path={statusPath} />
             <Alert role="note">
               <InfoIcon aria-hidden="true" />
-              <AlertDescription>Anyone with this link can see your request. Don&apos;t share it.</AlertDescription>
+              <AlertDescription>Anyone with this link can see your request, so keep it private.</AlertDescription>
             </Alert>
           </CardContent>
         </Card>

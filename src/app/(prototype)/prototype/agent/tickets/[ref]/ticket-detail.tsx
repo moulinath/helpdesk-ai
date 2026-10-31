@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PriorityBadge } from "../../../_components/badges";
 import { useProtoState } from "../../../_components/prototype-bar";
+import { useSubmission, withSubmission } from "../../../_components/submission";
 import { AGENT, SUMMARY_WORD_THRESHOLD, isLowConfidence, wordCount, type Ticket } from "../../../_data/sample";
 import { AskKb, ReplyPanel } from "./reply-panel";
 import { TriagePanel } from "./triage-panel";
@@ -104,7 +105,14 @@ function Message({ ticket }: { ticket: Ticket }) {
   );
 }
 
-export function TicketDetail({ ticket }: { ticket: Ticket }) {
+export function TicketDetail({ ticket: sample }: { ticket: Ticket }) {
+  const submission = useSubmission();
+  const ticket = withSubmission(sample, submission);
+  // Remount once the reviewer's own text arrives after hydration, so the editor starts from it (F6).
+  return <TicketDetailView key={ticket === sample ? "sample" : "submission"} ticket={ticket} />;
+}
+
+function TicketDetailView({ ticket }: { ticket: Ticket }) {
   const state = useProtoState();
   const [labelsConfirmed, setLabelsConfirmed] = useState(false);
   const onConfirmedChange = useCallback((c: boolean) => setLabelsConfirmed(c), []);
@@ -127,7 +135,7 @@ export function TicketDetail({ ticket }: { ticket: Ticket }) {
           )}
           {t && isLowConfidence(t) && (
             <Banner icon={<TriangleAlertIcon aria-hidden="true" />}>
-              <strong>Low confidence:</strong> the AI wasn&apos;t sure about this one. Read the full message before confirming.
+              <strong>Low confidence:</strong> the AI wasn&apos;t sure about this one. Read the full message before marking the labels as checked.
             </Banner>
           )}
           {t?.flag === "non-english" && (

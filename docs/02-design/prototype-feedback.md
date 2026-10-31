@@ -2,7 +2,7 @@
 
 | | |
 | --- | --- |
-| Version | 0.2 (prototype built and reviewed by the a11y subagent; human reviews pending) |
+| Version | 0.3 (2 human reviews recorded; changes F1–F6 applied; axe 0 violations on the 8 changed pages, live) |
 | Date | 2026-10-31 |
 | Inputs | [UX spec](ux-spec.md) v1.0 · decisions UX-1 to UX-7 |
 | Gate | Gate 2 needs: 2 human reviews recorded here, fixes applied |
@@ -53,6 +53,8 @@ S6 sample tickets:
 | HD-24790 | Already replied (read-only view) |
 
 ## 2. Review script (10 minutes per reviewer)
+
+_As run on 2026-10-31. After F5 the labels read "AI suggestion · not checked" and "Mark labels as checked"._
 
 **Who:** 2 people who haven't seen the spec, ideally one who has done customer-service work.
 Run it on a laptop. Do the customer part on a phone, or with a narrow browser window.
@@ -140,7 +142,7 @@ problem (5 places).
 _Paste notes here after each session. Keep quotes verbatim where you can._
 
 ### Reviewer 1
-- Who / role: _(to fill)_
+- Who / role: experienced online shopper ("extensive ecommerce customer"), the customer persona
 - Date: 2026-10-31 · unmoderated (written reply to the [reviewer brief](reviewer-brief.md), hosted link)
 - Task results (completed? where did they hesitate?):
   - Tasks 1–3: completed, "Not slowed down". Didn't use the private link: "had no reason to".
@@ -164,7 +166,7 @@ _Paste notes here after each session. Keep quotes verbatim where you can._
   4. The meaning of "AI · unconfirmed" wasn't answered, so P3 (AI visible) is untested here.
 
 ### Reviewer 2
-- Who / role: _(to fill)_
+- Who / role: has worked as a support agent for some time, the agent persona
 - Date: 2026-10-31 · unmoderated (written reply; brief with the F1 fix, so task 3 showed their own
   double-charge ticket)
 - Task results:
@@ -197,11 +199,11 @@ _Paste notes here after each session. Keep quotes verbatim where you can._
 | # | Feedback | Source | Change | Status |
 | --- | --- | --- | --- | --- |
 | F1 | Task 3 reply didn't match the reviewer's ticket | R1 | Add a replied double-charge sample (follow-on to HD-24817) and point task 3 at it, so tasks 1–3 tell one story | Done 2026-10-31: new status page `/prototype/t/Rf7mWc3kTy9J`; brief and script updated; redeployed |
-| F2 | Agent ticket screen (S6) is busy | R1 only | No layout change (1 of 2, nothing specific named). Recheck at UAT with a direct question | Proposed |
-| F3 | Summary missed on a 111-word ticket | R1, R2 | Lower the UX-2 threshold from 125 to 100 words (UX-2 and the spec updated; HD-24802 then shows a summary) | Proposed |
-| F4 | Private link: purpose unclear; the copied link opens an empty page | R2 | Prototype: copy a working address. Design: say what the link is for in the card ("Use this link to check your request and read our reply. Anyone with it can see your request, so keep it private.") | Proposed |
-| F5 | "AI · unconfirmed" not understood | R2 (R1 didn't answer) | Rename to **"AI suggestion · not checked"**, and "✓ Checked by Amara" once confirmed, in S5, S6 and the spec (§4, §8) | Proposed |
-| F6 | The agent view didn't show the reviewer's own message | R2 | Prototype only: carry what the reviewer typed into HD-24817 on S3 and S6 (this browser tab only). In the real app this is just the saved ticket | Proposed |
+| F2 | Agent ticket screen (S6) is busy | R1 only | No layout change (1 of 2, nothing specific named). Recheck at UAT with a direct question | Agreed: no change; UAT question noted on RAID D3 |
+| F3 | Summary missed on a 111-word ticket | R1, R2 | Lower the UX-2 threshold from 125 to 100 words (UX-2 and the spec updated; HD-24802 then shows a summary) | Done 2026-10-31: threshold 100 in the prototype, ux-spec UX-2, BRD §7 and NFRs; summary added to HD-24802 |
+| F4 | Private link: purpose unclear; the copied link opens an empty page | R2 | Prototype: copy a working address. Design: say what the link is for in the card ("Use this link to check your request and read our reply. Anyone with it can see your request, so keep it private.") | Done 2026-10-31: copies the live address; purpose line added; spec S2 updated |
+| F5 | "AI · unconfirmed" not understood | R2 (R1 didn't answer) | Rename to **"AI suggestion · not checked"**, and "✓ Checked by Amara" once confirmed, in S5, S6 and the spec (§4, §8) | Done 2026-10-31: badge, button ("Mark labels as checked"), status messages, send-dialog warning, label history and spec |
+| F6 | The agent view didn't show the reviewer's own message | R2 | Prototype only: carry what the reviewer typed into HD-24817 on S3 and S6 (this browser tab only). In the real app this is just the saved ticket | Done 2026-10-31: kept in this browser's localStorage, checked with Zod on read |
 
 ## 7. Notes and deviations from the spec
 
