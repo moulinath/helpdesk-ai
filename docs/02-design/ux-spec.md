@@ -5,7 +5,7 @@
 | Version | 1.0 (draft for Gate 2) |
 | Date | 2026-10-30 |
 | Inputs | [BRD](../01-requirements/BRD.md) · [personas](../01-requirements/personas.md) · [user stories](../01-requirements/user-stories.md) · [NFRs](../01-requirements/nfrs.md) |
-| Next | Clickable low-fi prototypes under `src/app/(prototype)`, then 2 prototype reviews → `prototype-feedback.md` |
+| Prototype | Built 2026-10-31: `/prototype` (code in `src/app/(prototype)/prototype`). URL map and review script in [prototype-feedback.md](prototype-feedback.md) |
 
 Values marked **assumed** are UX proposals, to be checked in the prototype review or UAT.
 
@@ -235,7 +235,7 @@ Conventions for every screen:
   is fixed for the MVP, so there are no sort controls to misuse.
 - **Badges:**
   - Priority badge: text plus icon plus colour, e.g. `▲ Urgent`, never colour alone.
-  - AI state, under the priority: **AI · unconfirmed** or **✓ Confirmed (Amara)**.
+  - AI state, under the priority: **AI · unconfirmed** or **✓ Confirmed by Amara**.
   - Low confidence: **⚠ Low confidence**.
   - Needs triage: **AI unavailable**, with priority shown as **High (default)**.
 - **Refresh (UX-3, hybrid):** the app checks every 30 s. New tickets show a polite notice "3 new
@@ -431,5 +431,5 @@ Customers never see the words "AI", "model" or "triage".
 | UX-3 | Queue refresh | **Hybrid:** check every 30 s; polite "n new tickets" notice; prominent, announced notice for new Urgent tickets; rows never move without the agent's click | Agreed |
 | UX-4 | After sending a reply | **Back to the queue** with a toast. PO: "agents need at least a split-second to recoup" | Agreed; reviewers' expectation noted in prototype review |
 | UX-5 | Customer contact details on S6 | Hidden behind **Show contact**; each reveal logged (who, when) | Agreed |
-| UX-6 | Visual style | shadcn/ui defaults, light mode only; light brand on customer screens: fictional **"Larkfield Goods"**, teal accent (contrast-checked). Dark mode on roadmap | Agreed; brand name changeable |
+| UX-6 | Visual style | shadcn/ui defaults, light mode only; light brand on customer screens: fictional **"Larkfield Goods"**, teal accent `#0f766e` (5.47:1 on white, measured). Dark mode on roadmap | Agreed; brand name changeable |
 | UX-7 | Rating scale | **1–5 CSAT** ("How satisfied are you with this reply?") + optional comment. Chosen by PO over the proposed Yes/No | Agreed; US-10 and US-08 updated |
