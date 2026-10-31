@@ -26,6 +26,7 @@
 | R21 | Status-link paths (with tokens) appear in Vercel's own request logs | M | L | Accepted. Owner-only, short-lived; Sentry and Analytics scrub `/t/<token>` (architecture §7.4) | User | Accepted |
 | R22 | A triage killed mid-call isn't retried; Neon and Vercel are single points of failure | L | L | Accepted for demo volume. Sweep moves stuck tickets to "Needs triage" within 2 min; queue service is the upgrade path (ADR 0004) | Claude Code | Accepted |
 | R23 | Auth.js v5 doesn't work cleanly with Next.js 16 | M | M | Spike at the start of US-12; fall back to a minimal signed-cookie session if blocked (new ADR) | Claude Code | Open |
+| R24 | The owner's personal email is visible in public commit history (more spam, targeted phishing) | M | L | Accepted by the user 2026-10-31. Rewriting history wouldn't remove it (PR refs keep the old commits). New commits use the GitHub noreply address; the user turns on "Keep my email private" and "Block command line pushes that expose my email" | User | Accepted |
 
 ## Assumptions
 | ID | Assumption | Validated? |

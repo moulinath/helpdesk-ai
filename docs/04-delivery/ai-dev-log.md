@@ -205,3 +205,28 @@ and governed. Claude Code appends entries via `/log`; the user can edit them.
   the sort, so a flagged Normal ticket still sits low in the queue; if UAT shows agents miss it, sorting
   flagged tickets with High is a candidate change (needs the user's call).
 - **Standup:** done Gate 3 / next: merge PR #2, sprint plan, CI / blocked: nothing
+
+### 2026-10-31 · Phase 4 · Sprint plan
+- **User asked:** `/next` → the sprint plan; approved the plan as proposed. Mid-turn: "repo can be
+  public with any required scan etc".
+- **Produced:** `docs/04-delivery/sprint-plan.md` (Sprint 1 order: CI, US-12, US-01, US-02, US-09,
+  US-03; Definition of Done; demo script; burndown; user dependencies); `retros.md` template;
+  PROGRESS story board with branch names.
+- **Human changes / corrections:** none to the plan. The user decided the repo goes public.
+- **What went wrong / caught:** my plan said branch protection on private repos needs a paid plan
+  and that GitHub Free gives ~2,000 private Actions minutes; both from memory, so labelled assumed.
+- **Standup:** done sprint plan / next: secret scan, repo public, then item 0 Foundation + CI /
+  blocked: nothing
+
+### 2026-10-31 · Phase 4 · Repo made public
+- **User asked:** make the repo public "with any required scan"; then, after my question about their
+  email in commit history, "is there any issue with leaving the email id visible", and "yes" to
+  leaving it and using the noreply address from now on.
+- **Produced:** full-history gitleaks scan (31 commits, all refs: 11 hits, all the made-up status
+  tokens in the prototype sample data; no real secrets; a regex check for Anthropic, GitHub, AWS,
+  private-key, Postgres and Vercel token patterns found none). Repo set to public; GitHub secret
+  scanning and push protection on; this repo's git email set to the GitHub noreply address; RAID R24.
+- **What went wrong / caught:** I paused before going public to flag the email exposure instead of
+  flipping visibility straight after the scan. My first sprint-plan and PROGRESS text said the repo
+  was public before it was; correct now.
+- **Standup:** done repo public / next: merge PR #3, then item 0 Foundation + CI / blocked: nothing
