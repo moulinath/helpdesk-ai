@@ -1,0 +1,7 @@
+# Default gitleaks rules, plus one allowlisted path.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Made-up status-link tokens in the Phase 2 prototype sample data (not secrets)"
+paths = ['''src/app/\(prototype\)/prototype/_data/sample\.ts''']

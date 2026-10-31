@@ -3,10 +3,11 @@
 Claude Code updates this file at the end of every session (`/log`). The user signs gates.
 
 **Current phase:** 4 — Build (Sprint 1)
-**Next step:** Sprint 1 item 0, Foundation + CI (`chore/ci-foundation`): plan first, then Prisma
-with the Sprint 1 tables, Vitest, Playwright with axe, `.env.example` and `.github/workflows/ci.yml`
-with a Postgres service container. Order after that: US-12 (Auth.js spike first), US-01, US-02,
-US-09, US-03 (`docs/04-delivery/sprint-plan.md` §2). The repo is public as of 2026-10-31.
+**Next step:** Merge PR #4 (`chore/ci-foundation`, CI green). Then decide on branch protection
+for `main` (required checks: "Typecheck, lint, test, build" and "Secret scan (gitleaks)"; no
+required approvals). Then `/story US-12`: start with the Auth.js v5 + Next.js 16 spike (R23);
+lowercase agent emails in the Zod schema (review C4). Local Postgres 17 runs via Homebrew;
+dev URL `postgresql://helpdesk:helpdesk@localhost:5432/helpdesk_dev` goes in `.env.local` (user).
 **Blocked on:** nothing (Anthropic API key with a spend limit needed for US-03's live check, RAID I1/D1)
 
 | Phase | Status | Gate | Signed off by user |
@@ -15,7 +16,7 @@ US-09, US-03 (`docs/04-delivery/sprint-plan.md` §2). The repo is public as of 2
 | 1 Requirements | Done | Gate 1: MVP scope + stories with acceptance criteria | 2026-10-30, approved |
 | 2 UX design | Done | Gate 2: UX spec + prototype feedback applied | 2026-10-31, with risks R15–R17, R14, I2 |
 | 3 Architecture | Done | Gate 3: architecture + 5 ADRs reviewed | 2026-10-31, approved (3 decisions: all yes) |
-| 4 Build (Sprint 1) | In progress (sprint plan done; 0 of 6 items) | Sprint 1 demo | — |
+| 4 Build (Sprint 1) | In progress (sprint plan done; 1 of 6 items: CI in review) | Sprint 1 demo | — |
 | 4 Build (Sprint 2) | Not started | Sprint 2 demo | — |
 | 5 Testing | Not started | Gate 5: exit criteria met | — |
 | 6 UAT | Not started | Gate 6: go / no-go | — |
@@ -41,5 +42,6 @@ US-09, US-03 (`docs/04-delivery/sprint-plan.md` §2). The repo is public as of 2
 - Book 4–6 UAT participants now (2-week target, RAID R11, D3). Run UAT moderated with think-aloud (R15).
 - Delete the Vercel project `helpdesk-ai-prototype` (Vercel dashboard → Settings → Delete), RAID R14.
 - Glance at the 4 Mermaid flows in `docs/02-design/ux-spec.md` on GitHub to confirm they render.
-- Merge the `phase-4/sprint-plan` PR.
+- Merge PR #4 (foundation + CI); decide on branch protection for `main`.
+- Add `DATABASE_URL` for local dev to `.env.local` (line in PROGRESS "Next step").
 - Before US-03: confirm the Anthropic API key is created with a spend limit (RAID I1/D1).

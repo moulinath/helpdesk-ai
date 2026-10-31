@@ -51,6 +51,7 @@ Sprint 2's order is planned at the Sprint 1 retro.
 | Sprint | Day | Done | Left | Note |
 | --- | --- | --- | --- | --- |
 | 1 | 0 | 0 | 6 | Plan written |
+| 1 | 0 | 1 | 5 | Item 0 (CI) in review, PR #4 |
 
 ## 6. What the user provides, and by when
 | What | Needed before | RAID |
