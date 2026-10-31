@@ -20,6 +20,12 @@
 | R15 | Prototype evidence is thin: 2 unmoderated reviews with written answers, no think-aloud; Reviewer 1 saw the first version of task 3 | M | M | Accepted at Gate 2. UAT (Phase 6) is moderated and think-aloud, with 4–6 participants (D3) | User | Accepted |
 | R16 | Changed wording (F4 private link, F5 "AI suggestion · not checked" / "Mark labels as checked") not yet seen by any user | M | M | Accepted at Gate 2. UAT script asks what the labels and the link mean | Claude Code | Accepted |
 | R17 | No screen-reader test yet (axe and the a11y subagent only) | M | H | Accepted at Gate 2. VoiceOver pass on S1, S3, S5, S6 in Phase 5; exit criterion for Gate 5 | Claude Code | Accepted |
+| R18 | One abuser uses up the daily AI budget ($0.15), so new tickets go to "Needs triage" for everyone until midnight UTC | L | M | Accepted at Gate 3 (2026-10-31). Honeypot field, per-IP limit; agents still answer by hand; cap and limit tunable by env var | User | Accepted |
+| R19 | Demo credentials are public: anyone can read every ticket and use Ask the KB | H | L | Accepted. Fictional data only; demo notice; KB limit 20/hour per agent; daily AI budget | User | Accepted |
+| R20 | Cold starts (Neon wake-up + function start) push submit over NFR-01's 1 s p95 | M | M | Measure warm and cold separately in Phase 5; report both; customer still sees the reference with no AI wait | Claude Code | Open |
+| R21 | Status-link paths (with tokens) appear in Vercel's own request logs | M | L | Accepted. Owner-only, short-lived; Sentry and Analytics scrub `/t/<token>` (architecture §7.4) | User | Accepted |
+| R22 | A triage killed mid-call isn't retried; Neon and Vercel are single points of failure | L | L | Accepted for demo volume. Sweep moves stuck tickets to "Needs triage" within 2 min; queue service is the upgrade path (ADR 0004) | Claude Code | Accepted |
+| R23 | Auth.js v5 doesn't work cleanly with Next.js 16 | M | M | Spike at the start of US-12; fall back to a minimal signed-cookie session if blocked (new ADR) | Claude Code | Open |
 
 ## Assumptions
 | ID | Assumption | Validated? |
@@ -34,7 +40,7 @@
 | ID | Issue | Raised | Owner | Status |
 | --- | --- | --- | --- | --- |
 | I1 | Anthropic Console payment issue; API key not yet created | 2026-10-30 | User | Open |
-| I2 | PR moulinath/helpdesk-ai#1 (scaffold, prototypes, Phase 2 docs) not merged; Phase 3 must start from `main` | 2026-10-31 | User | Open |
+| I2 | PR moulinath/helpdesk-ai#1 (scaffold, prototypes, Phase 2 docs) not merged; Phase 3 must start from `main` | 2026-10-31 | User | Closed 2026-10-31 (merged, 56b6b36) |
 
 ## Dependencies
 | ID | Dependency | Needed by | Status |

@@ -169,3 +169,39 @@ and governed. Claude Code appends entries via `/log`; the user can edit them.
     VoiceOver pass (R17) and no Vitest/Playwright (R8).
 - **Standup:** done reviews + F1–F6 + Gate 2 / next: merge PR #1, delete the review Vercel project,
   then Phase 3 architecture / blocked: nothing
+
+### 2026-10-31 · Phase 3 · Architecture, 5 ADRs, independent review
+- **User asked:** `/next` → Phase 3; approved the plan as proposed.
+- **Produced:** `docs/03-architecture/architecture.md` v0.2 (components, data model, lifecycle,
+  AI integration, security and privacy, cost per 1,000 tickets, traceability, test seams);
+  ADRs 0001–0005; `architecture-review.md`; RAID R18–R23; BRD and user stories aligned with the
+  Gate 2 decisions (UX-2 100 words, UX-8 wording) and the new thresholds.
+- **Human changes / corrections:** none yet; 3 open questions in §11 go to the user at Gate 3.
+- **What went wrong / caught:**
+  - **The `architecture-reviewer` subagent found 5 Must-fix and 11 Should-fix gaps in my v0.1**, all
+    real. Worst: my sequence put `redirect()` before `after()`; since `redirect()` throws, triage
+    would never have run (M1). My "$5 at the very worst" cost claim ignored long tickets and was off
+    by ~20% (M4). I also hadn't covered customers signing tickets with their own name (M5), tokens
+    leaking into telemetry (M3), or a late AI result overwriting an agent's labels (M2).
+  - The reviewer was partly wrong once: it doubted the prompt prefix was long enough to cache; the
+    API reference gives 512 tokens as Haiku 5.5's minimum. Caching was dropped anyway (costs more at
+    demo volume).
+  - I looked prices up in the Claude API reference rather than quoting from memory; they're still
+    labelled "assumed" until checked on the pricing page when the key exists. Vendor claims about
+    Supabase and Vercel cron limits are labelled assumed too.
+  - All 4 Mermaid diagrams parse (Mermaid 11.4.1).
+- **Standup:** done architecture + ADRs + review / next: user decides Gate 3 and the 3 open
+  questions / blocked: Gate 3 sign-off
+
+### 2026-10-31 · Phase 3 · Gate 3 signed
+- **User asked:** "Gate 3: approve", with answers to the 3 open questions: yes to the urgent keyword
+  safety net, accept the 20% edit threshold, yes to "time to triage". Move to Phase 4.
+- **Produced:** gate-3.md decision filled in; architecture v1.0 §11 rewritten as decisions, §6.3 gains
+  the `check_priority` row; US-05 AC6 added; US-08 AC3 and ux-spec S5/S7 reworded; ADRs 0001–0005
+  marked Accepted; RAID R18 wording; PROGRESS moved to Phase 4 Sprint 1.
+- **Human changes / corrections:** the user accepted all 3 recommendations as proposed. That widens
+  US-05 (a new AC) after Gate 1's scope freeze, with their explicit approval here.
+- **What went wrong / caught:** nothing new. Noted for Phase 4: the "Check priority" flag doesn't change
+  the sort, so a flagged Normal ticket still sits low in the queue; if UAT shows agents miss it, sorting
+  flagged tickets with High is a candidate change (needs the user's call).
+- **Standup:** done Gate 3 / next: merge PR #2, sprint plan, CI / blocked: nothing

@@ -177,10 +177,10 @@ Personas: **Sofia Martínez** (customer), **Daniel Kim** (new agent, primary), *
    to "Needs triage".
 4. Promise refunds, compensation, delivery dates or exceptions that the FAQ doesn't state.
 5. **Change a priority after its initial suggestion.** The AI's suggestion sets a new ticket's first
-   place in the queue, labelled "AI-suggested · unconfirmed". After that, only agents confirm or change
+   place in the queue, labelled "AI suggestion · not checked" (UX-8). After that, only agents check or change
    a priority, and every change is logged (who, when, old → new).
 6. Follow instructions written inside a ticket. Ticket text is treated as content, not commands.
-7. Hide low confidence: below the threshold (set in Phase 3), the ticket is clearly flagged for full
+7. Hide low confidence: below the threshold (confidence < 0.60, architecture §6.3), the ticket is clearly flagged for full
    human review.
 
 ### Classification rules

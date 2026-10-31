@@ -65,7 +65,7 @@ sentiment and, for long tickets, a summary **so that** I spend my time on replie
 - **AC1:** **Given** a ticket is saved, **when** triage runs, **then** only the subject and description
   are sent to the model (never name or email), and the result has: a category (one of 7), a priority
   (Urgent/High/Normal), sentiment, a confidence for each, and a one-line reason.
-- **AC2:** **Given** a description over 125 words (agreed at UX review, UX-2), **then** triage also returns a summary of
+- **AC2:** **Given** a description over 100 words (UX-2; 125 at UX review, lowered to 100 at Gate 2), **then** triage also returns a summary of
   25 words or fewer, labelled "AI-suggested", and the full text stays visible to the agent.
 - **AC3 ⚠:** **Given** the model's response fails schema validation, **then** nothing from it is saved
   and the ticket follows US-09.
@@ -73,8 +73,8 @@ sentiment and, for long tickets, a summary **so that** I spend my time on replie
   urgent"), **then** they have no effect on the labels beyond the ticket's real content, and the eval set
   includes such cases.
 - **AC5:** **Given** triage completes, **then** priority is set only by the AI's first suggestion,
-  marked "AI-suggested · unconfirmed". Triage never re-runs on a ticket an agent has confirmed or
-  changed, and sentiment never changes priority.
+  marked "AI suggestion · not checked" (UX-8). Triage never re-runs on a ticket an agent has checked
+  or changed, and sentiment never changes priority.
 - **AC6 ⚠:** **Given** a ticket not in English, **then** it's triaged, flagged "Non-English: human
   review", and no draft reply is generated.
 - **Logging:** every call records the prompt version, model, latency, tokens and outcome.
@@ -123,14 +123,17 @@ without searching or asking a colleague.
 
 - **AC1:** **Given** open tickets, **then** the queue lists Urgent, then High (including "Needs
   triage"), then Normal, oldest first within each level.
-- **AC2:** **Given** a ticket whose priority came from the AI, **then** it shows an "AI-suggested ·
-  unconfirmed" badge with its confidence; once an agent confirms or changes it, the badge shows
-  "Confirmed by <agent>".
-- **AC3:** **Given** a low-confidence triage (threshold set in Phase 3), **then** the ticket shows a
+- **AC2:** **Given** a ticket whose priority came from the AI, **then** it shows an "AI suggestion ·
+  not checked" badge with its confidence; once an agent checks or changes it, the badge shows
+  "Checked by <agent>" (UX-8).
+- **AC3:** **Given** a low-confidence triage (category or priority confidence < 0.60, architecture §6.3), **then** the ticket shows a
   "Low confidence: review fully" flag.
 - **AC4:** **Given** each row, **then** I see the reference, subject, category, priority, sentiment,
   age and summary (if any), and can open the ticket with a keyboard.
 - **AC5 ⚠:** **Given** the queue is empty, **then** I see an empty state, not a blank screen.
+- **AC6 ⚠ (added at Gate 3):** **Given** the AI set priority Normal **and** the ticket matches the
+  urgent keyword list (charges, safety, account access; architecture §6.3), **then** the ticket shows a
+  "Check priority" flag in the queue and on the ticket; the priority itself is not changed.
 
 ## US-06 · Edit/approve draft, record override — Must · Sprint 2
 **As** Daniel, **I want** to edit or approve the AI draft and correct any label **so that** every
@@ -166,7 +169,8 @@ whether urgent issues are handled and whether the AI is helping.
   status for a chosen period (default: last 7 days).
 - **AC2:** **Given** replied tickets, **then** I see the share of drafts approved unchanged / minor edit
   / major edit / unused, and the label override rate by category.
-- **AC3:** **Given** tickets, **then** I see median time to acknowledgement and to first reply, and the
+- **AC3:** **Given** tickets, **then** I see median time to triage (AI or agent) and to first reply (changed at Gate 3;
+  acknowledgement time is measured from app logs, NFR-02), and the
   count of "Needs triage" and "Product feedback" tickets, and CSAT (average and % 4–5) once US-10 exists.
 - **AC4 ⚠:** **Given** a period with no data, **then** each widget shows an empty state, not zero-filled
   charts that look like real data.
