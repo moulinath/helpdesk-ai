@@ -10,7 +10,7 @@
 | R5 | Over-claiming AI's role in CV | L | H | Dev log records who did what | User | Open |
 | R6 | Customer PII in prompts | L | H | Only ticket text sent; fictional demo data | Claude Code | Open |
 | R7 | API key still unavailable when Phase 4 starts, blocking US-03/US-04 and the AI eval | M (raised from L: 2-week target puts Phase 4 at ~day 5–6) | H | AI client behind an interface with a mock; "Needs triage" fallback (US-09) lets Sprint 1 proceed without a live key | Claude Code | Open |
-| R8 | No CI until Phase 4 (accepted at Gate 0); a regression in early scaffolding goes unnoticed | L | L | Phases 1–3 are docs and prototypes; CI is the first Phase 4 task, before any story | Claude Code | Accepted |
+| R8 | No CI until Phase 4 (accepted at Gate 0); a regression in early scaffolding goes unnoticed | L | L | Phases 1–3 are docs and prototypes; CI is the first Phase 4 task, before any story | Claude Code | Closed 2026-10-31: CI in PR #4 (typecheck, lint, migrate + drift check, Vitest, build, Playwright + axe, gitleaks); a deliberate type error was blocked |
 | R9 | FAQ has no owner (out of MVP scope); in real use it goes stale and drafts drift from policy | M | M | Stated as an MVP assumption (A2); content ownership on roadmap; drafts cite their FAQ entry | User | Accepted |
 | R10 | Automation bias: agents approve AI drafts without reading them, hidden by high approval and speed targets | M | H | Counter-metric: ≥ 90% of sampled approved replies correct; AI content labelled; UAT trust question | Claude Code | Open |
 | R11 | 2-week target vs ~4-week playbook; UAT participant availability can't be compressed | H | M | Target, not hard date; slippage tracked in PROGRESS.md; book UAT participants now; Coulds built last | User | Open |

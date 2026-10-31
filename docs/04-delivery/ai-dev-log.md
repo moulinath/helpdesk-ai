@@ -230,3 +230,27 @@ and governed. Claude Code appends entries via `/log`; the user can edit them.
   flipping visibility straight after the scan. My first sprint-plan and PROGRESS text said the repo
   was public before it was; correct now.
 - **Standup:** done repo public / next: merge PR #3, then item 0 Foundation + CI / blocked: nothing
+
+### 2026-10-31 · Phase 4 · Sprint 1 item 0: foundation and CI
+- **User asked:** merge PR #3, then plan item 0; approved the plan. Ran `gh auth refresh -s workflow`
+  when the first push was rejected; turned on Auto-fix for PR #4.
+- **Produced:** PR #4: Postgres 17 locally (Homebrew), Prisma 7.10.1 with the Sprint 1 tables and two
+  migrations, `src/lib/db.ts`, Vitest (unit + integration with a `_test` guard), Playwright with an
+  axe helper, smoke tests (11 Vitest, 1 Playwright), `ci.yml` (Postgres service, typecheck, lint,
+  migrate, schema-drift check, coverage, build, Playwright) and a pinned gitleaks job with a path
+  allowlist; `.env.example` now lists every §7.5 variable. RAID R8 closed.
+- **Human changes / corrections:** none to the plan.
+- **What went wrong / caught:**
+  - npm's `latest` Prisma is an 8.0 release candidate; pinned stable 7.10.1 instead.
+  - `@vitejs/plugin-react` clashed with installed Babel versions; dropped, Vite 8's own JSX transform
+    used. Vitest 5 needed `@types/node` 24.
+  - Prisma refuses `migrate reset` from an AI agent without the user's typed consent. I didn't work
+    around it with a fake consent; I recreated the empty test database and ran `migrate deploy`.
+  - **My default test URL had no user or password**, because a sed in a chained command never ran
+    after an earlier step failed. Tests still passed (they connected as the Mac user), so I missed
+    it; the `code-reviewer` subagent caught it. It found 0 Must-fix, 7 Should-fix (all applied) and
+    9 Consider (6 applied, 3 deferred to US-12/US-03).
+  - The first push failed: the `gh` token lacked the `workflow` scope (user fixed).
+  - Proof that CI blocks broken code: a deliberate type error (`45d1e84`) failed the Typecheck step
+    with TS2322; reverted in `6f01be2`.
+- **Standup:** done CI foundation / next: merge PR #4, branch protection, US-12 / blocked: nothing
