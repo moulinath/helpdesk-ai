@@ -164,19 +164,44 @@ _Paste notes here after each session. Keep quotes verbatim where you can._
   4. The meaning of "AI · unconfirmed" wasn't answered, so P3 (AI visible) is untested here.
 
 ### Reviewer 2
-- Who / role:
-- Date:
+- Who / role: _(to fill)_
+- Date: 2026-10-31 · unmoderated (written reply; brief with the F1 fix, so task 3 showed their own
+  double-charge ticket)
 - Task results:
+  - Tasks 1–3: completed, "No confusion in general". The task 3 reply caused no complaint, so the F1
+    fix worked. Copied the private link and pasted it into a new tab: "page returned empty".
+  - Task 4: opened the Urgent ticket first "because it said urgent" (same as Reviewer 1).
+  - Task 5: opened **Why?** and the sources. Landing back on the list "was expected" (UX-4 confirmed
+    by both reviewers).
+  - Task 6: the summary was "useful and missed on the second one" (same as Reviewer 1).
 - Quotes:
+  - "No idea what the private link was supposed to do."
+  - "AI-unconfirmed was unclear." / "The AI-unconfirmed type labels were unclear."
+  - Trust: "Not necessarily would trust more."
+  - "The message I wrote as the customer for the wrong charge did not appear that way when I logged
+    in as the agent and clicked on the same ticket."
 - Issues seen:
+  1. **The private link's purpose isn't clear, and the copied link is dead.** The dead link is a
+     prototype bug: "Copy link" copies the made-up address `support.larkfieldgoods.example`, which
+     doesn't exist, so pasting it gives an empty page. Claude Code built it that way. The purpose
+     problem is design: the link card only says "Don't share it", and what the link is for is in a
+     separate paragraph further down.
+  2. **"AI · unconfirmed" is unclear** (P3). Reviewer 1 didn't answer, so 0 of 2 reviewers
+     understood it.
+  3. **UX-2 summary threshold:** the summary was missed on the 111-word ticket again (2 of 2).
+  4. **The agent view didn't show what the reviewer typed.** Expected in a hardcoded prototype (every
+     submission becomes Sofia's sample ticket), but it breaks the story the review tasks tell.
 
 ## 6. Changes from feedback
 
 | # | Feedback | Source | Change | Status |
 | --- | --- | --- | --- | --- |
 | F1 | Task 3 reply didn't match the reviewer's ticket | R1 | Add a replied double-charge sample (follow-on to HD-24817) and point task 3 at it, so tasks 1–3 tell one story | Done 2026-10-31: new status page `/prototype/t/Rf7mWc3kTy9J`; brief and script updated; redeployed |
-| F2 | Agent ticket screen (S6) is busy | R1 | Wait for Reviewer 2 and ask what felt busy. Candidates: collapse Ask the KB and Why? by default, move contact and sentiment below the fold | Proposed |
-| F3 | Summary missed on a 111-word ticket | R1 | Consider lowering the UX-2 threshold (for example to 100 words). Decide after Reviewer 2 | Proposed |
+| F2 | Agent ticket screen (S6) is busy | R1 only | No layout change (1 of 2, nothing specific named). Recheck at UAT with a direct question | Proposed |
+| F3 | Summary missed on a 111-word ticket | R1, R2 | Lower the UX-2 threshold from 125 to 100 words (UX-2 and the spec updated; HD-24802 then shows a summary) | Proposed |
+| F4 | Private link: purpose unclear; the copied link opens an empty page | R2 | Prototype: copy a working address. Design: say what the link is for in the card ("Use this link to check your request and read our reply. Anyone with it can see your request, so keep it private.") | Proposed |
+| F5 | "AI · unconfirmed" not understood | R2 (R1 didn't answer) | Rename to **"AI suggestion · not checked"**, and "✓ Checked by Amara" once confirmed, in S5, S6 and the spec (§4, §8) | Proposed |
+| F6 | The agent view didn't show the reviewer's own message | R2 | Prototype only: carry what the reviewer typed into HD-24817 on S3 and S6 (this browser tab only). In the real app this is just the saved ticket | Proposed |
 
 ## 7. Notes and deviations from the spec
 
