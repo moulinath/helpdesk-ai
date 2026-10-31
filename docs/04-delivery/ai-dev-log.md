@@ -94,3 +94,45 @@ and governed. Claude Code appends entries via `/log`; the user can edit them.
   - Mermaid rendering on GitHub not yet visually checked.
 - **Standup:** done UX spec + decisions / next: plan Next.js scaffold + clickable prototypes / blocked:
   none (prototype reviewers still to book)
+
+### 2026-10-31 · Phase 2 · Next.js scaffold and clickable prototypes (S1–S8)
+- **Asked:** `/next`, which meant planning and building Phase 2 step 3: scaffold the app and build
+  low-fi prototypes of S1–S8, then check them with the `ux-accessibility-reviewer` subagent.
+- **Produced:** branch `phase-2/prototype` (PR to `main`):
+  - The app: Next.js 16.4 (App Router, Cache Components) with TypeScript strict plus
+    `noUncheckedIndexedAccess`, Tailwind v4, ESLint and shadcn/ui (Radix, Nova). There's a
+    `typecheck` script, and the edit hook now runs it.
+  - Clickable prototypes at `/prototype/*`:
+    - Each screen's loading, empty and error states are switched with `?state=`.
+    - Sample tickets at 111 and 135 words test the UX-2 summary threshold.
+    - The flows covered are override → confirm → approve → back to the queue with a toast,
+      CSAT rating, and a role-based 403.
+  - `docs/02-design/prototype-feedback.md`: how to run it, a 10-minute review script, the automated
+    and subagent results, and empty sections for the 2 human reviews.
+  - RAID: R14 (remove the prototype before release) and D4 (prototype reviewers).
+  - UX spec: the teal contrast ratio was measured at 5.47:1.
+- **Human changes / corrections:** the plan was approved as proposed; no corrections this session.
+- **What went wrong / caught:**
+  - **Next.js 16 surprises:** the bundled docs showed that Cache Components disables
+    `dynamicParams` and requires Suspense around `useSearchParams`. I read the docs before writing
+    any pages, so this didn't cause rework. The shadcn CLI also needed a preset flag to run without
+    prompts.
+  - **Lint caught one issue:** I had written to a ref during render in S1. Replaced it with an id
+    lookup.
+  - **axe found 2 issues, both fixed:** the S1 error-summary links were under 24 px (serious), and
+    the loading skeletons had no h1.
+  - **The subagent found much more than axe.** It returned 5 Must-fix and 25 Should-fix items that
+    were all my mistakes:
+    - AI wording leaked into customer tab titles, breaking P5.
+    - Focus was lost when controls unmounted, in 5 places.
+    - AI labels weren't linked to their selects for screen readers.
+    - The queue summary had no visible AI label.
+    - Smaller issues: microcopy, `maxLength` cutting text, and sample-data inconsistencies.
+
+    I fixed all the Must-fix items and 24 of the Should-fix ones; the 25th, about the description
+    counter, is logged as a deviation. Lesson: an automated a11y scan passing doesn't mean the spec
+    is met.
+  - **Tests:** there are no Vitest or Playwright tests yet, since the prototypes are throwaway (R8).
+    I haven't done a VoiceOver pass either.
+- **Standup:** done scaffold + S1–S8 prototypes + a11y review / next: user runs 2 prototype reviews,
+  then apply feedback and `/gate` / blocked: reviewers not yet booked
