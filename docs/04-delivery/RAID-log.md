@@ -34,7 +34,7 @@
 | ID | Issue | Raised | Owner | Status |
 | --- | --- | --- | --- | --- |
 | I1 | Anthropic Console payment issue; API key not yet created | 2026-10-30 | User | Open |
-| I2 | PR moulinath/helpdesk-ai#1 (scaffold, prototypes, Phase 2 docs) not merged; Phase 3 must start from `main` | 2026-10-31 | User | Open |
+| I2 | PR moulinath/helpdesk-ai#1 (scaffold, prototypes, Phase 2 docs) not merged; Phase 3 must start from `main` | 2026-10-31 | User | Closed 2026-10-31 (merged, 56b6b36) |
 
 ## Dependencies
 | ID | Dependency | Needed by | Status |
