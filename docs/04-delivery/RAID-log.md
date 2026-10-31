@@ -16,7 +16,7 @@
 | R11 | 2-week target vs ~4-week playbook; UAT participant availability can't be compressed | H | M | Target, not hard date; slippage tracked in PROGRESS.md; book UAT participants now; Coulds built last | User | Open |
 | R12 | Public demo exceeds the $5/month API cap | M | M | Rate limit on submission, AI on/off switch, Haiku-class model, spend limit in Console | User | Open |
 | R13 | Long-ticket AI summary omits a critical detail | M | H | Full text always visible; summary labelled AI-suggested; eval includes buried-detail tickets | Claude Code | Open |
-| R14 | Phase 2 prototype routes (`/prototype/*`, fake sign-in, sample data) ship to production | L | M | Pages are `noindex`; delete `src/app/(prototype)` as a Phase 7 release-checklist item; Gate 6 checks it's gone | Claude Code | Open |
+| R14 | Phase 2 prototype routes (`/prototype/*`, fake sign-in, sample data) ship to production | L | M | Pages are `noindex`; delete `src/app/(prototype)` as a Phase 7 release-checklist item; Gate 6 checks it's gone. The public review copy (Vercel project `helpdesk-ai-prototype`, 2026-10-31) is deleted after Gate 2 | Claude Code | Open |
 
 ## Assumptions
 | ID | Assumption | Validated? |

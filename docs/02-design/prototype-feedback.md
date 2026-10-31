@@ -15,6 +15,10 @@ npm run build && npm run start
 ```
 
 Then open <http://localhost:3000/prototype>. The index lists every screen and the sample tickets.
+
+**Hosted copy for reviewers:** <https://helpdesk-ai-prototype-eta.vercel.app/prototype> (separate
+Vercel project `helpdesk-ai-prototype`, redeploy with `npx vercel deploy --prod`). The message to
+send reviewers is in [reviewer-brief.md](reviewer-brief.md).
 Each screen has an amber **Prototype** bar for switching between its loading, empty and error states.
 
 - **Nothing is real.** All data is hardcoded in `src/app/(prototype)/prototype/_data/sample.ts`.
@@ -161,8 +165,8 @@ _Paste notes here after each session. Keep quotes verbatim where you can._
   Priya is the lead persona.
 - **New-ticket notices (UX-3):** the "new tickets" and "new urgent ticket" notices appear 2.5 s after
   load when chosen in the prototype bar. That stands in for the 30 s check.
-- **Dashboard 403:** shown through the prototype bar ("Agent (403)") rather than by role, so reviewers
-  can open the dashboard directly.
+- **Dashboard 403:** shown for the agent role (the default before signing in) and through the
+  prototype bar ("Agent (403)"). To see the dashboard, sign in as `priya@larkfield.example`.
 - **Description counter (S1):** the spec says the counter is "announced politely". The prototype
   announces it only within 200 characters of the limit, because announcing every keystroke drowns
   out what the user is typing. The visible counter always updates, and it's read when the field is
