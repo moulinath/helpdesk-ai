@@ -7,7 +7,7 @@ import { CustomerShell } from "../../_components/shells";
 import { findByRef } from "../../_data/sample";
 import { CopyLink } from "./copy-link";
 
-export const metadata: Metadata = { title: "Request received (prototype S2)" };
+export const metadata: Metadata = { title: { absolute: "Request received · Larkfield Goods" } };
 
 export default function ConfirmationPage() {
   const ticket = findByRef("HD-24817");
@@ -34,7 +34,7 @@ export default function ConfirmationPage() {
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             <CopyLink url={`https://support.larkfieldgoods.example/t/${ticket.token}`} />
-            <Alert>
+            <Alert role="note">
               <InfoIcon aria-hidden="true" />
               <AlertDescription>Anyone with this link can see your request. Don&apos;t share it.</AlertDescription>
             </Alert>

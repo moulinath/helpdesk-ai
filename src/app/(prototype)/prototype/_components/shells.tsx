@@ -7,7 +7,7 @@ import { AGENT, LEAD } from "../_data/sample";
 import { PrototypeBar, type StateOption } from "./prototype-bar";
 import { setRole, useRole } from "./role";
 
-function SkipLink() {
+export function SkipLink() {
   return (
     <a
       href="#main"

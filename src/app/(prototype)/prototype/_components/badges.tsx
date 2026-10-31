@@ -44,7 +44,7 @@ export function AiStateBadge({ state }: { state: AiState }) {
       return (
         <Badge variant="outline" className="h-6 border-emerald-300 bg-emerald-50 text-emerald-900">
           <CheckIcon aria-hidden="true" />
-          Confirmed ({state.by})
+          Confirmed by {state.by}
         </Badge>
       );
     case "low-confidence":
@@ -65,11 +65,11 @@ export function AiStateBadge({ state }: { state: AiState }) {
 }
 
 /** "AI-suggested · High confidence", with the exact % in a tooltip (§4). */
-export function ConfidenceLabel({ value }: { value: number }) {
+export function ConfidenceLabel({ value, id }: { value: number; id?: string }) {
   const word = confidenceWord(value);
   const pct = `${Math.round(value * 100)}%`;
   return (
-    <span className="inline-flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
+    <span id={id} className="inline-flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
       <SparklesIcon aria-hidden="true" className="size-3" />
       AI-suggested ·
       <Tooltip>

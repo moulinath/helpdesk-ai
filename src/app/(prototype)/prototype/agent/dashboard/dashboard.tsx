@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useProtoState } from "../../_components/prototype-bar";
+import { useRole } from "../../_components/role";
 
 type Period = "24h" | "7d" | "30d";
 const PERIOD_LABEL: Record<Period, string> = { "24h": "Last 24 hours", "7d": "Last 7 days", "30d": "Last 30 days" };
@@ -44,10 +45,12 @@ const PRIORITY_STATUS = [
 
 export function Dashboard() {
   const state = useProtoState();
+  const role = useRole();
   const [period, setPeriod] = useState<Period>("7d");
   const [failed, setFailed] = useState(state === "widget-error");
 
-  if (state === "forbidden") {
+  // Lead role only (US-08); agents get a 403 with a way back.
+  if (state === "forbidden" || role === "agent") {
     return (
       <div className="flex flex-col gap-3">
         <h1 className="text-2xl font-semibold">You don&apos;t have access to the dashboard</h1>
@@ -247,11 +250,11 @@ function BarChart({ rows, unit, summary }: { rows: readonly Row[]; unit: string;
           </tbody>
         </table>
       ) : (
-        <ul className="flex flex-col gap-1.5" aria-hidden="true">
+        <ul className="flex flex-col gap-1.5">
           {rows.map((r) => (
             <li key={r.label} className="grid grid-cols-[9rem_1fr_3rem] items-center gap-2 text-sm">
               <span className="truncate">{r.label}</span>
-              <span className="h-3 rounded-sm bg-slate-600" style={{ width: `${(r.value / max) * 100}%` }} />
+              <span aria-hidden="true" className="h-3 rounded-sm bg-slate-600" style={{ width: `${(r.value / max) * 100}%` }} />
               <span className="text-right tabular-nums">{fmt(r.value)}</span>
             </li>
           ))}

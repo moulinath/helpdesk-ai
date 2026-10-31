@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronRightIcon } from "lucide-react";
-import { useId, useState, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -83,11 +83,18 @@ function Rating({ ticket, failSave }: { ticket: Ticket; failSave: boolean }) {
   const [comment, setComment] = useState("");
   const [saved, setSaved] = useState(ticket.rating ?? null);
   const [error, setError] = useState<string | null>(null);
+  const [justSaved, setJustSaved] = useState(false);
+  const thanksRef = useRef<HTMLHeadingElement>(null);
+
+  // The form (and its focused button) disappears on save, so move focus to the confirmation (P4, SC 4.1.3).
+  useEffect(() => {
+    if (justSaved) thanksRef.current?.focus();
+  }, [justSaved]);
 
   if (saved) {
     return (
-      <section aria-labelledby={`${id}-h`} className="rounded-lg border p-4" aria-live="polite">
-        <h2 id={`${id}-h`} className="font-semibold">
+      <section aria-labelledby={`${id}-h`} className="rounded-lg border p-4">
+        <h2 id={`${id}-h`} ref={thanksRef} tabIndex={-1} className="font-semibold">
           Thanks for your feedback.
         </h2>
         <p className="mt-1 text-sm">
@@ -110,13 +117,14 @@ function Rating({ ticket, failSave }: { ticket: Ticket; failSave: boolean }) {
     }
     setError(null);
     setSaved({ score: Number(score), comment: comment.trim() || undefined });
+    setJustSaved(true);
   }
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4 rounded-lg border p-4" noValidate>
       <fieldset className="flex flex-col gap-3" aria-describedby={error ? `${id}-err` : undefined}>
-        <legend className="mb-2 font-semibold">How satisfied are you with this reply?</legend>
-        <RadioGroup value={score} onValueChange={setScore} className="grid grid-cols-1 gap-2 sm:grid-cols-5">
+        <legend id={`${id}-legend`} className="mb-2 font-semibold">How satisfied are you with this reply?</legend>
+        <RadioGroup aria-labelledby={`${id}-legend`} value={score} onValueChange={setScore} className="grid grid-cols-1 gap-2 sm:grid-cols-5">
           {SCALE.map((label, i) => (
             <div key={label} className="flex items-center gap-2 rounded-md border p-2 sm:flex-col sm:text-center">
               <RadioGroupItem value={String(i + 1)} id={`${id}-r${i + 1}`} />
@@ -134,7 +142,7 @@ function Rating({ ticket, failSave }: { ticket: Ticket; failSave: boolean }) {
       </div>
       <div aria-live="assertive">
         {error && (
-          <Alert variant="destructive">
+          <Alert variant="destructive" role={undefined}>
             <AlertTitle id={`${id}-err`}>{error}</AlertTitle>
           </Alert>
         )}

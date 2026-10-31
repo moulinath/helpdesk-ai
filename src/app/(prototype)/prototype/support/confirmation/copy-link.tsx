@@ -5,16 +5,18 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 export function CopyLink({ url }: { url: string }) {
-  const [copied, setCopied] = useState(false);
+  const [result, setResult] = useState<"copied" | "failed" | null>(null);
+  const copied = result === "copied";
 
   async function copy() {
     try {
       await navigator.clipboard.writeText(url);
+      setResult("copied");
+      window.setTimeout(() => setResult(null), 3000);
     } catch {
       // Clipboard blocked (e.g. insecure context): the link is still visible to copy by hand.
+      setResult("failed");
     }
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 3000);
   }
 
   return (
@@ -29,6 +31,11 @@ export function CopyLink({ url }: { url: string }) {
       <span className="sr-only" aria-live="polite">
         {copied ? "Link copied" : ""}
       </span>
+      {result === "failed" && (
+        <p className="text-sm" role="status">
+          Couldn&apos;t copy. Select the link and copy it.
+        </p>
+      )}
     </div>
   );
 }

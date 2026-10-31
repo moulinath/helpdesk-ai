@@ -3,7 +3,8 @@ import { Suspense } from "react";
 import { CustomerShell } from "../_components/shells";
 import { SubmitForm } from "./submit-form";
 
-export const metadata: Metadata = { title: "Contact support (prototype S1)" };
+// Customer tab titles never mention the product or AI (P5).
+export const metadata: Metadata = { title: { absolute: "Contact support · Larkfield Goods" } };
 
 const STATES = [
   { value: "loading", label: "Sending" },

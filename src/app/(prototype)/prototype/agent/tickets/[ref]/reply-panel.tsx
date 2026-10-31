@@ -23,10 +23,10 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "
 import { Textarea } from "@/components/ui/textarea";
 import { FAQ, type FaqEntry, type Ticket } from "../../../_data/sample";
 
-type Props = { ticket: Ticket; pending: boolean; failSend: boolean };
+type Props = { ticket: Ticket; pending: boolean; failSend: boolean; labelsConfirmed: boolean };
 
 /** Reply editor (S6). AI text only reaches the customer after Approve → confirm (P2). */
-export function ReplyPanel({ ticket, pending, failSend }: Props) {
+export function ReplyPanel({ ticket, pending, failSend, labelsConfirmed }: Props) {
   const router = useRouter();
   const draft = pending ? null : (ticket.triage?.draft ?? null);
   const [text, setText] = useState(draft ?? "");
@@ -39,6 +39,12 @@ export function ReplyPanel({ ticket, pending, failSend }: Props) {
   function discard() {
     setText("");
     setUsingDraft(false);
+    document.getElementById("reply")?.focus();
+  }
+
+  function restore() {
+    setText(draft ?? "");
+    setUsingDraft(true);
     document.getElementById("reply")?.focus();
   }
 
@@ -70,7 +76,7 @@ export function ReplyPanel({ ticket, pending, failSend }: Props) {
           </Label>
         </h2>
         {usingDraft && (
-          <Badge variant="outline" className="h-6 text-muted-foreground">
+          <Badge id="draft-label" variant="outline" className="h-6 text-muted-foreground">
             <SparklesIcon aria-hidden="true" /> AI-suggested draft
           </Badge>
         )}
@@ -83,7 +89,10 @@ export function ReplyPanel({ ticket, pending, failSend }: Props) {
         onChange={(e) => setText(e.target.value)}
         rows={10}
         aria-invalid={error === "Write a reply before sending." ? true : undefined}
-        aria-describedby={error ? "reply-error" : usingDraft ? "reply-sources" : undefined}
+        aria-describedby={
+          [error && "reply-error", usingDraft && "draft-label", sources.length > 0 && "reply-sources"].filter(Boolean).join(" ") ||
+          undefined
+        }
         placeholder={usingDraft ? undefined : `Hi ${ticket.customerFirstName},`}
       />
 
@@ -101,7 +110,7 @@ export function ReplyPanel({ ticket, pending, failSend }: Props) {
 
       <div aria-live="assertive">
         {error && (
-          <Alert variant="destructive">
+          <Alert variant="destructive" role={undefined}>
             <TriangleAlertIcon aria-hidden="true" />
             <AlertTitle id="reply-error">{error}</AlertTitle>
           </Alert>
@@ -112,6 +121,10 @@ export function ReplyPanel({ ticket, pending, failSend }: Props) {
         {usingDraft ? (
           <Button variant="outline" onClick={discard} className="h-9">
             Discard draft and write my own
+          </Button>
+        ) : draft !== null ? (
+          <Button variant="outline" onClick={restore} className="h-9">
+            Restore AI draft
           </Button>
         ) : (
           <span />
@@ -127,6 +140,11 @@ export function ReplyPanel({ ticket, pending, failSend }: Props) {
             <AlertDialogTitle>Send this reply to the customer?</AlertDialogTitle>
             <AlertDialogDescription>They&apos;ll see it on their status page.</AlertDialogDescription>
           </AlertDialogHeader>
+          {!labelsConfirmed && (
+            <p className="rounded-md border border-amber-400 bg-amber-50 p-2 text-sm text-amber-950">
+              The labels aren&apos;t confirmed yet. Sending will confirm them as they are, and that&apos;s logged.
+            </p>
+          )}
           <div className="max-h-64 overflow-y-auto rounded-md border bg-muted/40 p-3 text-sm whitespace-pre-line">{text}</div>
           <AlertDialogFooter>
             <AlertDialogCancel>Keep editing</AlertDialogCancel>
@@ -188,7 +206,9 @@ export function AskKb() {
         <div aria-live="polite" className="text-sm">
           {answer && (
             <div className="rounded-md bg-muted/50 p-3">
-              <p className="mb-1 text-xs text-muted-foreground">AI-suggested answer from the FAQ · check before using</p>
+              {answer.source && (
+                <p className="mb-1 text-xs text-muted-foreground">AI-suggested answer from the FAQ · check before using</p>
+              )}
               <p>{answer.text}</p>
               {answer.source && <p className="mt-1 text-xs">Source: {answer.source}</p>}
             </div>

@@ -17,7 +17,7 @@ const ticketScenarios = [
   ["HD-24817", "Urgent, high confidence, FAQ-grounded draft"],
   ["HD-24811", "Already confirmed by Amara"],
   ["HD-24809", "AI unavailable: needs triage, no draft"],
-  ["HD-24805", "Low confidence; 136 words, so the AI summary shows"],
+  ["HD-24805", "Low confidence; 135 words, so the AI summary shows"],
   ["HD-24802", "111 words, so no summary (UX-2 threshold is 125)"],
   ["HD-24799", "Non-English: no draft"],
   ["HD-24795", "No FAQ match: empty editor"],
@@ -78,7 +78,7 @@ export default function PrototypeIndex() {
                 S6 Ticket {ref}
               </Item>
             ))}
-            <Item href="/prototype/agent/dashboard" note="sign in as priya@larkfield.example to see the nav link">
+            <Item href="/prototype/agent/dashboard" note="sign in as priya@larkfield.example first; agents see a 403">
               S7 Team-lead dashboard
             </Item>
           </ul>

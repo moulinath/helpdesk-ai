@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckIcon, ChevronRightIcon, Loader2Icon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Label } from "@/components/ui/label";
@@ -9,13 +9,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AiStateBadge, ConfidenceLabel } from "../../../_components/badges";
 import { AGENT, CATEGORIES, PRIORITIES, type Ticket } from "../../../_data/sample";
 
-type Props = { ticket: Ticket; pending: boolean };
+type Props = { ticket: Ticket; pending: boolean; onConfirmedChange: (confirmed: boolean) => void };
 
 /** Right-hand triage panel (S6): AI values pre-selected; changing one is an override (US-06). */
-export function TriagePanel({ ticket, pending }: Props) {
+export function TriagePanel({ ticket, pending, onConfirmedChange }: Props) {
   const ai = pending ? null : ticket.triage;
   const [category, setCategory] = useState<string>(ai?.category ?? "");
-  const [priority, setPriority] = useState<string>(ai?.priority ?? "");
+  const [priority, setPriority] = useState<string>(ai?.priority ?? (ticket.triage ? "" : "High"));
   const [confirmedBy, setConfirmedBy] = useState<string | null>(ai?.confirmedBy ?? null);
   const [saved, setSaved] = useState<{ category: string; priority: string } | null>(
     ai?.confirmedBy ? { category: ai.category, priority: ai.priority } : null,
@@ -27,7 +27,10 @@ export function TriagePanel({ ticket, pending }: Props) {
   const priChanged = !!ai && priority !== ai.priority;
   const dirty = !saved || saved.category !== category || saved.priority !== priority;
 
+  useEffect(() => onConfirmedChange(!dirty), [dirty, onConfirmedChange]);
+
   function save() {
+    if (!dirty) return; // aria-disabled keeps the button focusable after confirming.
     if (!category || !priority) {
       setError("Choose a category and a priority first.");
       return;
@@ -42,19 +45,24 @@ export function TriagePanel({ ticket, pending }: Props) {
     );
   }
 
-  function fieldNote(changed: boolean, aiValue: string | undefined, confidence: number | undefined) {
+  // Each note is linked to its Select with aria-describedby, so screen readers hear the AI label (P3).
+  function fieldNote(id: string, changed: boolean, aiValue: string | undefined, confidence: number | undefined, fallback = "Set by you") {
     if (!ai || aiValue === undefined || confidence === undefined) {
-      return <span className="text-xs text-muted-foreground">Set by you</span>;
+      return (
+        <span id={id} className="text-xs text-muted-foreground">
+          {fallback}
+        </span>
+      );
     }
     if (changed) {
       return (
-        <span className="text-xs font-medium text-amber-900">
+        <span id={id} className="text-xs font-medium text-amber-900">
           Changed by you · AI suggested {aiValue}
           {saved ? " · override logged" : " · logged when you save"}
         </span>
       );
     }
-    return <ConfidenceLabel value={confidence} />;
+    return <ConfidenceLabel id={id} value={confidence} />;
   }
 
   return (
@@ -82,7 +90,7 @@ export function TriagePanel({ ticket, pending }: Props) {
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="category">Category</Label>
         <Select value={category} onValueChange={setCategory}>
-          <SelectTrigger id="category" className="h-9 w-full">
+          <SelectTrigger id="category" aria-describedby="category-note" className="h-9 w-full">
             <SelectValue placeholder="Choose a category" />
           </SelectTrigger>
           <SelectContent>
@@ -93,14 +101,14 @@ export function TriagePanel({ ticket, pending }: Props) {
             ))}
           </SelectContent>
         </Select>
-        {fieldNote(catChanged, ai?.category, ai?.confidence.category)}
+        {fieldNote("category-note", catChanged, ai?.category, ai?.confidence.category)}
       </div>
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="priority">Priority</Label>
         <Select value={priority} onValueChange={setPriority}>
-          <SelectTrigger id="priority" className="h-9 w-full">
-            <SelectValue placeholder={ticket.triage ? "Choose a priority" : "High (default)"} />
+          <SelectTrigger id="priority" aria-describedby="priority-note" className="h-9 w-full">
+            <SelectValue placeholder="Choose a priority" />
           </SelectTrigger>
           <SelectContent>
             {PRIORITIES.map((p) => (
@@ -110,15 +118,22 @@ export function TriagePanel({ ticket, pending }: Props) {
             ))}
           </SelectContent>
         </Select>
-        {fieldNote(priChanged, ai?.priority, ai?.confidence.priority)}
+        {fieldNote(
+          "priority-note",
+          priChanged,
+          ai?.priority,
+          ai?.confidence.priority,
+          ticket.triage ? "Set by you" : "High by default while the AI is unavailable",
+        )}
       </div>
 
       {ai && (
         <div className="flex flex-col gap-1">
           <p className="text-sm font-medium">Sentiment</p>
           <p className="text-sm">
-            {ai.sentiment} <span className="text-xs text-muted-foreground">(AI-suggested, read-only)</span>
+            {ai.sentiment} <span className="text-xs text-muted-foreground">(read-only)</span>
           </p>
+          <ConfidenceLabel value={ai.confidence.sentiment} />
         </div>
       )}
 
@@ -132,7 +147,8 @@ export function TriagePanel({ ticket, pending }: Props) {
             <p>“{ai.reason}”</p>
             <p className="text-xs text-muted-foreground">
               Category confidence {Math.round(ai.confidence.category * 100)}% · Priority confidence{" "}
-              {Math.round(ai.confidence.priority * 100)}% · Prompt triage.v1
+              {Math.round(ai.confidence.priority * 100)}% · Sentiment confidence{" "}
+              {Math.round(ai.confidence.sentiment * 100)}% · Prompt triage.v1
             </p>
           </CollapsibleContent>
         </Collapsible>
@@ -144,7 +160,7 @@ export function TriagePanel({ ticket, pending }: Props) {
         </p>
       )}
 
-      <Button onClick={save} variant={dirty ? "default" : "outline"} disabled={!dirty} className="h-9">
+      <Button onClick={save} variant={dirty ? "default" : "outline"} aria-disabled={!dirty} className="h-9">
         {!dirty ? (
           <>
             <CheckIcon aria-hidden="true" /> Labels confirmed

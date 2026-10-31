@@ -68,7 +68,7 @@ export type Triage = {
   priority: Priority;
   sentiment: Sentiment;
   /** Model confidence 0–1 per label. Word bands per UX-1. */
-  confidence: { category: number; priority: number };
+  confidence: { category: number; priority: number; sentiment: number };
   reason: string;
   /** Only produced when the description is over the summary threshold (UX-2). */
   summary?: string;
@@ -142,7 +142,7 @@ export const TICKETS: readonly Ticket[] = [
       category: "Payment & billing",
       priority: "Urgent",
       sentiment: "Upset",
-      confidence: { category: 0.96, priority: 0.88 },
+      confidence: { category: 0.96, priority: 0.88, sentiment: 0.9 },
       reason: "Two identical charges for one order, and the customer says money is tight.",
       draft:
         "Hi Sofia,\n\nI'm sorry about the double charge on order 5521. A second payment is often a temporary hold that your bank removes within 3 working days. I've checked your order and only one payment was taken by us, so the second one should disappear on its own.\n\nIf it's still showing as completed after 3 working days, reply here and we'll refund it in full straight away. Refunds reach your original payment method within 2 working days, and your bank may take a few more days to show it.\n\nBest wishes,\nDaniel",
@@ -165,7 +165,7 @@ export const TICKETS: readonly Ticket[] = [
       category: "Delivery",
       priority: "High",
       sentiment: "Neutral",
-      confidence: { category: 0.97, priority: 0.81 },
+      confidence: { category: 0.97, priority: 0.81, sentiment: 0.91 },
       reason: "Marked as delivered but not received; the customer has already checked with neighbours.",
       draft:
         "Hi Tom,\n\nI'm sorry your parcel hasn't turned up. Thanks for already checking with your neighbours. If it hasn't arrived within 48 hours of the delivery scan, we'll open a claim with the courier and send you a replacement or a refund, whichever you prefer.\n\nI'll check back tomorrow afternoon and let you know.\n\nBest wishes,\nDaniel",
@@ -203,7 +203,7 @@ export const TICKETS: readonly Ticket[] = [
       category: "Product question",
       priority: "Normal",
       sentiment: "Calm",
-      confidence: { category: 0.55, priority: 0.83 },
+      confidence: { category: 0.55, priority: 0.83, sentiment: 0.49 },
       reason: "Asks for sizing advice before buying; it could also be read as a returns question.",
       summary:
         "Choosing between medium and large in the Hartley jacket: 40\" chest, long arms, wants room for a jumper, and wants to avoid a return.",
@@ -228,7 +228,7 @@ export const TICKETS: readonly Ticket[] = [
       category: "Returns & refunds",
       priority: "Normal",
       sentiment: "Calm",
-      confidence: { category: 0.94, priority: 0.9 },
+      confidence: { category: 0.94, priority: 0.9, sentiment: 0.88 },
       reason: "Wants to return unworn boots for a refund within the 30-day window.",
       draft:
         "Hi Hannah,\n\nI'm sorry the boots aren't comfortable. As they're unworn and within 30 days, you can return them for a full refund. Print a free returns label from your order page and drop the parcel at any partner shop.\n\nOnce we've approved the return, the refund goes back to your card within 2 working days. Your bank may take a further 3–5 working days to show it.\n\nBest wishes,\nDaniel",
@@ -251,7 +251,7 @@ export const TICKETS: readonly Ticket[] = [
       category: "Delivery",
       priority: "Normal",
       sentiment: "Neutral",
-      confidence: { category: 0.78, priority: 0.74 },
+      confidence: { category: 0.78, priority: 0.74, sentiment: 0.72 },
       reason: "Spanish-language message about an item missing from a delivered order.",
       draft: null,
       sources: [],
@@ -274,7 +274,7 @@ export const TICKETS: readonly Ticket[] = [
       category: "Product question",
       priority: "Normal",
       sentiment: "Calm",
-      confidence: { category: 0.91, priority: 0.92 },
+      confidence: { category: 0.91, priority: 0.92, sentiment: 0.85 },
       reason: "Asks about engraving, which no FAQ entry covers.",
       draft: null,
       sources: [],
@@ -296,9 +296,10 @@ export const TICKETS: readonly Ticket[] = [
       category: "Returns & refunds",
       priority: "Normal",
       sentiment: "Neutral",
-      confidence: { category: 0.89, priority: 0.86 },
+      confidence: { category: 0.89, priority: 0.86, sentiment: 0.83 },
       reason: "Received the wrong colour and wants to exchange it.",
-      draft: null,
+      draft:
+        "Hi Aisha,\n\nI'm sorry we sent the wrong colour. You can return the grey scarf with a free label from your order page, and we'll send the navy one once it arrives.\n\nBest wishes,\nDaniel",
       sources: ["FAQ 5"],
       confirmedBy: "Daniel",
     },
@@ -326,9 +327,10 @@ export const TICKETS: readonly Ticket[] = [
       category: "Account",
       priority: "Normal",
       sentiment: "Neutral",
-      confidence: { category: 0.95, priority: 0.9 },
+      confidence: { category: 0.95, priority: 0.9, sentiment: 0.89 },
       reason: "Password reset email not received.",
-      draft: null,
+      draft:
+        "Hi Ben,\n\nSorry about that. Use 'Forgot password' on the sign-in page to get a new reset link. Links expire after 30 minutes.\n\nBest wishes,\nAmara",
       sources: ["FAQ 8"],
       confirmedBy: "Amara",
     },
@@ -360,10 +362,11 @@ export const INCOMING_URGENT: Ticket = {
     category: "Account",
     priority: "Urgent",
     sentiment: "Upset",
-    confidence: { category: 0.86, priority: 0.91 },
+    confidence: { category: 0.86, priority: 0.91, sentiment: 0.8 },
     reason: "Charged a large amount and locked out of the account.",
-    draft: null,
-    sources: [],
+    draft:
+      "Hi Ella,\n\nI'm sorry you've been locked out straight after paying. Your payment and order are safe. Use 'Forgot password' on the sign-in page to get a reset link (it lasts 30 minutes), and I'll check the order on our side in the meantime.\n\nBest wishes,\nDaniel",
+    sources: ["FAQ 8"],
   },
 };
 
@@ -387,3 +390,31 @@ export function sortQueue(tickets: readonly Ticket[]): Ticket[] {
     .reverse()
     .sort((a, b) => rank[effectivePriority(a)] - rank[effectivePriority(b)]);
 }
+
+/** Arrive when the agent clicks Refresh on the "3 new tickets" notice (UX-3). */
+export const INCOMING_NEW: readonly Ticket[] = [
+  ["HD-24821", "Gift card balance", "How do I check how much is left on my gift card?", "Nina", "Account", 0.88],
+  ["HD-24822", "Change delivery address", "I've just ordered but used my old address. Can you change it to my new one?", "Raj", "Delivery", 0.93],
+  ["HD-24823", "Do you ship to Ireland?", "Thinking of ordering a coat. Do you deliver to Dublin and how long does it take?", "Cara", "Delivery", 0.9],
+].map(([ref, subject, description, first, category, conf], i) => ({
+  ref: ref as string,
+  token: `NewSample${i}xQ`,
+  subject: subject as string,
+  description: description as string,
+  customerFirstName: first as string,
+  customerFullName: `${first as string} Sample`,
+  customerEmail: `${(first as string).toLowerCase()}@example.com`,
+  receivedAt: "30 Oct, 10:46",
+  age: "now",
+  status: "Received" as const,
+  triage: {
+    category: category as Category,
+    priority: "Normal" as const,
+    sentiment: "Calm" as const,
+    confidence: { category: conf as number, priority: 0.9, sentiment: 0.85 },
+    reason: "Routine question.",
+    draft: null,
+    sources: [],
+    flag: "no-faq-match" as const,
+  },
+}));

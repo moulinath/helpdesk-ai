@@ -28,6 +28,7 @@ export function SignInForm() {
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
+    if (loading) return; // aria-disabled keeps focus on the button, so guard repeat submits here.
     setError(null);
     setLoading(true);
     window.setTimeout(() => {
@@ -52,27 +53,30 @@ export function SignInForm() {
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
       <div aria-live="assertive">
         {error && (
-          <Alert variant="destructive">
-            <AlertTitle>{error}</AlertTitle>
+          <Alert variant="destructive" role={undefined}>
+            <AlertTitle id="signin-error">{error}</AlertTitle>
           </Alert>
         )}
       </div>
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="email">Email</Label>
-        <Input id="email" type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} className="h-10" />
+        <Input id="email" name="email" type="email" aria-invalid={error ? true : undefined} aria-describedby={error ? "signin-error" : undefined} autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} className="h-10" />
       </div>
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="password">Password</Label>
         <Input
           id="password"
+          name="password"
           type="password"
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? "signin-error" : undefined}
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="h-10"
         />
       </div>
-      <Button type="submit" size="lg" className="h-10" disabled={loading}>
+      <Button type="submit" size="lg" className="h-10" aria-disabled={loading}>
         {loading ? (
           <>
             <Loader2Icon aria-hidden="true" className="animate-spin" />
@@ -82,7 +86,7 @@ export function SignInForm() {
           "Sign in"
         )}
       </Button>
-      <Alert>
+      <Alert role="note">
         <InfoIcon aria-hidden="true" />
         <AlertTitle>Demo accounts (demo environment only)</AlertTitle>
         <AlertDescription>

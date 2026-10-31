@@ -5,7 +5,7 @@ import { CustomerShell } from "../../_components/shells";
 import { TICKETS, findByToken } from "../../_data/sample";
 import { StatusSkeleton, StatusView } from "./status-view";
 
-export const metadata: Metadata = { title: "Your request (prototype S3)" };
+export const metadata: Metadata = { title: { absolute: "Your request · Larkfield Goods" } };
 
 export function generateStaticParams() {
   return TICKETS.map((t) => ({ token: t.token }));

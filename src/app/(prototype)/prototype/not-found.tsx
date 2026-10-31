@@ -5,6 +5,7 @@ import { CustomerShell } from "./_components/shells";
 export default function NotFound() {
   return (
     <CustomerShell>
+      <title>Page not found · Larkfield Goods</title>
       <h1 className="text-2xl font-semibold">We can&apos;t find that page</h1>
       <p className="mt-3">
         If you&apos;re looking for a support request, use the link from your confirmation.

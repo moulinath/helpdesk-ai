@@ -1,6 +1,6 @@
 "use client";
 
-import { RefreshCwIcon, TriangleAlertIcon } from "lucide-react";
+import { RefreshCwIcon, SparklesIcon, TriangleAlertIcon } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AiStateBadge, PriorityBadge } from "../../_components/badges";
 import { useProtoState } from "../../_components/prototype-bar";
 import {
+  INCOMING_NEW,
   INCOMING_URGENT,
   SUMMARY_WORD_THRESHOLD,
   TICKETS,
@@ -75,9 +76,11 @@ export function QueueView() {
   const replied = all.filter((t) => t.reply);
 
   function refresh() {
-    if (notice === "urgent") setExtra([INCOMING_URGENT]);
+    setExtra((prev) => [...(notice === "urgent" ? [INCOMING_URGENT] : INCOMING_NEW), ...prev]);
     setNotice(null);
     setRefreshed(true);
+    // The focused Refresh button disappears, so put focus somewhere predictable (§6).
+    document.getElementById("queue-heading")?.focus();
   }
 
   return (
@@ -115,7 +118,7 @@ export function QueueView() {
 
         <div aria-live="assertive">
           {notice === "urgent" && (
-            <Alert className="mt-3 border-amber-400 bg-amber-50 text-amber-950">
+            <Alert role={undefined} className="mt-3 border-amber-400 bg-amber-50 text-amber-950">
               <TriangleAlertIcon aria-hidden="true" />
               <AlertTitle className="flex flex-wrap items-center gap-2">
                 1 new urgent ticket ·
@@ -131,7 +134,14 @@ export function QueueView() {
           {open.length === 0 ? (
             <div className="rounded-lg border p-8 text-center">
               <p className="font-medium">No open tickets. Nice work.</p>
-              <Button variant="link" onClick={() => setTab("replied")}>
+              <Button
+                variant="link"
+                onClick={() => {
+                  setTab("replied");
+                  // This button unmounts with the panel; keep focus on the tab the agent moved to.
+                  window.setTimeout(() => document.querySelector<HTMLElement>('[role="tab"][data-state="active"]')?.focus(), 0);
+                }}
+              >
                 See replied tickets
               </Button>
             </div>
@@ -198,8 +208,8 @@ function QueueTable({ tickets, caption }: { tickets: readonly Ticket[]; caption:
                   {t.subject}
                   {showSummary && (
                     <p className="mt-1 text-xs text-muted-foreground">
-                      <span aria-hidden="true">↳ </span>
-                      <span className="sr-only">AI summary: </span>“{t.triage?.summary}”
+                      <SparklesIcon aria-hidden="true" className="mr-1 inline size-3" />
+                      AI summary: “{t.triage?.summary}”
                     </p>
                   )}
                 </TableCell>

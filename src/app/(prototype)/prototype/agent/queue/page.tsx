@@ -16,7 +16,9 @@ const STATES = [
 export default function QueuePage() {
   return (
     <AgentShell states={STATES}>
-      <h1 className="mb-4 text-2xl font-semibold">Queue</h1>
+      <h1 id="queue-heading" tabIndex={-1} className="mb-4 text-2xl font-semibold outline-none">
+        Queue
+      </h1>
       <Suspense fallback={<QueueSkeleton />}>
         <QueueView />
       </Suspense>

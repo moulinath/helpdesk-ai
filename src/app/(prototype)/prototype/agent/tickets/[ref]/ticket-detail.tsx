@@ -2,7 +2,7 @@
 
 import { CloudOffIcon, LanguagesIcon, SearchXIcon, SparklesIcon, TriangleAlertIcon } from "lucide-react";
 import Link from "next/link";
-import { useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -25,7 +25,7 @@ export function DetailSkeleton() {
 
 function Banner({ icon, children, tone = "amber" }: { icon: ReactNode; children: ReactNode; tone?: "amber" | "grey" }) {
   return (
-    <Alert className={tone === "amber" ? "border-amber-400 bg-amber-50 text-amber-950" : "border-slate-300 bg-slate-100 text-slate-900"}>
+    <Alert role="note" className={tone === "amber" ? "border-amber-400 bg-amber-50 text-amber-950" : "border-slate-300 bg-slate-100 text-slate-900"}>
       {icon}
       <AlertDescription className="text-current">{children}</AlertDescription>
     </Alert>
@@ -34,6 +34,11 @@ function Banner({ icon, children, tone = "amber" }: { icon: ReactNode; children:
 
 function Contact({ ticket }: { ticket: Ticket }) {
   const [revealedAt, setRevealedAt] = useState<string | null>(null);
+  const revealedRef = useRef<HTMLSpanElement>(null);
+  // The button disappears on reveal, so move focus to what it revealed.
+  useEffect(() => {
+    if (revealedAt) revealedRef.current?.focus();
+  }, [revealedAt]);
   if (!revealedAt) {
     return (
       <Button
@@ -46,7 +51,7 @@ function Contact({ ticket }: { ticket: Ticket }) {
     );
   }
   return (
-    <span className="flex flex-col text-sm" role="status">
+    <span ref={revealedRef} tabIndex={-1} className="flex flex-col text-sm outline-none focus-visible:outline-2">
       <span>
         {ticket.customerFullName} · {ticket.customerEmail}
       </span>
@@ -101,6 +106,8 @@ function Message({ ticket }: { ticket: Ticket }) {
 
 export function TicketDetail({ ticket }: { ticket: Ticket }) {
   const state = useProtoState();
+  const [labelsConfirmed, setLabelsConfirmed] = useState(false);
+  const onConfirmedChange = useCallback((c: boolean) => setLabelsConfirmed(c), []);
   if (state === "loading") return <DetailSkeleton />;
   if (ticket.reply) return <ReadOnly ticket={ticket} />;
 
@@ -139,15 +146,19 @@ export function TicketDetail({ ticket }: { ticket: Ticket }) {
       {/* DOM order = tab order: ticket → triage → reply (§6). Stacks below 1024 px (§7). */}
       <div className="grid gap-6 lg:grid-cols-[1fr_22rem]">
         <Message ticket={ticket} />
-        <TriagePanel ticket={ticket} pending={pending} />
+        <TriagePanel ticket={ticket} pending={pending} onConfirmedChange={onConfirmedChange} />
       </div>
-      <ReplyPanel ticket={ticket} pending={pending} failSend={state === "send-error"} />
+      <ReplyPanel ticket={ticket} pending={pending} failSend={state === "send-error"} labelsConfirmed={labelsConfirmed} />
       <AskKb />
     </div>
   );
 }
 
-const EDIT_LEVEL = { none: "Approved unchanged", minor: "Minor edit", major: "Major edit" } as const;
+const EDIT_LEVEL = {
+  none: "AI draft sent unchanged",
+  minor: "AI draft sent with minor edits",
+  major: "AI draft sent with major edits",
+} as const;
 
 function ReadOnly({ ticket }: { ticket: Ticket }) {
   const reply = ticket.reply;
@@ -200,7 +211,7 @@ function ReadOnly({ ticket }: { ticket: Ticket }) {
           Sent reply
         </h2>
         <p className="text-sm text-muted-foreground">
-          Sent by {reply.agent} · {reply.sentAt} · {EDIT_LEVEL[reply.editLevel]} of the AI draft
+          Sent by {reply.agent} · {reply.sentAt} · {EDIT_LEVEL[reply.editLevel]}
         </p>
         <p className="text-sm whitespace-pre-line">{reply.body}</p>
       </section>

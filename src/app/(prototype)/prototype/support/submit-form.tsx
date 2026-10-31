@@ -16,19 +16,23 @@ const MAX = 5000;
 // Same limits and microcopy as ux-spec §3 S1 and §5. The real schema will live in src/lib (US-01).
 const schema = z.object({
   name: z.string().trim().min(1, { error: "Please enter your name." }),
-  email: z.email({ error: "Please enter an email address like name@example.com." }),
+  email: z
+    .string()
+    .trim()
+    .min(1, { error: "Please enter your email." })
+    .pipe(z.email({ error: "Please enter an email address like name@example.com." })),
   subject: z
     .string()
     .trim()
     .min(1, { error: "Please enter your subject." })
     .min(5, { error: "Please make the subject a little longer (at least 5 characters)." })
-    .max(120, { error: "Please keep the subject under 120 characters." }),
+    .max(120, { error: "Please keep the subject to 120 characters or fewer." }),
   description: z
     .string()
     .trim()
     .min(1, { error: "Please enter your description." })
     .min(20, { error: "Please add a bit more detail (at least 20 characters)." })
-    .max(MAX, { error: `Please keep the description under ${MAX} characters.` }),
+    .max(MAX, { error: "Please keep the description to 5,000 characters or fewer." }),
 });
 
 type Field = keyof z.infer<typeof schema>;
@@ -80,6 +84,7 @@ export function SubmitForm() {
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
+    if (submitting) return; // aria-disabled keeps the button focusable, so guard repeat submits here.
     const found = validate(values);
     setErrors(found);
     const first = FIELDS.find((f) => found[f.name]);
@@ -116,7 +121,7 @@ export function SubmitForm() {
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-5">
       <div aria-live="assertive">
         {errorList.length > 0 && (
-          <Alert variant="destructive">
+          <Alert variant="destructive" role={undefined}>
             <AlertTitle>
               Please fix {errorList.length === 1 ? "1 problem" : `${errorList.length} problems`} before sending
             </AlertTitle>
@@ -134,13 +139,18 @@ export function SubmitForm() {
           </Alert>
         )}
         {serverError && (
-          <Alert variant="destructive">
+          <Alert variant="destructive" role={undefined}>
             <AlertTitle>
               {serverError === "server"
                 ? "We couldn't send your request. Please try again."
                 : "You've sent several requests in a short time. Please try again in a few minutes."}
             </AlertTitle>
-            <AlertDescription>Your message is still here, so you won&apos;t need to type it again.</AlertDescription>
+            <AlertDescription className="flex flex-col items-start gap-2">
+              Your message is still here, so you won&apos;t need to type it again.
+              <Button type="submit" variant="outline" size="sm">
+                Try again
+              </Button>
+            </AlertDescription>
           </Alert>
         )}
       </div>
@@ -164,7 +174,7 @@ export function SubmitForm() {
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor={`${id}-subject`}>Subject (required)</Label>
-        <Input {...fieldProps("subject")} maxLength={120} className="h-10" />
+        <Input {...fieldProps("subject")} className="h-10" />
         <p id={`${id}-subject-hint`} className="text-sm text-muted-foreground">
           A few words, for example &quot;Charged twice for my order&quot;.
         </p>
@@ -173,7 +183,7 @@ export function SubmitForm() {
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor={`${id}-description`}>Description (required)</Label>
-        <Textarea {...fieldProps("description")} rows={7} maxLength={MAX} />
+        <Textarea {...fieldProps("description")} rows={7} />
         <p id={`${id}-description-hint`} className="text-right text-sm text-muted-foreground">
           {descLength.toLocaleString("en-GB")} of {MAX.toLocaleString("en-GB")} characters
         </p>
@@ -184,7 +194,7 @@ export function SubmitForm() {
         <FieldError id={`${id}-description-error`} message={errors.description} />
       </div>
 
-      <Button type="submit" size="lg" className="h-11 w-full text-base" disabled={submitting} aria-disabled={submitting}>
+      <Button type="submit" size="lg" className="h-11 w-full text-base" aria-disabled={submitting}>
         {submitting ? (
           <>
             <Loader2Icon aria-hidden="true" className="animate-spin" />

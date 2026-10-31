@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: { default: "HelpDesk AI", template: "%s · HelpDesk AI" },
-  description: "Customer support with AI-assisted triage and human-approved replies.",
+  description: "Customer support.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
