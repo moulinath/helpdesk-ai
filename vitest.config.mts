@@ -1,11 +1,20 @@
 import { fileURLToPath } from "node:url";
 
+import { config } from "dotenv";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 
-// Local test database: no password, no secret. CI sets DATABASE_URL_TEST to its service container.
+// Like prisma.config.ts: read .env.local, but variables already set in the environment win.
+config({ path: ".env.local", quiet: true });
+
+// Local throwaway test database (password "helpdesk" is not a secret). CI sets DATABASE_URL_TEST.
 const testDatabaseUrl =
-  process.env["DATABASE_URL_TEST"] ?? "postgresql://localhost:5432/helpdesk_test";
+  process.env["DATABASE_URL_TEST"] ?? "postgresql://helpdesk:helpdesk@localhost:5432/helpdesk_test";
+
+// Integration tests delete rows, so refuse to run against anything but a *_test database.
+if (!new URL(testDatabaseUrl).pathname.endsWith("_test")) {
+  throw new Error(`DATABASE_URL_TEST must point at a database whose name ends in "_test"`);
+}
 
 export default defineConfig({
   plugins: [tsconfigPaths()],
@@ -30,6 +39,7 @@ export default defineConfig({
           name: "unit",
           environment: "jsdom",
           include: ["src/**/*.test.{ts,tsx}"],
+          setupFiles: ["tests/support/setup-unit.ts"],
         },
       },
       {
