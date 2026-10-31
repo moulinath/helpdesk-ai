@@ -1,0 +1,170 @@
+// HelpDesk AI data model: Sprint 1 tables (architecture §3).
+// Reply, Feedback, LabelChange and ContactReveal arrive with the stories that need them.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TicketStatus {
+  received
+  in_progress
+  replied
+}
+
+enum TriageState {
+  pending
+  done
+  needs_triage
+}
+
+// BRD §7 classification rules: 7 categories.
+enum Category {
+  delivery
+  returns_refunds
+  payment_billing
+  product_question
+  product_feedback
+  account_login
+  other
+}
+
+enum Priority {
+  urgent
+  high
+  normal
+}
+
+enum Sentiment {
+  upset
+  neutral
+  calm
+}
+
+// architecture §6.3
+enum TriageFlag {
+  low_confidence
+  non_english
+  no_faq_match
+  summary_dropped
+  draft_dropped
+  url_in_draft
+  check_priority
+}
+
+enum AgentRole {
+  agent
+  lead
+}
+
+enum AiPurpose {
+  triage
+  kb
+}
+
+enum AiOutcome {
+  ok
+  timeout
+  api_error
+  invalid_output
+  refused
+  disabled
+  capped
+  lost
+}
+
+model Ticket {
+  id                String       @id @default(uuid())
+  // Shown as "HD-<refNumber>". Not a secret: only the status token opens the status page (§7.2).
+  // The migration restarts this sequence at 24800.
+  refNumber         Int          @unique @default(autoincrement())
+  status            TicketStatus @default(received)
+  triageState       TriageState  @default(pending)
+  // Set when both attempts were refused; sorted with Urgent (§4.3, §6.1).
+  reviewNow         Boolean      @default(false)
+  customerName      String
+  customerEmail     String
+  subject           String
+  description       String
+  // SHA-256 of the 128-bit status token; the plain token lives only in the customer's link.
+  statusTokenHash   String       @unique
+  category          Category?
+  priority          Priority?
+  labelsCheckedById String?
+  labelsCheckedBy   Agent?       @relation(fields: [labelsCheckedById], references: [id], onDelete: SetNull)
+  createdAt         DateTime     @default(now())
+  triageCompletedAt DateTime?
+  firstReplyAt      DateTime?
+
+  triage     Triage?
+  aiCallLogs AiCallLog[]
+
+  @@index([triageState, createdAt])
+}
+
+// Written once from a validated AI response, never updated (BRD §7 must-never 5).
+model Triage {
+  id            String       @id @default(uuid())
+  ticketId      String       @unique
+  ticket        Ticket       @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  category      Category
+  priority      Priority
+  sentiment     Sentiment
+  confCategory  Float
+  confPriority  Float
+  confSentiment Float
+  reason        String
+  summary       String?
+  draft         String?
+  sources       String[]
+  flags         TriageFlag[]
+  promptVersion String
+  faqVersion    String
+  model         String
+  createdAt     DateTime     @default(now())
+}
+
+model Agent {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  name           String
+  role           AgentRole @default(agent)
+  passwordHash   String
+  active         Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  checkedTickets Ticket[]
+}
+
+// One row per attempt, written as soon as it ends. No ticket text or customer data (NFR-08).
+model AiCallLog {
+  id            String    @id @default(uuid())
+  ticketId      String?
+  // Set to null when the ticket is deleted, so cost and latency history survives (§3).
+  ticket        Ticket?   @relation(fields: [ticketId], references: [id], onDelete: SetNull)
+  purpose       AiPurpose
+  promptVersion String
+  faqVersion    String
+  model         String
+  attempt       Int
+  latencyMs     Int
+  inputTokens   Int       @default(0)
+  outputTokens  Int       @default(0)
+  costUsd       Decimal   @default(0) @db.Decimal(10, 6)
+  outcome       AiOutcome
+  at            DateTime  @default(now())
+
+  @@index([at])
+}
+
+// Keys are HMAC-SHA-256 with a server secret, e.g. "submit:<hmac(ip)>" (§3, §7.4).
+model RateLimit {
+  key         String
+  windowStart DateTime
+  count       Int      @default(0)
+
+  @@id([key, windowStart])
+}
