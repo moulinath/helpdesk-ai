@@ -374,8 +374,49 @@ export function findByRef(ref: string): Ticket | undefined {
   return TICKETS.find((t) => t.ref === ref);
 }
 
+/**
+ * HD-24817 a day later, after Daniel replied. Customer status page only (review task 3), so the
+ * story the reviewer starts in task 1 ends with a reply to their own ticket. The queue keeps the
+ * open version.
+ */
+export const HD_24817_REPLIED: Ticket = {
+  ref: "HD-24817",
+  token: "Rf7mWc3kTy9J",
+  subject: "Charged twice for my order",
+  description:
+    "Hi, I ordered a rain jacket on Monday (order 5521) and my bank app shows two payments of £89.00 to Larkfield Goods on the same day. I only placed one order and only got one confirmation email. Money is tight this month so I really need the second payment back as soon as possible. Can you please check and refund it?",
+  customerFirstName: "Sofia",
+  customerFullName: "Sofia Marin",
+  customerEmail: "sofia.marin@example.com",
+  receivedAt: "30 Oct, 10:42",
+  age: "1d",
+  status: "Replied",
+  triage: {
+    category: "Payment & billing",
+    priority: "Urgent",
+    sentiment: "Upset",
+    confidence: { category: 0.96, priority: 0.88, sentiment: 0.9 },
+    reason: "Two identical charges for one order, and the customer says money is tight.",
+    draft:
+      "Hi Sofia,\n\nI'm sorry about the double charge on order 5521. A second payment is often a temporary hold that your bank removes within 3 working days. I've checked your order and only one payment was taken by us, so the second one should disappear on its own.\n\nIf it's still showing as completed after 3 working days, reply here and we'll refund it in full straight away. Refunds reach your original payment method within 2 working days, and your bank may take a few more days to show it.\n\nBest wishes,\nDaniel",
+    sources: ["FAQ 7", "FAQ 3"],
+    confirmedBy: "Daniel",
+  },
+  reply: {
+    agent: "Daniel",
+    sentAt: "30 Oct, 11:05",
+    body: "Hi Sofia,\n\nI'm sorry about the double charge on order 5521. I've checked, and the second £89.00 payment was taken by mistake, so I've refunded it today. Refunds reach your original payment method within 2 working days, and your bank may take a few more days to show it.\n\nYou don't need to do anything else. If it hasn't appeared by next Friday, reply here and I'll chase it for you.\n\nBest wishes,\nDaniel",
+    editLevel: "major",
+  },
+  labelHistory: ["30 Oct 10:42 · AI suggested Payment & billing / Urgent", "30 Oct 10:58 · Confirmed by Daniel"],
+  contactReveals: [],
+};
+
+/** Every ticket a customer status link can open. */
+export const STATUS_TICKETS: readonly Ticket[] = [...TICKETS, HD_24817_REPLIED];
+
 export function findByToken(token: string): Ticket | undefined {
-  return TICKETS.find((t) => t.token === token);
+  return STATUS_TICKETS.find((t) => t.token === token);
 }
 
 /** Queue sort (S5): Urgent → High (incl. Needs triage, treated as High) → Normal; oldest first. */

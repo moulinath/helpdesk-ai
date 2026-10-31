@@ -32,6 +32,7 @@ Two ways to run it:
 > - It's a rough prototype with fake data. Nothing you type is saved or sent anywhere, but please
 >   use made-up details anyway.
 > - Ignore the amber "Prototype" bar at the top of each page.
+> - Whatever you type, the pages after it show a sample customer called Sofia. That's expected.
 > - I'm testing the design, not you. If something is confusing, that's exactly what I need to know.
 >   There are no wrong answers.
 >
@@ -40,8 +41,8 @@ Two ways to run it:
 > 1. You were charged twice for an order. Contact the shop's support about it.
 >    Start here: https://helpdesk-ai-prototype-eta.vercel.app/prototype/support
 > 2. A day later you want to check on your request. Find out what's happening with it.
-> 3. Some time later, your request has been answered. Read the reply and tell the shop what you
->    thought of it: https://helpdesk-ai-prototype-eta.vercel.app/prototype/t/Ps4nGv7cXr2D
+> 3. Some time later, the shop has answered your double-charge request. Read the reply and tell
+>    the shop what you thought of it: https://helpdesk-ai-prototype-eta.vercel.app/prototype/t/Rf7mWc3kTy9J
 >
 > **Part 2: You're a support agent at the shop (about 7 minutes)**
 >

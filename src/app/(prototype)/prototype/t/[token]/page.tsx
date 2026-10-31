@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { CustomerShell } from "../../_components/shells";
-import { TICKETS, findByToken } from "../../_data/sample";
+import { STATUS_TICKETS, findByToken } from "../../_data/sample";
 import { StatusSkeleton, StatusView } from "./status-view";
 
 export const metadata: Metadata = { title: { absolute: "Your request · Larkfield Goods" } };
 
 export function generateStaticParams() {
-  return TICKETS.map((t) => ({ token: t.token }));
+  return STATUS_TICKETS.map((t) => ({ token: t.token }));
 }
 
 const STATES = [

@@ -32,7 +32,7 @@ Each screen has an amber **Prototype** bar for switching between its loading, em
 | --- | --- | --- |
 | S1 Submit | `/prototype/support` | sending · validation errors · server error · rate limited |
 | S2 Confirmation | `/prototype/support/confirmation` | copy link |
-| S3 Status | `/prototype/t/9fK2xQ7pLmV4` (in progress) · `…/Nd3kLs9vQe2B` (received) · `…/Ps4nGv7cXr2D` (replied, not rated) · `…/Zk9qBt5mLw3H` (replied and rated) | loading · rating fails |
+| S3 Status | `/prototype/t/9fK2xQ7pLmV4` (in progress) · `…/Nd3kLs9vQe2B` (received) · `…/Ps4nGv7cXr2D` (replied, not rated) · `…/Zk9qBt5mLw3H` (replied and rated) · `…/Rf7mWc3kTy9J` (HD-24817 replied, for review task 3) | loading · rating fails |
 | S4 Sign-in | `/prototype/agent/sign-in` | signing in · wrong details · rate limited |
 | S5 Queue | `/prototype/agent/queue` | loading · empty · error · new tickets · new urgent ticket |
 | S6 Ticket | `/prototype/agent/tickets/HD-24817` and others (below) | loading · AI still running · send fails |
@@ -66,7 +66,7 @@ think aloud. There are no wrong answers."
 2. "Later, you come back to check on it." Open the status page from the confirmation.
    - Ask: "What's happening with your request now?"
 3. "Your request has been answered. Read the reply and tell the shop what you thought." Use
-   `/prototype/t/Ps4nGv7cXr2D`.
+   `/prototype/t/Rf7mWc3kTy9J` (the same double-charge ticket, a day later, now answered).
 
 **Agent tasks (about 5 min):**
 
@@ -174,7 +174,7 @@ _Paste notes here after each session. Keep quotes verbatim where you can._
 
 | # | Feedback | Source | Change | Status |
 | --- | --- | --- | --- | --- |
-| F1 | Task 3 reply didn't match the reviewer's ticket | R1 | Add a replied double-charge sample (follow-on to HD-24817) and point task 3 at it, so tasks 1–3 tell one story | Proposed (before Reviewer 2) |
+| F1 | Task 3 reply didn't match the reviewer's ticket | R1 | Add a replied double-charge sample (follow-on to HD-24817) and point task 3 at it, so tasks 1–3 tell one story | Done 2026-10-31: new status page `/prototype/t/Rf7mWc3kTy9J`; brief and script updated; redeployed |
 | F2 | Agent ticket screen (S6) is busy | R1 | Wait for Reviewer 2 and ask what felt busy. Candidates: collapse Ask the KB and Why? by default, move contact and sentiment below the fold | Proposed |
 | F3 | Summary missed on a 111-word ticket | R1 | Consider lowering the UX-2 threshold (for example to 100 words). Decide after Reviewer 2 | Proposed |
 

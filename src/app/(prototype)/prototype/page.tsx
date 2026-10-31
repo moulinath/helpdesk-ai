@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PrototypeBar } from "./_components/prototype-bar";
-import { TICKETS } from "./_data/sample";
+import { HD_24817_REPLIED, TICKETS } from "./_data/sample";
 
 export const metadata: Metadata = { title: "Prototypes" };
 
-const statusLinks = TICKETS.filter((t) => ["HD-24817", "HD-24809", "HD-24790", "HD-24788"].includes(t.ref));
+const statusLinks = [
+  ...TICKETS.filter((t) => ["HD-24817", "HD-24809", "HD-24790", "HD-24788"].includes(t.ref)),
+  HD_24817_REPLIED,
+];
+// Keyed by token: HD-24817 has two status pages (in progress, then replied).
 const describe: Record<string, string> = {
-  "HD-24817": "In progress, no reply yet",
-  "HD-24809": "Received, no reply yet",
-  "HD-24790": "Replied, not yet rated",
-  "HD-24788": "Replied and rated",
+  "9fK2xQ7pLmV4": "In progress, no reply yet",
+  "Nd3kLs9vQe2B": "Received, no reply yet",
+  "Ps4nGv7cXr2D": "Replied, not yet rated",
+  "Zk9qBt5mLw3H": "Replied and rated",
+  [HD_24817_REPLIED.token]: "Replied, not yet rated (review task 3: the double charge, a day later)",
 };
 
 const ticketScenarios = [
@@ -56,7 +61,7 @@ export default function PrototypeIndex() {
             </Item>
             <Item href="/prototype/support/confirmation">S2 Confirmation</Item>
             {statusLinks.map((t) => (
-              <Item key={t.ref} href={`/prototype/t/${t.token}`} note={describe[t.ref]}>
+              <Item key={t.token} href={`/prototype/t/${t.token}`} note={describe[t.token]}>
                 S3 Status page · {t.ref}
               </Item>
             ))}
