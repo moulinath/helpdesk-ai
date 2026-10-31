@@ -3,22 +3,19 @@
 Claude Code updates this file at the end of every session (`/log`). The user signs gates.
 
 **Current phase:** 3 — Architecture
-**Next step:** Phase 3 step 1. PR #1 is merged. Delete the Vercel project `helpdesk-ai-prototype`
-(R14), then start a new branch `phase-3/architecture` from `main`. Run `/next`: in plan mode propose `docs/03-architecture/architecture.md` (component diagram
-in Mermaid, data model with `Ticket`, `Triage`, `Reply`, `Agent`, `Feedback`, API routes, AI
-integration: structured output, Zod, 10 s timeout, one retry, "Needs triage" fallback; security and
-privacy controls; cost per 1,000 tickets) and the 5 ADRs (framework; database + ORM; AI model
-`claude-haiku-5-5`; sync vs async triage; auth). Carry the Gate 2 decisions into the design:
-summary threshold 100 words (UX-2), "checked" wording (UX-8), sending with unchecked labels logs a
-check (UX-11). Then run the `architecture-reviewer` subagent and `/gate`.
-**Blocked on:** nothing
+**Next step:** Gate 3 sign-off (the user's part). Read `docs/04-delivery/gates/gate-3.md`, answer
+the 3 open questions in `docs/03-architecture/architecture.md` §11 (urgent keyword safety net;
+20% edit-level threshold; dashboard "time to triage" instead of "time to acknowledgement"), and
+approve, approve with risks, or reject. After sign-off, merge the `phase-3/architecture` PR and
+start Phase 4 Sprint 1 with CI setup (R8), then `/story US-12` or `/story US-01`.
+**Blocked on:** the user's Gate 3 decision
 
 | Phase | Status | Gate | Signed off by user |
 | --- | --- | --- | --- |
 | 0 Setup | Done | Repo, CLAUDE.md, CI skeleton (deferred to Phase 4) | 2026-10-30, with risks R7, R8 |
 | 1 Requirements | Done | Gate 1: MVP scope + stories with acceptance criteria | 2026-10-30, approved |
 | 2 UX design | Done | Gate 2: UX spec + prototype feedback applied | 2026-10-31, with risks R15–R17, R14, I2 |
-| 3 Architecture | Not started (next) | Gate 3: architecture + 5 ADRs reviewed | — |
+| 3 Architecture | Gate prepared (architecture v0.2, 5 ADRs, review applied) | Gate 3: architecture + 5 ADRs reviewed | — |
 | 4 Build (Sprint 1) | Not started | Sprint 1 demo | — |
 | 4 Build (Sprint 2) | Not started | Sprint 2 demo | — |
 | 5 Testing | Not started | Gate 5: exit criteria met | — |

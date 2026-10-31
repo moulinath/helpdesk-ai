@@ -20,12 +20,14 @@ Reviewers of the public demo need ready-made accounts (US-12 AC5). Two roles: `a
 Auth.js v5 with the Credentials provider. Seed one agent and one lead; passwords hashed with
 argon2id. JWT session cookie (HTTP-only, Secure, SameSite=Lax, 8 h) carrying `agentId` and `role`.
 Sign-in rate-limited (5 tries per 15 min per IP + email) with a generic error message.
-`requireAgent()` / `requireLead()` at the top of every agent page and Server Action; `proxy.ts`
-redirects signed-out users as a first check.
+`requireAgent()` / `requireLead()` at the top of every agent page, Server Action and Route Handler;
+they also look the agent up and reject inactive ones. `proxy.ts` redirects signed-out users as a
+first check.
 
 ## Consequences
 - No email or OAuth setup; reviewers get the demo credentials in the README.
-- JWT sessions can't be revoked before they expire; 8 hours is the trade-off. Removing an agent
-  takes effect at their next sign-in.
-- The demo passwords are public by design, so the demo holds fictional data only (BRD §8).
+- Credentials sign-in requires JWT sessions in Auth.js. Because `requireAgent()` checks the database,
+  deactivating an agent takes effect on their next request, not after 8 hours.
+- The demo passwords are public by design, so anyone can read every ticket and use Ask the KB within
+  its limits. The demo holds fictional data only (BRD §8; RAID R19).
 - Auth.js v5 must be checked for compatibility with Next.js 16 at the start of US-12 (RAID).

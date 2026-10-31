@@ -17,9 +17,12 @@ finishes, the ticket must still end up somewhere an agent sees it (US-09).
 | Cron that triages pending tickets | Durable | Vercel Hobby cron runs at most once a day (assumed; checked at setup): tickets would wait hours |
 
 ## Decision
-Save the ticket with `triageState = pending`, return the confirmation, and start triage with
-`after()`. The submit route sets `maxDuration = 60`. Every queue load first moves any ticket still
-`pending` after 2 minutes to `needs_triage`. Agents can always set labels themselves while triage is
+Save the ticket with `triageState = pending`, register triage with `after()`, then redirect to the
+confirmation. **`after()` must be called before `redirect()`**, because `redirect()` throws. The
+submit route sets `maxDuration = 60`. The agents' 30 s queue poll (`GET /api/agent/queue-status`)
+first moves any ticket still `pending` after 2 minutes to `needs_triage` and logs it as `lost`; pages
+never write during render. A late triage result only fills labels nobody has set (conditional
+update), so it can't overwrite an agent. Agents can always set labels themselves while triage is
 pending, and their values win.
 
 ## Consequences
@@ -29,4 +32,4 @@ pending, and their values win.
 - Lost triage isn't retried automatically. At demo volume that's acceptable; a queue service is the
   upgrade path if volume grows (roadmap).
 - Tests drive the triage function directly with a fake AI client; the `after()` wiring gets one
-  integration test.
+  integration test that fails if triage never runs (the reviewer's M1).
