@@ -1,7 +1,5 @@
 import "server-only";
 
-import { randomBytes } from "node:crypto";
-
 import { hash, verify } from "@node-rs/argon2";
 
 // @node-rs/argon2 defaults to Argon2id (ADR 0005).
@@ -13,14 +11,15 @@ export function verifyPassword(passwordHash: string, password: string): Promise<
   return verify(passwordHash, password);
 }
 
-let dummyHash: Promise<string> | undefined;
-
 /**
- * Checked when no agent matches the email, so an unknown email takes as long as a wrong
- * password and the timing doesn't reveal which accounts exist (US-12 AC3).
+ * An Argon2id hash (default parameters) of a random string nobody knows. Checked when no agent
+ * matches the email, so an unknown email takes as long as a wrong password, including on the
+ * first request after a cold start (US-12 AC3).
  */
+const DUMMY_HASH =
+  "$argon2id$v=19$m=19456,t=2,p=1$ZwPmzvAH5qtTNCokOGknNw$t458ZLMg7LaWX38AtgTPuRr6Yr/DlOIMdUDpVz/D90w";
+
 export async function verifyAgainstDummy(password: string): Promise<false> {
-  dummyHash ??= hash(randomBytes(32).toString("hex"));
-  await verify(await dummyHash, password);
+  await verify(DUMMY_HASH, password);
   return false;
 }

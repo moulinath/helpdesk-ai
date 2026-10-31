@@ -20,6 +20,9 @@ export type SignInInput = z.infer<typeof SignInSchema>;
 // the count, so in practice it limits failed tries.
 export const SIGN_IN_LIMIT: RateLimitRule = { bucket: "signin", limit: 5, windowMs: 15 * 60 * 1000 };
 
+// Against password spraying: 30 tries per 15 minutes from one address, across all emails.
+export const SIGN_IN_IP_LIMIT: RateLimitRule = { bucket: "signin-ip", limit: 30, windowMs: 15 * 60 * 1000 };
+
 export type SignedInAgent = { id: string; name: string; email: string; role: AgentRole };
 
 export type CredentialsResult =
@@ -37,8 +40,9 @@ export async function checkCredentials(raw: unknown, ip: string): Promise<Creden
   }
   const { email, password } = parsed.data;
 
-  const limit = await hitRateLimit(SIGN_IN_LIMIT, [ip, email]);
-  if (!limit.allowed) {
+  const perEmail = await hitRateLimit(SIGN_IN_LIMIT, [ip, email]);
+  const perIp = await hitRateLimit(SIGN_IN_IP_LIMIT, [ip]);
+  if (!perEmail.allowed || !perIp.allowed) {
     return { ok: false, reason: "rate_limited" };
   }
 

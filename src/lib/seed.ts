@@ -2,13 +2,14 @@ import { hash } from "@node-rs/argon2";
 
 import type { PrismaClient } from "@/generated/prisma/client";
 
-import { demoAccounts } from "./demo-accounts";
+import { assertSafeToSeed, demoAccounts, type EnvVars } from "./demo-accounts";
 
 /**
  * Creates or refreshes the demo agent and lead (US-12 AC5). Safe to run repeatedly: accounts are
  * matched by email, re-activated and given the current demo password. Argon2id by default.
  */
-export async function seedDemoAccounts(db: PrismaClient, env: NodeJS.ProcessEnv = process.env) {
+export async function seedDemoAccounts(db: PrismaClient, env: EnvVars = process.env) {
+  assertSafeToSeed(env);
   const accounts = demoAccounts(env);
   for (const account of accounts) {
     const passwordHash = await hash(account.password);

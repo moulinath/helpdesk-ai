@@ -1,18 +1,20 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { AuthError, CredentialsSignin } from "next-auth";
 
 import { signIn } from "@/auth";
 import { SignInSchema } from "@/lib/auth/credentials";
+import { signInErrorFor, type SignInError } from "@/lib/auth/sign-in-errors";
 import { db } from "@/lib/db";
 
 export type SignInState = {
-  error: "invalid" | "rate_limited" | null;
+  error: SignInError | null;
   email: string;
+  /** Changes on every failed attempt, so the same message is announced again. */
+  attempt: number;
 };
 
-export async function signInAction(_previous: SignInState, formData: FormData): Promise<SignInState> {
+export async function signInAction(previous: SignInState, formData: FormData): Promise<SignInState> {
   const email = String(formData.get("email") ?? "");
   try {
     await signIn("credentials", {
@@ -21,13 +23,15 @@ export async function signInAction(_previous: SignInState, formData: FormData): 
       redirect: false,
     });
   } catch (error) {
-    if (error instanceof CredentialsSignin) {
-      return { error: error.code === "rate_limited" ? "rate_limited" : "invalid", email };
+    const signInError = signInErrorFor(error);
+    if (!signInError) {
+      throw error;
     }
-    if (error instanceof AuthError) {
-      return { error: "invalid", email };
+    if (signInError === "unavailable") {
+      // The type only: never the email or the underlying message.
+      console.error("Sign-in failed on the server:", (error as { type?: string }).type);
     }
-    throw error;
+    return { error: signInError, email, attempt: previous.attempt + 1 };
   }
 
   // Signed in. Agents land on the queue, leads on the dashboard (S4).

@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 
 import type { AgentRole } from "@/generated/prisma/client";
 import { checkCredentials, clientIp } from "@/lib/auth/credentials";
+import { nextToken, SESSION_MAX_AGE_MS, type AgentToken } from "@/lib/auth/session";
 
 declare module "next-auth" {
   interface User {
@@ -14,10 +15,8 @@ declare module "next-auth" {
 }
 
 declare module "@auth/core/jwt" {
-  interface JWT {
-    agentId?: string;
-    role?: AgentRole;
-  }
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- module augmentation
+  interface JWT extends AgentToken {}
 }
 
 /** Generic failure: the same code whatever was wrong (US-12 AC3). */
@@ -30,8 +29,9 @@ class RateLimited extends CredentialsSignin {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  // Credentials sign-in requires JWT sessions (ADR 0005). 8-hour lifetime.
-  session: { strategy: "jwt", maxAge: 8 * 60 * 60 },
+  // Credentials sign-in requires JWT sessions (ADR 0005). The cookie's maxAge slides on use;
+  // the absolute 8-hour limit is enforced in the jwt callback (nextToken).
+  session: { strategy: "jwt", maxAge: SESSION_MAX_AGE_MS / 1000 },
   pages: { signIn: "/agent/sign-in" },
   providers: [
     Credentials({
@@ -48,11 +48,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     jwt({ token, user }) {
-      if (user?.id) {
-        token.agentId = user.id;
-        token.role = user.role;
-      }
-      return token;
+      return nextToken(token, user);
     },
     session({ session, token }) {
       if (token.agentId && token.role) {

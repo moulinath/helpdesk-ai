@@ -1,10 +1,14 @@
 import { expect, test, type Page } from "@playwright/test";
 
+import { demoAccounts } from "../../src/lib/demo-accounts";
+
 import { expectNoSeriousViolations } from "./helpers/axe";
 
 // Seeded by global-setup.ts (US-12 AC5). Public demo values, not secrets (RAID R19).
-const AGENT = { email: "daniel@larkfield.example", password: "demo-agent-2026", name: "Daniel Kim" };
-const LEAD = { email: "priya@larkfield.example", password: "demo-lead-2026", name: "Priya Shah" };
+const [AGENT, LEAD] = demoAccounts();
+if (!AGENT || !LEAD) {
+  throw new Error("demo accounts missing");
+}
 
 async function signIn(page: Page, email: string, password: string) {
   await page.goto("/agent/sign-in");
@@ -75,10 +79,24 @@ test.describe("US-12 agent sign-in", () => {
     await expect(agentPage).toHaveURL(/\/agent\/queue$/);
     const response = await agentPage.goto("/agent/dashboard");
     expect(response?.status()).toBe(403);
+    await expect(agentPage).toHaveURL(/\/agent\/dashboard$/);
     await expect(
       agentPage.getByRole("heading", { level: 1, name: "You don't have access to this page" }),
     ).toBeVisible();
     await expectNoSeriousViolations(agentPage);
     await agentContext.close();
+  });
+
+  test("AC3: repeated failures are rate-limited with their own message", async ({ page }) => {
+    // An address with no account: the limit applies before the lookup, so no one else is locked out.
+    const email = "brute-force-test@larkfield.example";
+    for (let attempt = 1; attempt <= 5; attempt++) {
+      await signIn(page, email, `wrong-${attempt}`);
+      await expect(page.getByText("Email or password is incorrect.")).toBeVisible();
+    }
+    await signIn(page, email, "wrong-6");
+    await expect(page.getByText("Too many attempts. Try again in a few minutes.")).toBeVisible();
+    await expect(page.getByLabel("Email")).not.toHaveAttribute("aria-invalid", "true");
+    await expectNoSeriousViolations(page);
   });
 });

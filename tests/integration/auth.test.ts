@@ -9,15 +9,26 @@ import { seedDemoAccounts } from "@/lib/seed";
 const session = vi.hoisted(() => ({ value: null as { user: { id: string } } | null }));
 vi.mock("@/auth", () => ({ auth: async () => session.value }));
 vi.mock("next/server", () => ({ connection: async () => undefined }));
+// Next's redirect() and forbidden() throw; stand-ins that say which one fired.
+vi.mock("next/navigation", () => ({
+  redirect: (url: string) => {
+    throw new Error(`redirect:${url}`);
+  },
+  forbidden: () => {
+    throw new Error("forbidden");
+  },
+}));
 
-const { currentAgent } = await import("@/lib/auth/guards");
+const { agentOrUnauthorized, currentAgent, requireAgent, requireLead } = await import(
+  "@/lib/auth/guards"
+);
 
 const IP = "203.0.113.7";
 const PASSWORD = "correct-horse-battery";
 
-async function createAgent(email: string, active = true) {
+async function createAgent(email: string, active = true, role: "agent" | "lead" = "agent") {
   return db.agent.create({
-    data: { email, name: "Test Agent", passwordHash: await hashPassword(PASSWORD), active },
+    data: { email, name: "Test Agent", passwordHash: await hashPassword(PASSWORD), active, role },
   });
 }
 
@@ -76,7 +87,9 @@ describe("US-12 sign-in against the database", () => {
       await checkCredentials({ email: "amara@larkfield.example", password: "nope" }, IP);
     }
     expect((await checkCredentials({ email: "amara@larkfield.example", password: PASSWORD }, IP)).ok).toBe(true);
-    expect(await db.rateLimit.count()).toBe(0);
+    // The per-email count is cleared; the per-address spraying cap is not.
+    expect(await db.rateLimit.count({ where: { key: { startsWith: "signin:" } } })).toBe(0);
+    expect(await db.rateLimit.count({ where: { key: { startsWith: "signin-ip:" } } })).toBe(1);
   });
 
   it("requireAgent's lookup rejects an agent deactivated after signing in (ADR 0005)", async () => {
@@ -96,5 +109,56 @@ describe("US-12 sign-in against the database", () => {
       ["daniel@larkfield.example", "agent", true],
       ["priya@larkfield.example", "lead", true],
     ]);
+  });
+
+  it("caps tries from one address across many emails (password spraying)", async () => {
+    for (let attempt = 1; attempt <= 30; attempt++) {
+      const result = await checkCredentials({ email: `guess${attempt}@larkfield.example`, password: "x" }, IP);
+      expect(result).toEqual({ ok: false, reason: "invalid" });
+    }
+    const next = await checkCredentials({ email: "guess31@larkfield.example", password: "x" }, IP);
+    expect(next).toEqual({ ok: false, reason: "rate_limited" });
+  });
+});
+
+// The guards are tested without proxy.ts, which is only the first check (architecture §5).
+describe("US-12 page and API guards", () => {
+  beforeEach(async () => {
+    await db.rateLimit.deleteMany();
+    await db.ticket.deleteMany();
+    await db.agent.deleteMany();
+    session.value = null;
+  });
+
+  it("AC1: requireAgent redirects to sign-in when signed out", async () => {
+    await expect(requireAgent()).rejects.toThrow("redirect:/agent/sign-in");
+  });
+
+  it("AC1: agentOrUnauthorized gives 401 when signed out or deactivated", async () => {
+    const signedOut = await agentOrUnauthorized();
+    expect(signedOut).toBeInstanceOf(Response);
+    expect((signedOut as Response).status).toBe(401);
+
+    const agent = await createAgent("amara@larkfield.example", false);
+    session.value = { user: { id: agent.id } };
+    const inactive = await agentOrUnauthorized();
+    expect((inactive as Response).status).toBe(401);
+  });
+
+  it("AC4: requireLead lets a lead through and refuses an agent", async () => {
+    const lead = await createAgent("priya@larkfield.example", true, "lead");
+    session.value = { user: { id: lead.id } };
+    expect((await requireLead()).id).toBe(lead.id);
+
+    const agent = await createAgent("daniel@larkfield.example");
+    session.value = { user: { id: agent.id } };
+    await expect(requireLead()).rejects.toThrow("forbidden");
+  });
+
+  it("AC4: a lead demoted in the database is refused even though their session still says lead", async () => {
+    const lead = await createAgent("priya@larkfield.example", true, "lead");
+    session.value = { user: { id: lead.id } };
+    await db.agent.update({ where: { id: lead.id }, data: { role: "agent" } });
+    await expect(requireLead()).rejects.toThrow("forbidden");
   });
 });
