@@ -136,3 +136,36 @@ and governed. Claude Code appends entries via `/log`; the user can edit them.
     I haven't done a VoiceOver pass either.
 - **Standup:** done scaffold + S1–S8 prototypes + a11y review / next: user runs 2 prototype reviews,
   then apply feedback and `/gate` / blocked: reviewers not yet booked
+
+### 2026-10-31 · Phase 2 · Prototype reviews, feedback applied, Gate 2 signed
+- **User asked:** how to run the reviews; then a shareable link, the exact message for reviewers and
+  what to expect of them; then to record each review, apply the changes and prepare Gate 2.
+- **Produced:**
+  - Hosted prototype on a separate Vercel project (`helpdesk-ai-prototype`), with `.vercelignore`
+    keeping `.env*` and `docs/` out of the upload, and `vercel.json` pinning the Next.js preset.
+  - `docs/02-design/reviewer-brief.md`: the message to send, with direct links and 7 questions.
+  - Both reviews in `prototype-feedback.md` §5; changes F1–F6 in §6, applied and redeployed.
+  - Spec v1.1 (UX-2 lowered to 100 words; UX-8 to UX-11 added), BRD §7 and NFRs aligned.
+  - `gates/gate-2.md`; RAID R15–R17 and I2 added, R14 updated, D4 closed.
+- **Human changes / corrections:**
+  - The user ran both reviews (an experienced online shopper and a support agent) and approved all
+    proposed changes, the 2 deviations and Gate 2 with risks.
+  - An earlier "review" reply ("I would need interactive browser control") looked like it came from
+    an AI tool; I said it couldn't count as a human review, and the user found real reviewers.
+- **What went wrong / caught:**
+  - **My review script had a broken story.** Task 3 linked to an unrelated "wrong colour" ticket, so
+    Reviewer 1 thought the reply was wrong. Fixed (F1) before Reviewer 2.
+  - **My "Copy link" copied a made-up address** (`support.larkfieldgoods.example`), so Reviewer 2's
+    pasted link opened an empty page. Fixed (F4).
+  - **My first rewrite of the dashboard 403 note was wrong** (it said the dashboard opens without
+    signing in). I checked `role.ts` before committing and corrected it.
+  - **First Vercel deploy failed:** the new project had no framework preset. Fixed with `vercel.json`.
+  - `vercel link` wrote a `VERCEL_OIDC_TOKEN` into `.env.local` (gitignored; not read). Reported to
+    the user.
+  - A summary I wrote for HD-24802 was 27 words against the 25-word rule; trimmed to 22.
+  - I didn't type a password into the public site, so the agent sign-in on the hosted copy wasn't
+    exercised by me; the user was asked to try it once.
+  - Checks: typecheck, lint, build pass; axe 0 violations on the 8 changed pages (live). Still no
+    VoiceOver pass (R17) and no Vitest/Playwright (R8).
+- **Standup:** done reviews + F1–F6 + Gate 2 / next: merge PR #1, delete the review Vercel project,
+  then Phase 3 architecture / blocked: nothing

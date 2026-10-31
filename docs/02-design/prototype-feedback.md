@@ -2,7 +2,7 @@
 
 | | |
 | --- | --- |
-| Version | 0.3 (2 human reviews recorded; changes F1–F6 applied; axe 0 violations on the 8 changed pages, live) |
+| Version | 1.0 (Gate 2 signed with risks, 2026-10-31) |
 | Date | 2026-10-31 |
 | Inputs | [UX spec](ux-spec.md) v1.0 · decisions UX-1 to UX-7 |
 | Gate | Gate 2 needs: 2 human reviews recorded here, fixes applied |
@@ -216,8 +216,8 @@ _Paste notes here after each session. Keep quotes verbatim where you can._
 - **Description counter (S1):** the spec says the counter is "announced politely". The prototype
   announces it only within 200 characters of the limit, because announcing every keystroke drowns
   out what the user is typing. The visible counter always updates, and it's read when the field is
-  focused. To be confirmed at Gate 2.
+  focused. **Confirmed at Gate 2 (UX-10).**
 - **Sending with unconfirmed labels (S6):** allowed. The send dialog warns that sending confirms the
-  labels as they are, and that's logged. Check this against US-06 in Phase 4.
+  labels as they are, and that's logged. **Confirmed at Gate 2 (UX-11)**; check against US-06 in Phase 4.
 - **Dashboard charts:** plain CSS bars at low fidelity; the chart library is a Phase 4 decision.
   The figures are sample data (assumed).

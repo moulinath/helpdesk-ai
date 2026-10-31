@@ -16,7 +16,10 @@
 | R11 | 2-week target vs ~4-week playbook; UAT participant availability can't be compressed | H | M | Target, not hard date; slippage tracked in PROGRESS.md; book UAT participants now; Coulds built last | User | Open |
 | R12 | Public demo exceeds the $5/month API cap | M | M | Rate limit on submission, AI on/off switch, Haiku-class model, spend limit in Console | User | Open |
 | R13 | Long-ticket AI summary omits a critical detail | M | H | Full text always visible; summary labelled AI-suggested; eval includes buried-detail tickets | Claude Code | Open |
-| R14 | Phase 2 prototype routes (`/prototype/*`, fake sign-in, sample data) ship to production | L | M | Pages are `noindex`; delete `src/app/(prototype)` as a Phase 7 release-checklist item; Gate 6 checks it's gone. The public review copy (Vercel project `helpdesk-ai-prototype`, 2026-10-31) is deleted after Gate 2 | Claude Code | Open |
+| R14 | Phase 2 prototype routes (`/prototype/*`, fake sign-in, sample data) ship to production | L | M | Pages are `noindex`; delete `src/app/(prototype)` as a Phase 7 release-checklist item; Gate 6 checks it's gone. The public review copy (Vercel project `helpdesk-ai-prototype`, 2026-10-31) is deleted now that Gate 2 is signed (user, in the Vercel dashboard) | Claude Code | Open |
+| R15 | Prototype evidence is thin: 2 unmoderated reviews with written answers, no think-aloud; Reviewer 1 saw the first version of task 3 | M | M | Accepted at Gate 2. UAT (Phase 6) is moderated and think-aloud, with 4–6 participants (D3) | User | Accepted |
+| R16 | Changed wording (F4 private link, F5 "AI suggestion · not checked" / "Mark labels as checked") not yet seen by any user | M | M | Accepted at Gate 2. UAT script asks what the labels and the link mean | Claude Code | Accepted |
+| R17 | No screen-reader test yet (axe and the a11y subagent only) | M | H | Accepted at Gate 2. VoiceOver pass on S1, S3, S5, S6 in Phase 5; exit criterion for Gate 5 | Claude Code | Accepted |
 
 ## Assumptions
 | ID | Assumption | Validated? |
@@ -31,6 +34,7 @@
 | ID | Issue | Raised | Owner | Status |
 | --- | --- | --- | --- | --- |
 | I1 | Anthropic Console payment issue; API key not yet created | 2026-10-30 | User | Open |
+| I2 | PR moulinath/helpdesk-ai#1 (scaffold, prototypes, Phase 2 docs) not merged; Phase 3 must start from `main` | 2026-10-31 | User | Open |
 
 ## Dependencies
 | ID | Dependency | Needed by | Status |

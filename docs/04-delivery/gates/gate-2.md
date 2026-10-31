@@ -43,7 +43,8 @@ prototype feedback applied", plus the five Phase 2 steps.
 - **PR #1 not merged:** Phase 3 work should start from `main` once you've merged it.
 
 ## Decision
-Decision: _(for the user: approve / approve with risks / reject, with date)_
+Decision: **Approved with risks** by the user on 2026-10-31. The 3 decision changes and the 2 deviations
+are confirmed. Accepted risks logged as RAID R15–R17, R14 (updated) and I2.
 
 ## On approval, Claude Code will
 1. Mark Gate 2 signed in `PROGRESS.md`, move "Current phase" to 3 — Architecture, and add a dev-log

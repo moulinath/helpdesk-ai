@@ -2,7 +2,7 @@
 
 | | |
 | --- | --- |
-| Version | 1.1 (prototype feedback F3–F5 applied, for Gate 2) |
+| Version | 1.1 (approved at Gate 2 with risks, 2026-10-31) |
 | Date | 2026-10-31 |
 | Inputs | [BRD](../01-requirements/BRD.md) · [personas](../01-requirements/personas.md) · [user stories](../01-requirements/user-stories.md) · [NFRs](../01-requirements/nfrs.md) |
 | Prototype | Built 2026-10-31: `/prototype` (code in `src/app/(prototype)/prototype`). URL map and review script in [prototype-feedback.md](prototype-feedback.md) |
@@ -426,14 +426,18 @@ Customers never see the words "AI", "model" or "triage".
 | S1–S3, S8 (customer) | **Mobile-first**, 360 px and up | Single column; full-width buttons; the private link wraps and the copy button stays reachable |
 | S4–S7 (agent/lead) | **Desktop**, ≥ 1024 px; works at tablet width (768 px) | S6 two-column → stacked below 1024 px (ticket, triage, reply); S5 table → hides the Sentiment and Age columns below 768 px; S7 widgets in a 2-column grid → 1 column |
 
-## 8. Decisions (agreed with the product owner, 2026-10-30)
+## 8. Decisions (agreed with the product owner, 2026-10-30; UX-2 and UX-8 to UX-11 at Gate 2, 2026-10-31)
 
 | # | Item | Decision | Status |
 | --- | --- | --- | --- |
 | UX-1 | Confidence word bands | High ≥ 0.85 · Medium 0.60–0.85 · Low < 0.60 | Agreed; recalibrate after `/eval` (models tend to be overconfident) |
-| UX-2 | Long-ticket summary threshold | Shown when the description is **> 100 words**. Was 125 (PO's number); lowered after both prototype reviewers missed the summary on a 111-word ticket (F3) | Agreed 2026-10-31 |
+| UX-2 | Long-ticket summary threshold | Shown when the description is **> 100 words**. Was 125 (PO's number); lowered after both prototype reviewers missed the summary on a 111-word ticket (F3) | Agreed at Gate 2, 2026-10-31 |
 | UX-3 | Queue refresh | **Hybrid:** check every 30 s; polite "n new tickets" notice; prominent, announced notice for new Urgent tickets; rows never move without the agent's click | Agreed |
 | UX-4 | After sending a reply | **Back to the queue** with a toast. PO: "agents need at least a split-second to recoup" | Agreed; reviewers' expectation noted in prototype review |
 | UX-5 | Customer contact details on S6 | Hidden behind **Show contact**; each reveal logged (who, when) | Agreed |
 | UX-6 | Visual style | shadcn/ui defaults, light mode only; light brand on customer screens: fictional **"Larkfield Goods"**, teal accent `#0f766e` (5.47:1 on white, measured). Dark mode on roadmap | Agreed; brand name changeable |
 | UX-7 | Rating scale | **1–5 CSAT** ("How satisfied are you with this reply?") + optional comment. Chosen by PO over the proposed Yes/No | Agreed; US-10 and US-08 updated |
+| UX-8 | AI state wording | **"AI suggestion · not checked"** → **"✓ Checked by <name>"**; button **"Mark labels as checked"** (replaces "AI · unconfirmed" / "Confirmed by") | Agreed at Gate 2, 2026-10-31 (prototype review F5) |
+| UX-9 | Private link card | Says what the link is for: "Use this link to check your request and read our reply." | Agreed at Gate 2, 2026-10-31 (prototype review F4) |
+| UX-10 | Description counter (S1) | Visible counter always; announced to screen readers only within 200 characters of the limit | Agreed at Gate 2, 2026-10-31 (deviation from "announced politely") |
+| UX-11 | Sending with unchecked labels (S6) | Allowed; the send dialog warns that sending marks the labels as checked, and that's logged | Agreed at Gate 2, 2026-10-31; re-check against US-06 in Phase 4 |
