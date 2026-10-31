@@ -1,6 +1,6 @@
 # ADR 0002 — Database and ORM: Postgres on Neon, with Prisma
 
-- **Status:** Proposed (Gate 3)
+- **Status:** Accepted (Gate 3, 2026-10-31)
 - **Date:** 2026-10-31
 
 ## Context

@@ -1,6 +1,6 @@
 # ADR 0005 — Agent auth: Auth.js Credentials with seeded accounts
 
-- **Status:** Proposed (Gate 3)
+- **Status:** Accepted (Gate 3, 2026-10-31)
 - **Date:** 2026-10-31
 
 ## Context

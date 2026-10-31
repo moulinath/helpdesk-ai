@@ -240,6 +240,8 @@ Conventions for every screen:
   - Priority badge: text plus icon plus colour, e.g. `▲ Urgent`, never colour alone.
   - AI state, under the priority: **AI suggestion · not checked** or **✓ Checked by Amara** (F5).
   - Low confidence: **⚠ Low confidence**.
+  - Check priority (added at Gate 3, US-05 AC6): **⚠ Check priority**, when the AI said Normal but
+    the ticket matches the urgent keyword list. Shown on S5 and S6; the priority is not changed.
   - Needs triage: **AI unavailable**, with priority shown as **High (default)**.
 - **Refresh (UX-3, hybrid):** the app checks every 30 s. New tickets show a polite notice "3 new
   tickets · Refresh". A new **Urgent** ticket shows a prominent amber notice "1 new urgent ticket ·
@@ -341,7 +343,7 @@ Conventions for every screen:
   2. Tickets by **priority** and **status** (stacked bar or table).
   3. **Draft outcome:** approved unchanged / minor edit / major edit / unused (bar, %).
   4. **Override rate** by category (table), with links to the tickets.
-  5. **Median time** to acknowledgement and to first reply (stat tiles).
+  5. **Median time** to triage and to first reply (stat tiles; changed at Gate 3).
   6. **Needs triage** count · **Product feedback** count · **CSAT**: average score and % rating 4–5
      (stat tiles).
 - **Empty:** each widget shows "No tickets in this period", never zero-filled charts (US-08 AC4).

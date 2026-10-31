@@ -131,6 +131,9 @@ without searching or asking a colleague.
 - **AC4:** **Given** each row, **then** I see the reference, subject, category, priority, sentiment,
   age and summary (if any), and can open the ticket with a keyboard.
 - **AC5 ⚠:** **Given** the queue is empty, **then** I see an empty state, not a blank screen.
+- **AC6 ⚠ (added at Gate 3):** **Given** the AI set priority Normal **and** the ticket matches the
+  urgent keyword list (charges, safety, account access; architecture §6.3), **then** the ticket shows a
+  "Check priority" flag in the queue and on the ticket; the priority itself is not changed.
 
 ## US-06 · Edit/approve draft, record override — Must · Sprint 2
 **As** Daniel, **I want** to edit or approve the AI draft and correct any label **so that** every
@@ -166,7 +169,8 @@ whether urgent issues are handled and whether the AI is helping.
   status for a chosen period (default: last 7 days).
 - **AC2:** **Given** replied tickets, **then** I see the share of drafts approved unchanged / minor edit
   / major edit / unused, and the label override rate by category.
-- **AC3:** **Given** tickets, **then** I see median time to acknowledgement and to first reply, and the
+- **AC3:** **Given** tickets, **then** I see median time to triage (AI or agent) and to first reply (changed at Gate 3;
+  acknowledgement time is measured from app logs, NFR-02), and the
   count of "Needs triage" and "Product feedback" tickets, and CSAT (average and % 4–5) once US-10 exists.
 - **AC4 ⚠:** **Given** a period with no data, **then** each widget shows an empty state, not zero-filled
   charts that look like real data.

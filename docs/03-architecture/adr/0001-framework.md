@@ -1,6 +1,6 @@
 # ADR 0001 — Framework: Next.js 16 App Router on Vercel
 
-- **Status:** Proposed (Gate 3)
+- **Status:** Accepted (Gate 3, 2026-10-31)
 - **Date:** 2026-10-31
 
 ## Context

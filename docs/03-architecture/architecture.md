@@ -2,7 +2,7 @@
 
 | | |
 | --- | --- |
-| Version | 0.2 (architecture-reviewer findings applied, for Gate 3) |
+| Version | 1.0 (approved at Gate 3, 2026-10-31; §11 answered) |
 | Date | 2026-10-31 |
 | Inputs | [BRD](../01-requirements/BRD.md) §6–8 · [user stories](../01-requirements/user-stories.md) · [NFRs](../01-requirements/nfrs.md) · [UX spec](../02-design/ux-spec.md) v1.1 |
 | Decisions | [ADR 0001–0005](adr/) · review findings in [architecture-review.md](architecture-review.md) |
@@ -288,6 +288,7 @@ and polling is the simplest thing on serverless).
 | Draft contains a URL that isn't in the FAQ | Draft kept, flag `url_in_draft`, warning shown to the agent |
 | Category or priority confidence < 0.60 | Flag `low_confidence` (UX-1; bands recalibrated after `/eval`) |
 | `non_english` | Draft dropped (BRD A4, US-03 AC6) |
+| AI priority is Normal, but the subject or description matches the urgent keyword list (charges, safety, account access; `src/ai/urgent-keywords.ts`) | Flag `check_priority`, shown to the agent as "Check priority". The priority is never changed and the sort is unchanged (§11 Q1, US-05 AC6) |
 
 ### 6.4 Things code can't guarantee
 The prompt tells the model never to promise refunds, compensation or dates the FAQ doesn't state
@@ -439,12 +440,14 @@ Hosting: Vercel Hobby and Neon's free tier, $0 at demo volume (assumed).
 | Each story | At least one Playwright test, with axe (charter, NFR-13) |
 | Triage quality | `/eval`: accuracy, urgent recall, injection cases, non-English (NFR-07, 11, 16) |
 
-## 11. Open questions for Gate 3
-1. **Urgent safety net.** NFR-16 asks for 0 urgent tickets missed, which currently rests on the model
-   alone. Recommended: a cheap keyword check (charges, safety, account access) that adds a "check
-   priority" flag for the agent when the AI says Normal. It never changes the priority. Not in the
-   MVP stories, so it needs your call.
-2. **Edit-level threshold** of 20% (§6.5) is assumed; fine to start with?
-3. **"Time to acknowledgement" on the dashboard (US-08 AC3).** The customer is acknowledged instantly
-   by design, so that number would always be ~0. Recommended: show *time to triage* (AI or agent) and
-   *time to first reply* instead.
+## 11. Gate 3 decisions
+Answered by the user at Gate 3 (2026-10-31).
+
+1. **Urgent safety net: yes.** A keyword check (charges, safety, account access) adds a "Check
+   priority" flag when the AI says Normal (§6.3). It never changes the priority or the sort. Added as
+   US-05 AC6. The keyword list lives in code, is unit-tested, and its hit rate is reported in `/eval`.
+2. **Edit-level threshold: 20% accepted** (§6.5). Still assumed; checked against real edits in UAT.
+3. **Dashboard metric: "time to triage"** (ticket saved → labels set by the AI or an agent, from
+   `triageCompletedAt` or the first `LabelChange`) and time to first reply replace "time to
+   acknowledgement" (US-08 AC3, ux-spec S7). Acknowledgement time stays a BRD KPI (G1), measured from
+   app logs and the Playwright timing test (NFR-02), not shown on the dashboard.

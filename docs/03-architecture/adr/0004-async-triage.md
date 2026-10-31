@@ -1,6 +1,6 @@
 # ADR 0004 — Triage runs after the response, with a lost-job sweep
 
-- **Status:** Proposed (Gate 3)
+- **Status:** Accepted (Gate 3, 2026-10-31)
 - **Date:** 2026-10-31
 
 ## Context

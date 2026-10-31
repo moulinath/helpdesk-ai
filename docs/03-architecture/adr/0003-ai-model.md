@@ -1,6 +1,6 @@
 # ADR 0003 — AI model: `claude-haiku-5-5`
 
-- **Status:** Proposed (Gate 3)
+- **Status:** Accepted (Gate 3, 2026-10-31)
 - **Date:** 2026-10-31
 
 ## Context

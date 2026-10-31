@@ -41,7 +41,12 @@ reviewed; reviewer findings resolved or accepted", plus the four Phase 3 steps.
 - All cost and token figures are assumed until `/eval` and the pricing page confirm them.
 
 ## Decision
-Decision: _(for the user: approve / approve with risks / reject, with date, plus answers to 1–3)_
+Decision: **Approved** by the user on 2026-10-31.
+1. Urgent safety net: **yes** (US-05 AC6, architecture §6.3).
+2. 20% edit-level threshold: **accepted** (assumed; checked at UAT).
+3. "Time to triage" instead of "time to acknowledgement": **yes** (US-08 AC3, ux-spec S7).
+
+Risks R18–R23 stand as logged in RAID.
 
 ## On approval, Claude Code will
 1. Record your answers in `architecture.md` §11 and update US-05 / US-08 if you said yes.
