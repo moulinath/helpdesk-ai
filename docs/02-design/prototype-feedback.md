@@ -140,11 +140,28 @@ problem (5 places).
 _Paste notes here after each session. Keep quotes verbatim where you can._
 
 ### Reviewer 1
-- Who / role:
-- Date:
+- Who / role: _(to fill)_
+- Date: 2026-10-31 · unmoderated (written reply to the [reviewer brief](reviewer-brief.md), hosted link)
 - Task results (completed? where did they hesitate?):
+  - Tasks 1–3: completed, "Not slowed down". Didn't use the private link: "had no reason to".
+  - Task 4: would pick the Urgent ticket "as it stuck out". Didn't say what "AI · unconfirmed" means.
+  - Task 5: opened **Why?** and the sources. Landing back on the queue "was expected" (supports UX-4).
+  - Task 6: "Summary was useful and missed on the second one" (HD-24802, 111 words, no summary).
 - Quotes:
+  - "The response was wrong as it talked about sending a different color rather than addressing my
+    concern on double charge."
+  - "Screen (as an agent) was busy."
+  - "As an agent, probably the screen could be a bit more intuitive."
+  - Trust: "No" (nothing trusted more or less because the AI suggested it).
 - Issues seen:
+  1. **Task 3 showed someone else's reply.** Cause: a flaw in the review script, not the design.
+     Task 3 links to HD-24790 ("Wrong colour sent", customer Aisha), which has nothing to do with the
+     double-charge ticket the reviewer submitted in task 1. Claude Code wrote the script and missed
+     this. Still useful: a customer assumes the reply on their status page answers *their* ticket.
+  2. **S6 ticket detail feels busy** to an agent. No specific element named; needs a follow-up.
+  3. **UX-2 summary threshold (125 words) may be too high:** the summary was missed on a 111-word
+     ticket.
+  4. The meaning of "AI · unconfirmed" wasn't answered, so P3 (AI visible) is untested here.
 
 ### Reviewer 2
 - Who / role:
@@ -157,7 +174,9 @@ _Paste notes here after each session. Keep quotes verbatim where you can._
 
 | # | Feedback | Source | Change | Status |
 | --- | --- | --- | --- | --- |
-| | | | | |
+| F1 | Task 3 reply didn't match the reviewer's ticket | R1 | Add a replied double-charge sample (follow-on to HD-24817) and point task 3 at it, so tasks 1–3 tell one story | Proposed (before Reviewer 2) |
+| F2 | Agent ticket screen (S6) is busy | R1 | Wait for Reviewer 2 and ask what felt busy. Candidates: collapse Ask the KB and Why? by default, move contact and sentiment below the fold | Proposed |
+| F3 | Summary missed on a 111-word ticket | R1 | Consider lowering the UX-2 threshold (for example to 100 words). Decide after Reviewer 2 | Proposed |
 
 ## 7. Notes and deviations from the spec
 
