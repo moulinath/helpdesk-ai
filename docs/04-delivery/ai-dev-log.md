@@ -94,3 +94,78 @@ and governed. Claude Code appends entries via `/log`; the user can edit them.
   - Mermaid rendering on GitHub not yet visually checked.
 - **Standup:** done UX spec + decisions / next: plan Next.js scaffold + clickable prototypes / blocked:
   none (prototype reviewers still to book)
+
+### 2026-10-31 · Phase 2 · Next.js scaffold and clickable prototypes (S1–S8)
+- **Asked:** `/next`, which meant planning and building Phase 2 step 3: scaffold the app and build
+  low-fi prototypes of S1–S8, then check them with the `ux-accessibility-reviewer` subagent.
+- **Produced:** branch `phase-2/prototype` (PR to `main`):
+  - The app: Next.js 16.4 (App Router, Cache Components) with TypeScript strict plus
+    `noUncheckedIndexedAccess`, Tailwind v4, ESLint and shadcn/ui (Radix, Nova). There's a
+    `typecheck` script, and the edit hook now runs it.
+  - Clickable prototypes at `/prototype/*`:
+    - Each screen's loading, empty and error states are switched with `?state=`.
+    - Sample tickets at 111 and 135 words test the UX-2 summary threshold.
+    - The flows covered are override → confirm → approve → back to the queue with a toast,
+      CSAT rating, and a role-based 403.
+  - `docs/02-design/prototype-feedback.md`: how to run it, a 10-minute review script, the automated
+    and subagent results, and empty sections for the 2 human reviews.
+  - RAID: R14 (remove the prototype before release) and D4 (prototype reviewers).
+  - UX spec: the teal contrast ratio was measured at 5.47:1.
+- **Human changes / corrections:** the plan was approved as proposed; no corrections this session.
+- **What went wrong / caught:**
+  - **Next.js 16 surprises:** the bundled docs showed that Cache Components disables
+    `dynamicParams` and requires Suspense around `useSearchParams`. I read the docs before writing
+    any pages, so this didn't cause rework. The shadcn CLI also needed a preset flag to run without
+    prompts.
+  - **Lint caught one issue:** I had written to a ref during render in S1. Replaced it with an id
+    lookup.
+  - **axe found 2 issues, both fixed:** the S1 error-summary links were under 24 px (serious), and
+    the loading skeletons had no h1.
+  - **The subagent found much more than axe.** It returned 5 Must-fix and 25 Should-fix items that
+    were all my mistakes:
+    - AI wording leaked into customer tab titles, breaking P5.
+    - Focus was lost when controls unmounted, in 5 places.
+    - AI labels weren't linked to their selects for screen readers.
+    - The queue summary had no visible AI label.
+    - Smaller issues: microcopy, `maxLength` cutting text, and sample-data inconsistencies.
+
+    I fixed all the Must-fix items and 24 of the Should-fix ones; the 25th, about the description
+    counter, is logged as a deviation. Lesson: an automated a11y scan passing doesn't mean the spec
+    is met.
+  - **Tests:** there are no Vitest or Playwright tests yet, since the prototypes are throwaway (R8).
+    I haven't done a VoiceOver pass either.
+- **Standup:** done scaffold + S1–S8 prototypes + a11y review / next: user runs 2 prototype reviews,
+  then apply feedback and `/gate` / blocked: reviewers not yet booked
+
+### 2026-10-31 · Phase 2 · Prototype reviews, feedback applied, Gate 2 signed
+- **User asked:** how to run the reviews; then a shareable link, the exact message for reviewers and
+  what to expect of them; then to record each review, apply the changes and prepare Gate 2.
+- **Produced:**
+  - Hosted prototype on a separate Vercel project (`helpdesk-ai-prototype`), with `.vercelignore`
+    keeping `.env*` and `docs/` out of the upload, and `vercel.json` pinning the Next.js preset.
+  - `docs/02-design/reviewer-brief.md`: the message to send, with direct links and 7 questions.
+  - Both reviews in `prototype-feedback.md` §5; changes F1–F6 in §6, applied and redeployed.
+  - Spec v1.1 (UX-2 lowered to 100 words; UX-8 to UX-11 added), BRD §7 and NFRs aligned.
+  - `gates/gate-2.md`; RAID R15–R17 and I2 added, R14 updated, D4 closed.
+- **Human changes / corrections:**
+  - The user ran both reviews (an experienced online shopper and a support agent) and approved all
+    proposed changes, the 2 deviations and Gate 2 with risks.
+  - An earlier "review" reply ("I would need interactive browser control") looked like it came from
+    an AI tool; I said it couldn't count as a human review, and the user found real reviewers.
+- **What went wrong / caught:**
+  - **My review script had a broken story.** Task 3 linked to an unrelated "wrong colour" ticket, so
+    Reviewer 1 thought the reply was wrong. Fixed (F1) before Reviewer 2.
+  - **My "Copy link" copied a made-up address** (`support.larkfieldgoods.example`), so Reviewer 2's
+    pasted link opened an empty page. Fixed (F4).
+  - **My first rewrite of the dashboard 403 note was wrong** (it said the dashboard opens without
+    signing in). I checked `role.ts` before committing and corrected it.
+  - **First Vercel deploy failed:** the new project had no framework preset. Fixed with `vercel.json`.
+  - `vercel link` wrote a `VERCEL_OIDC_TOKEN` into `.env.local` (gitignored; not read). Reported to
+    the user.
+  - A summary I wrote for HD-24802 was 27 words against the 25-word rule; trimmed to 22.
+  - I didn't type a password into the public site, so the agent sign-in on the hosted copy wasn't
+    exercised by me; the user was asked to try it once.
+  - Checks: typecheck, lint, build pass; axe 0 violations on the 8 changed pages (live). Still no
+    VoiceOver pass (R17) and no Vitest/Playwright (R8).
+- **Standup:** done reviews + F1–F6 + Gate 2 / next: merge PR #1, delete the review Vercel project,
+  then Phase 3 architecture / blocked: nothing

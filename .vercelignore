@@ -1,0 +1,15 @@
+# Never upload local secrets or tooling state to Vercel.
+.env
+.env.*
+!.env.example
+.claude
+.git
+.next
+.DS_Store
+node_modules
+tsconfig.tsbuildinfo
+# Not needed to build the app (and may hold interview notes).
+docs
+PLAYBOOK.md
+START-HERE.md
+CLAUDE.md
