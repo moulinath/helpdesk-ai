@@ -55,7 +55,7 @@ Sprint 2's order is planned at the Sprint 1 retro.
 ## 6. What the user provides, and by when
 | What | Needed before | RAID |
 | --- | --- | --- |
-| Make the repo public: decided "yes" on 2026-10-31, after a full-history secret scan and turning on GitHub secret scanning | Item 0 | Gate 0 |
+| Make the repo public: **done 2026-10-31**. gitleaks scanned all 31 commits (11 hits, all fake prototype status tokens); GitHub secret scanning and push protection on | Item 0 | Gate 0, R24 |
 | A Neon account and a Vercel production project; the user puts the database URLs in `.env.local` | Preview deploys (local dev and CI use plain Postgres) | D2 |
 | An Anthropic API key with a spend limit, plus a separate key for eval and development | US-03's live check (tests don't need it) | I1, D1, R7 |
 | Record the 2-minute demo; read the retro | End of Sprint 1 | — |
