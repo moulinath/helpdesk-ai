@@ -3,11 +3,11 @@
 Claude Code updates this file at the end of every session (`/log`). The user signs gates.
 
 **Current phase:** 4 — Build (Sprint 1)
-**Next step:** Merge PR #4 (`chore/ci-foundation`, CI green). Then decide on branch protection
-for `main` (required checks: "Typecheck, lint, test, build" and "Secret scan (gitleaks)"; no
-required approvals). Then `/story US-12`: start with the Auth.js v5 + Next.js 16 spike (R23);
-lowercase agent emails in the Zod schema (review C4). Local Postgres 17 runs via Homebrew;
-dev URL `postgresql://helpdesk:helpdesk@localhost:5432/helpdesk_dev` goes in `.env.local` (user).
+**Next step:** `/story US-12` (branch `story/US-12-agent-sign-in`): plan first; start with the
+Auth.js v5 + Next.js 16 spike (R23); lowercase agent emails in the Zod schema (review C4). `main` is
+protected: every change goes through a PR with both CI checks green. Local Postgres 17 runs via
+Homebrew; the user adds `DATABASE_URL=postgresql://helpdesk:helpdesk@localhost:5432/helpdesk_dev`
+to `.env.local`.
 **Blocked on:** nothing (Anthropic API key with a spend limit needed for US-03's live check, RAID I1/D1)
 
 | Phase | Status | Gate | Signed off by user |
@@ -16,7 +16,7 @@ dev URL `postgresql://helpdesk:helpdesk@localhost:5432/helpdesk_dev` goes in `.e
 | 1 Requirements | Done | Gate 1: MVP scope + stories with acceptance criteria | 2026-10-30, approved |
 | 2 UX design | Done | Gate 2: UX spec + prototype feedback applied | 2026-10-31, with risks R15–R17, R14, I2 |
 | 3 Architecture | Done | Gate 3: architecture + 5 ADRs reviewed | 2026-10-31, approved (3 decisions: all yes) |
-| 4 Build (Sprint 1) | In progress (sprint plan done; 1 of 6 items: CI in review) | Sprint 1 demo | — |
+| 4 Build (Sprint 1) | In progress (1 of 6 items done: CI, PR #4) | Sprint 1 demo | — |
 | 4 Build (Sprint 2) | Not started | Sprint 2 demo | — |
 | 5 Testing | Not started | Gate 5: exit criteria met | — |
 | 6 UAT | Not started | Gate 6: go / no-go | — |
@@ -42,6 +42,5 @@ dev URL `postgresql://helpdesk:helpdesk@localhost:5432/helpdesk_dev` goes in `.e
 - Book 4–6 UAT participants now (2-week target, RAID R11, D3). Run UAT moderated with think-aloud (R15).
 - Delete the Vercel project `helpdesk-ai-prototype` (Vercel dashboard → Settings → Delete), RAID R14.
 - Glance at the 4 Mermaid flows in `docs/02-design/ux-spec.md` on GitHub to confirm they render.
-- Merge PR #4 (foundation + CI); decide on branch protection for `main`.
 - Add `DATABASE_URL` for local dev to `.env.local` (line in PROGRESS "Next step").
 - Before US-03: confirm the Anthropic API key is created with a spend limit (RAID I1/D1).

@@ -254,3 +254,15 @@ and governed. Claude Code appends entries via `/log`; the user can edit them.
   - Proof that CI blocks broken code: a deliberate type error (`45d1e84`) failed the Typecheck step
     with TS2322; reverted in `6f01be2`.
 - **Standup:** done CI foundation / next: merge PR #4, branch protection, US-12 / blocked: nothing
+
+### 2026-10-31 · Phase 4 · PR #4 merged, `main` protected
+- **User asked:** merge PR #4, then protect `main`: both CI checks required, PRs only, no required
+  approvals, admins can bypass.
+- **Produced:** PR #4 merged (`f386a8c`) after CI was green on its final commit. Branch protection set
+  with `gh api` and read back: required checks "Typecheck, lint, test, build" and "Secret scan
+  (gitleaks)"; pull requests required, 0 approvals; not enforced for admins; no force pushes or
+  deletion of `main`.
+- **What went wrong / caught:** I asked before merging, because the user's message ("once PR #4 is
+  green and merged") didn't say who merges. Protection now applies to docs updates too, so this entry
+  went through its own PR.
+- **Standup:** done CI + protection / next: `/story US-12` / blocked: nothing
