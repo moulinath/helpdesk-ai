@@ -1,7 +1,6 @@
 import { fileURLToPath } from "node:url";
 
 import { config } from "dotenv";
-import tsconfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 
 // Like prisma.config.ts: read .env.local, but variables already set in the environment win.
@@ -17,8 +16,8 @@ if (!new URL(testDatabaseUrl).pathname.endsWith("_test")) {
 }
 
 export default defineConfig({
-  plugins: [tsconfigPaths()],
   resolve: {
+    tsconfigPaths: true,
     alias: {
       // `server-only` throws outside a React Server Components build; tests run plain Node.
       "server-only": fileURLToPath(new URL("./tests/support/empty.ts", import.meta.url)),
@@ -40,6 +39,8 @@ export default defineConfig({
           environment: "jsdom",
           include: ["src/**/*.test.{ts,tsx}"],
           setupFiles: ["tests/support/setup-unit.ts"],
+          // Modules that import the db client can load; unit tests never connect.
+          env: { DATABASE_URL: "postgresql://unit-tests-never-connect@localhost:1/none" },
         },
       },
       {
@@ -48,7 +49,12 @@ export default defineConfig({
           name: "integration",
           environment: "node",
           include: ["tests/integration/**/*.test.ts"],
-          env: { DATABASE_URL: testDatabaseUrl },
+          env: {
+            DATABASE_URL: testDatabaseUrl,
+            // Throwaway test values, not secrets.
+            AUTH_SECRET: "integration-test-auth-secret-0123456789abcdef",
+            RATE_LIMIT_SECRET: "integration-test-rate-limit-secret-0123456789",
+          },
           // Tests share one database, so files run one at a time.
           fileParallelism: false,
         },
