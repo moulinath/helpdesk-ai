@@ -205,3 +205,15 @@ and governed. Claude Code appends entries via `/log`; the user can edit them.
   the sort, so a flagged Normal ticket still sits low in the queue; if UAT shows agents miss it, sorting
   flagged tickets with High is a candidate change (needs the user's call).
 - **Standup:** done Gate 3 / next: merge PR #2, sprint plan, CI / blocked: nothing
+
+### 2026-10-31 · Phase 4 · Sprint plan
+- **User asked:** `/next` → the sprint plan; approved the plan as proposed. Mid-turn: "repo can be
+  public with any required scan etc".
+- **Produced:** `docs/04-delivery/sprint-plan.md` (Sprint 1 order: CI, US-12, US-01, US-02, US-09,
+  US-03; Definition of Done; demo script; burndown; user dependencies); `retros.md` template;
+  PROGRESS story board with branch names.
+- **Human changes / corrections:** none to the plan. The user decided the repo goes public.
+- **What went wrong / caught:** my plan said branch protection on private repos needs a paid plan
+  and that GitHub Free gives ~2,000 private Actions minutes; both from memory, so labelled assumed.
+- **Standup:** done sprint plan / next: secret scan, repo public, then item 0 Foundation + CI /
+  blocked: nothing
