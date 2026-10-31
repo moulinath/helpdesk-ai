@@ -47,6 +47,6 @@
 | ID | Dependency | Needed by | Status |
 | --- | --- | --- | --- |
 | D1 | Anthropic API key with spend limit | Phase 4 | Deferred to Phase 4 (see I1) |
-| D2 | Vercel + Postgres accounts | Phase 4 | Open |
+| D2 | Vercel + Postgres accounts | Phase 4 | Partly met 2026-10-31: Neon account and database created. Still needed: Vercel production project, with Neon's pooled URL as `DATABASE_URL` and direct URL as `DIRECT_URL` in Vercel env vars (not `.env.local`) |
 | D3 | 4–6 UAT participants | Phase 6 | Open. UAT script must ask agents whether S6 feels busy and which parts (prototype review F2) |
 | D4 | 2 prototype reviewers, 10 min each | Gate 2 | Closed 2026-10-31 (an online shopper and a support agent; unmoderated) |

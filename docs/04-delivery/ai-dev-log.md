@@ -266,3 +266,7 @@ and governed. Claude Code appends entries via `/log`; the user can edit them.
   green and merged") didn't say who merges. Protection now applies to docs updates too, so this entry
   went through its own PR.
 - **Standup:** done CI + protection / next: `/story US-12` / blocked: nothing
+- **Later the same session:** the user pasted their `.env.local` into chat. I flagged that the
+  `AUTH_SECRET` in it is now exposed and should be regenerated (`npx auth secret`), that it held two
+  `DATABASE_URL` lines (local and Neon), and that Neon's URLs belong in Vercel's env vars. I didn't
+  repeat the secret anywhere. RAID D2 partly met (Neon exists).
