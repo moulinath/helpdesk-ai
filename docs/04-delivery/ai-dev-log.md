@@ -302,3 +302,28 @@ and governed. Claude Code appends entries via `/log`; the user can edit them.
     items, 7 were applied; a redirect away from sign-in when already signed in, and sign-in event
     logging, are left for later.
 - **Standup:** done US-12 / next: merge it, then US-01 / blocked: nothing
+
+### 2026-11-01 · Process change · Delivery-manager role made explicit
+- **User asked:** to change how we work from now on. The user is the delivery manager and owns scope,
+  priorities, gate decisions, "good enough" criteria, the people work (interviews, UAT) and the RAID
+  log; doesn't write code, design architecture or write tests, but needs them in plain English.
+- **Produced:**
+  - CLAUDE.md "My role": Claude Code proposes options with a recommendation but leaves those decisions
+    to the user, explains technical work in plain English, records every rejected or changed proposal,
+    and asks before adding a risk to RAID.
+  - `/gate` now asks for the user's own 3–5-line view **before** showing the pack, saves it in the gate
+    file under "PM view (written before reading Claude's pack)", and adds "Where my view and Claude's
+    differed".
+  - `docs/04-delivery/decision-log.md`, back-filled with 7 rows from this log.
+  - `/walkthrough` and `docs/04-delivery/walkthroughs.md`; added as the last step of each sprint in
+    PLAYBOOK.
+  - A reminder (PLAYBOOK Phase 4, `/eval`) that the user writes about 5 of the trickiest eval tickets,
+    marked `"author": "PM"` and reported separately.
+- **Human changes / corrections:** this whole entry is the user's change to the process.
+- **What went wrong / caught:** my first back-fill of the decision log had 11 rows. On re-checking
+  against this log, 4 stated what I had proposed when the log doesn't record it (for example "a public
+  repo" at Gate 0), or weren't rejections at all. I cut them to the 7 the record supports; where the
+  original figure wasn't recorded, the row says so. "Ask before adding a risk to RAID" is my reading of
+  "I own the RAID log", flagged to the user.
+- **Standup:** done process change / next: retrospective gate views, then `/walkthrough`, then US-02 /
+  blocked: the user's retrospective views

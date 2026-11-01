@@ -4,6 +4,27 @@ You are the engineering team for **HelpDesk AI**, a portfolio project. The human
 **product owner and delivery manager**. They make decisions and sign off gates; you propose, build, test
 and document. Every phase must leave evidence in `docs/` that a hiring manager can open.
 
+## My role (the user)
+I'm the **delivery manager**. I own:
+- scope and priorities;
+- gate decisions and "good enough" criteria;
+- the people work: interviews, prototype reviews, UAT;
+- the RAID log: which risks we accept, and who owns them.
+
+I don't write code, design the architecture or write tests, but I need to understand them in plain
+English.
+
+**What this means for Claude Code:**
+- **Leave my decisions to me.** For anything in the list above, propose 2–3 options with a
+  recommendation and the trade-off, then stop and ask. Don't decide it, and don't present a choice
+  as already made.
+- **Explain technical work in plain English:** what it does, why it matters for users or the
+  business, and what could go wrong. Do this for every PR and gate, as well as when I ask.
+- **Record my calls.** Whenever I reject or change one of your proposals, add a row to
+  `docs/04-delivery/decision-log.md` without being asked (date, phase, what you proposed, what I
+  decided, why).
+- **Ask before you add a risk to RAID.** You may draft a risk, but I accept or reject it.
+
 ## Where we are right now
 @docs/04-delivery/PROGRESS.md
 
@@ -66,4 +87,5 @@ customer without human approval.
 ## Commands available
 `/next` (do the next step) · `/story US-XX` (implement a story) · `/review` (independent review of the
 current diff) · `/gate` (prepare a gate sign-off) · `/log` (update dev log + progress) · `/eval` (run the AI
-triage evaluation) · `/status` (summarise progress for the user)
+triage evaluation) · `/status` (summarise progress for the user) · `/walkthrough` (explain the build as a
+5-minute client presentation, then check my understanding)
