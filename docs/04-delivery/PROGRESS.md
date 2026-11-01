@@ -3,10 +3,11 @@
 Claude Code updates this file at the end of every session (`/log`). The user signs gates.
 
 **Current phase:** 4 — Build (Sprint 1)
-**Next step:** Review and merge the US-12 PR (`story/US-12-agent-sign-in`). Then `/story US-01`
-(submit ticket): reuse `src/lib/rate-limit.ts` (5 per 10 min per IP) and `src/lib/env.ts`; register
-`after()` before `redirect()` (architecture §4.1). The user adds `RATE_LIMIT_SECRET`
-(`openssl rand -hex 32`) to `.env.local` and regenerates `AUTH_SECRET` (`npx auth secret`).
+**Next step:** Review and merge the US-01 PR (`story/US-01-submit-ticket`). Then `/story US-02`:
+finish S2 on `/t/[token]?new=1` (private link + Copy, warning, "What happens next"); a real 404
+for bad tokens (today `notFound()` inside Suspense returns HTTP 200); `Referrer-Policy:
+no-referrer` on `/t/*` (US-01 review C14). For US-09: catch errors inside the `after()` triage
+callback so a failure always ends in "Needs triage" (US-01 review C15).
 **Blocked on:** nothing (Anthropic API key with a spend limit needed for US-03's live check, RAID I1/D1)
 
 | Phase | Status | Gate | Signed off by user |
@@ -15,7 +16,7 @@ Claude Code updates this file at the end of every session (`/log`). The user sig
 | 1 Requirements | Done | Gate 1: MVP scope + stories with acceptance criteria | 2026-10-30, approved |
 | 2 UX design | Done | Gate 2: UX spec + prototype feedback applied | 2026-10-31, with risks R15–R17, R14, I2 |
 | 3 Architecture | Done | Gate 3: architecture + 5 ADRs reviewed | 2026-10-31, approved (3 decisions: all yes) |
-| 4 Build (Sprint 1) | In progress (1 of 6 items done: CI; US-12 in review) | Sprint 1 demo | — |
+| 4 Build (Sprint 1) | In progress (2 of 6 items done: CI, US-12; US-01 in review) | Sprint 1 demo | — |
 | 4 Build (Sprint 2) | Not started | Sprint 2 demo | — |
 | 5 Testing | Not started | Gate 5: exit criteria met | — |
 | 6 UAT | Not started | Gate 6: go / no-go | — |
@@ -24,7 +25,7 @@ Claude Code updates this file at the end of every session (`/log`). The user sig
 ## Story board (Phase 4)
 | Story | Status | Branch / PR |
 | --- | --- | --- |
-| US-01 Submit ticket | Sprint 1, planned | `story/US-01-submit-ticket` |
+| US-01 Submit ticket | In review (minimal landing page; S2 completed by US-02) | `story/US-01-submit-ticket` |
 | US-02 Confirmation + status link | Sprint 1, planned | `story/US-02-status-link` |
 | US-03 AI triage | Sprint 1, planned | `story/US-03-ai-triage` |
 | US-04 AI draft reply (FAQ-grounded) | Not started | |
@@ -35,7 +36,7 @@ Claude Code updates this file at the end of every session (`/log`). The user sig
 | US-09 AI fallback "Needs triage" | Sprint 1, planned | `story/US-09-ai-fallback` |
 | US-10 Customer rates reply (Should, promoted at interview) | Not started | |
 | US-11 Ask the knowledge base, agent-only (Could) | Not started | |
-| US-12 Agent sign-in (Must, added at Gate 1) | In review (AC2's "identity recorded on approvals" is delivered by US-06) | `story/US-12-agent-sign-in` |
+| US-12 Agent sign-in (Must, added at Gate 1) | Done, PR #6 (AC2's "identity recorded on approvals" is delivered by US-06) | `story/US-12-agent-sign-in` |
 
 ## Open decisions for the user
 - Book 4–6 UAT participants now (2-week target, RAID R11, D3). Run UAT moderated with think-aloud (R15).

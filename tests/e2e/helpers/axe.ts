@@ -10,7 +10,9 @@ export async function expectNoSeriousViolations(page: Page): Promise<void> {
     (v) => v.impact === "serious" || v.impact === "critical",
   );
   expect(
-    serious.map((v) => `${v.id}: ${v.help} (${v.nodes.length} element(s))`),
+    serious.map(
+      (v) => `${v.id}: ${v.help} — ${v.nodes.map((node) => node.target.join(" ")).join(", ")}`,
+    ),
     "serious or critical axe violations",
   ).toEqual([]);
 }

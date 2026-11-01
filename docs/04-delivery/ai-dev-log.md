@@ -302,3 +302,34 @@ and governed. Claude Code appends entries via `/log`; the user can edit them.
     items, 7 were applied; a redirect away from sign-in when already signed in, and sign-in event
     logging, are left for later.
 - **Standup:** done US-12 / next: merge it, then US-01 / blocked: nothing
+
+### 2026-11-01 · Phase 4 · US-01 Submit ticket
+- **User asked:** turn on Auto-fix for PR #6, merge it, then `/story US-01`; approved the plan.
+- **Produced:** S1 at `/` (Larkfield Goods shell, form with browser-side checks, error summary in a
+  live region, focus to the first problem, input kept on every error), `submitTicket` Server Action
+  (Zod, honeypot, 5 per 10 min per HMAC(IP), save as Received/pending, `after()` registered before
+  `redirect()`), 128-bit status token stored as SHA-256, a minimal `/t/[token]?new=1` landing page,
+  a no-op `startTriage` for US-09/US-03. 58 Vitest + 13 Playwright tests.
+- **Human changes / corrections:** none to the plan.
+- **What went wrong / caught:**
+  - **The red error alerts failed WCAG contrast** (description text at 90% opacity, just under
+    4.5:1). The Phase 2 prototype used the same component, so its error states probably had the
+    same problem; its axe checks looked only at default states. Fixed in the shared Alert.
+  - A bad status token returns HTTP 200 (Next's 404 UI inside Suspense); left for US-02's AC3.
+  - **The `code-reviewer` subagent found 1 Must-fix in my first version:** a network failure
+    (offline, a deploy mid-request) made React throw during render, showing Next's "Application
+    error" and losing everything the customer typed. Fixed with a client wrapper that rethrows only
+    Next's redirect. I checked that the new test fails with the fix removed.
+  - It also found 9 Should-fix, all fixed:
+    - a submit before JavaScript loaded would put name and email in the URL (now `method="post"`);
+    - a fast double click could create two tickets (now a synchronous in-flight flag; tested);
+    - honeypot hits weren't logged;
+    - a failed save used up the customer's quota;
+    - the counter could say "-37 characters left";
+    - stale server errors showed while a new submit was pending;
+    - my AC4 test passed with any limit (now asserts exactly 5 saved);
+    - missing tests for the network error and the live region;
+    - a lint warning I'd dismissed.
+  - Of 5 Consider items, 3 were applied (summary re-announced per attempt, Try again moved out of the
+    live region, NUL characters stripped). 2 are recorded in PROGRESS for US-02 and US-09.
+- **Standup:** done US-01 / next: merge it, then US-02 / blocked: nothing
