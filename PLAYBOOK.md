@@ -95,10 +95,14 @@ Use plan mode.
 4. AI feature: Anthropic TypeScript SDK with tool use / structured output forcing a JSON schema; a small
    FAQ file (`src/ai/faq.md`, 10–15 Q&As for a fictional retailer) as context for drafts. Create
    `tests/fixtures/tickets.json` with 25–30 sample tickets and expected labels (include urgent and tricky
-   cases).
+   cases). **Before writing the set, remind the user to write about 5 of the trickiest tickets
+   themselves**, with the labels they expect. Mark each one `"author": "PM"` (Claude Code's are
+   `"author": "Claude Code"`), and report PM-authored results separately in `/eval`.
 5. Delivery hygiene: one-line standup notes in the dev log, story-count burndown in `PROGRESS.md`, remind
    the user to record a 2-minute demo at the end of each sprint, write a short retro after each sprint in
    `docs/04-delivery/retros.md`.
+6. **Last step of each sprint: `/walkthrough`.** Claude Code explains the build as a 5-minute client
+   presentation and asks the user 3 questions; the answers go in `docs/04-delivery/walkthroughs.md`.
 
 **Gate 4:** both sprint demos done; all Must stories merged with green CI.
 

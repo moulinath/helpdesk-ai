@@ -38,6 +38,11 @@ Claude Code updates this file at the end of every session (`/log`). The user sig
 | US-12 Agent sign-in (Must, added at Gate 1) | In review (AC2's "identity recorded on approvals" is delivered by US-06) | `story/US-12-agent-sign-in` |
 
 ## Open decisions for the user
+- **Catch-up (process change 2026-11-01):** write a short retrospective view for each signed gate
+  (0–3), saved in each gate file as "written retrospectively on 2026-11-01"; then answer the 3
+  `/walkthrough` questions.
+- **Before US-03's eval set:** write about 5 of the trickiest tickets yourself, with the labels you
+  expect. They're marked `"author": "PM"` in `tests/fixtures/tickets.json`.
 - Book 4–6 UAT participants now (2-week target, RAID R11, D3). Run UAT moderated with think-aloud (R15).
 - Delete the Vercel project `helpdesk-ai-prototype` (Vercel dashboard → Settings → Delete), RAID R14.
 - Glance at the 4 Mermaid flows in `docs/02-design/ux-spec.md` on GitHub to confirm they render.
