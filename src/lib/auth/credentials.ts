@@ -60,9 +60,3 @@ export async function checkCredentials(raw: unknown, ip: string): Promise<Creden
   await clearRateLimit(SIGN_IN_LIMIT, [ip, email]);
   return { ok: true, agent: { id: agent.id, name: agent.name, email: agent.email, role: agent.role } };
 }
-
-/** First address in X-Forwarded-For (set by Vercel), else "unknown". */
-export function clientIp(headers: Headers): string {
-  const forwarded = headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-  return forwarded || headers.get("x-real-ip") || "unknown";
-}

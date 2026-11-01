@@ -2,7 +2,8 @@ import NextAuth, { CredentialsSignin, type DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 import type { AgentRole } from "@/generated/prisma/client";
-import { checkCredentials, clientIp } from "@/lib/auth/credentials";
+import { checkCredentials } from "@/lib/auth/credentials";
+import { clientIp } from "@/lib/client-ip";
 import { nextToken, SESSION_MAX_AGE_MS, type AgentToken } from "@/lib/auth/session";
 
 declare module "next-auth" {
