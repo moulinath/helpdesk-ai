@@ -25,6 +25,13 @@ describe("TicketInputSchema (US-01 AC1)", () => {
   });
 });
 
+describe("NUL characters (review C13)", () => {
+  it("are stripped before checking and saving, since Postgres rejects them", () => {
+    const parsed = TicketInputSchema.parse({ ...VALID, description: `${VALID.description}\u0000` });
+    expect(parsed.description).toBe(VALID.description);
+  });
+});
+
 describe("ticketFieldErrors (US-01 AC2)", () => {
   it("returns no errors for valid input", () => {
     expect(ticketFieldErrors(VALID)).toEqual({});

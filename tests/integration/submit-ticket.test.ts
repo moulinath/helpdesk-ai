@@ -24,7 +24,9 @@ vi.mock("next/navigation", () => ({
 vi.mock("next/headers", () => ({
   headers: async () => new Headers({ "x-forwarded-for": calls.ip }),
 }));
-const triage = vi.hoisted(() => ({ startTriage: vi.fn(async (_ticketId: string) => undefined) }));
+const triage = vi.hoisted(() => ({
+  startTriage: vi.fn<(ticketId: string) => Promise<void>>(async () => undefined),
+}));
 vi.mock("@/ai/triage", () => triage);
 
 const { submitTicket } = await import("@/app/(customer)/actions");
@@ -105,7 +107,7 @@ describe("US-01 submitTicket", () => {
   });
 
   it("saves nothing when the honeypot field is filled", async () => {
-    const { state } = await submit({ ...VALID, website: "http://spam.example" });
+    const { state } = await submit({ ...VALID, hd_extra: "http://spam.example" });
     expect(state?.status).toBe("server");
     expect(await db.ticket.count()).toBe(0);
   });
@@ -119,6 +121,15 @@ describe("US-01 submitTicket", () => {
     expect(await db.ticket.count()).toBe(5);
 
     calls.ip = "198.51.100.2";
+    expect((await submit(VALID)).token).toBeDefined();
+  });
+
+  it("a failed save doesn't use up the customer's quota (review S5)", async () => {
+    const spy = vi.spyOn(db.ticket, "create").mockRejectedValue(new Error("connection refused"));
+    for (let n = 1; n <= 6; n++) {
+      expect((await submit(VALID)).state?.status).toBe("server");
+    }
+    spy.mockRestore();
     expect((await submit(VALID)).token).toBeDefined();
   });
 });

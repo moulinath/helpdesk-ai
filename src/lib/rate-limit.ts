@@ -54,3 +54,16 @@ export async function clearRateLimit(
   const key = rateLimitKey(rule.bucket, parts, serverEnv().RATE_LIMIT_SECRET);
   await db.rateLimit.deleteMany({ where: { key, windowStart: windowStart(now, rule.windowMs) } });
 }
+
+/** Gives back one attempt, e.g. when the work it counted for failed on our side. */
+export async function releaseRateLimit(
+  rule: RateLimitRule,
+  parts: readonly string[],
+  now: Date = new Date(),
+): Promise<void> {
+  const key = rateLimitKey(rule.bucket, parts, serverEnv().RATE_LIMIT_SECRET);
+  await db.rateLimit.updateMany({
+    where: { key, windowStart: windowStart(now, rule.windowMs), count: { gt: 0 } },
+    data: { count: { decrement: 1 } },
+  });
+}

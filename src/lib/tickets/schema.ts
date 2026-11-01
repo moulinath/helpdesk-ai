@@ -3,30 +3,41 @@ import { z } from "zod";
 // US-01 AC1 limits and the ux-spec §3 S1 / §5 microcopy. Shared by the form and the Server Action.
 export const DESCRIPTION_MAX = 5000;
 
+// Postgres rejects NUL characters in text, which would fail every retry with a generic error.
+const withoutNul = z.string().transform((value) => value.replaceAll("\u0000", ""));
+
 export const TicketInputSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, { error: "Please enter your name." })
-    .max(100, { error: "Please keep your name to 100 characters or fewer." }),
-  email: z
-    .string()
-    .trim()
-    .min(1, { error: "Please enter your email." })
-    .max(254, { error: "Please enter an email address like name@example.com." })
-    .pipe(z.email({ error: "Please enter an email address like name@example.com." })),
-  subject: z
-    .string()
-    .trim()
-    .min(1, { error: "Please enter your subject." })
-    .min(5, { error: "Please make the subject a little longer (at least 5 characters)." })
-    .max(120, { error: "Please keep the subject to 120 characters or fewer." }),
-  description: z
-    .string()
-    .trim()
-    .min(1, { error: "Please enter your description." })
-    .min(20, { error: "Please add a bit more detail (at least 20 characters)." })
-    .max(DESCRIPTION_MAX, { error: "Please keep the description to 5,000 characters or fewer." }),
+  name: withoutNul.pipe(
+    z
+      .string()
+      .trim()
+      .min(1, { error: "Please enter your name." })
+      .max(100, { error: "Please keep your name to 100 characters or fewer." }),
+  ),
+  email: withoutNul.pipe(
+    z
+      .string()
+      .trim()
+      .min(1, { error: "Please enter your email." })
+      .max(254, { error: "Please enter an email address like name@example.com." })
+      .pipe(z.email({ error: "Please enter an email address like name@example.com." })),
+  ),
+  subject: withoutNul.pipe(
+    z
+      .string()
+      .trim()
+      .min(1, { error: "Please enter your subject." })
+      .min(5, { error: "Please make the subject a little longer (at least 5 characters)." })
+      .max(120, { error: "Please keep the subject to 120 characters or fewer." }),
+  ),
+  description: withoutNul.pipe(
+    z
+      .string()
+      .trim()
+      .min(1, { error: "Please enter your description." })
+      .min(20, { error: "Please add a bit more detail (at least 20 characters)." })
+      .max(DESCRIPTION_MAX, { error: "Please keep the description to 5,000 characters or fewer." }),
+  ),
 });
 
 export type TicketInput = z.infer<typeof TicketInputSchema>;
@@ -57,4 +68,5 @@ export function ticketFieldErrors(values: unknown): TicketFieldErrors {
 }
 
 /** Hidden field real people never see or fill; bots often do (architecture §4.1). */
-export const HONEYPOT_FIELD = "website";
+// Deliberately meaningless, so autofill and password managers leave it alone (review).
+export const HONEYPOT_FIELD = "hd_extra";

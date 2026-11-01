@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 import { expectNoSeriousViolations } from "./helpers/axe";
+import { clearRateLimits, countTickets } from "./helpers/db";
 
 const VALID = {
   name: "Sofia Marin",
@@ -37,7 +38,11 @@ test.describe("US-01 submit ticket", () => {
     await page.getByLabel("Subject (required)").fill("Help");
     await page.getByRole("button", { name: "Submit request" }).click();
 
-    await expect(page.getByText("Please fix 4 problems before sending")).toBeVisible();
+    // The summary is inside the assertive live region, so screen readers announce it.
+    await expect(
+      page.getByTestId("form-messages").getByText("Please fix 4 problems before sending"),
+    ).toBeVisible();
+    await expect(page.getByTestId("form-messages")).toHaveAttribute("aria-live", "assertive");
     await expect(page.getByLabel("Name (required)")).toBeFocused();
     await expect(page.getByLabel("Email (required)")).toHaveAttribute("aria-invalid", "true");
     await expect(page.getByLabel("Email (required)")).toHaveAccessibleDescription(
@@ -69,23 +74,53 @@ test.describe("US-01 submit ticket", () => {
     await expect(page).toHaveURL(/\/t\/[A-Za-z0-9_-]{22}\?new=1$/);
   });
 
-  test("AC4: past the rate limit, a friendly message shows and the input is kept", async ({ page }) => {
-    // Earlier tests in this file used some of this address's 5 submissions; reset-db cleared the rest.
-    for (let attempt = 0; attempt < 6; attempt++) {
+  test("AC4: the 6th ticket in 10 minutes is refused with a friendly message, input kept", async ({
+    page,
+  }) => {
+    clearRateLimits();
+    const subject = `Rate limit check ${Date.now()}`;
+    for (let attempt = 1; attempt <= 5; attempt++) {
       await page.goto("/");
-      await fill(page, VALID);
+      await fill(page, { ...VALID, subject });
       await page.getByRole("button", { name: "Submit request" }).click();
-      const limited = page.getByText(
-        "You've sent several requests in a short time. Please try again in a few minutes.",
-      );
-      const landed = page.getByRole("heading", { level: 1, name: "Thanks, we've got your request" });
-      await expect(limited.or(landed)).toBeVisible();
-      if (await limited.isVisible()) {
-        await expect(page.getByLabel("Subject (required)")).toHaveValue(VALID.subject);
-        await expectNoSeriousViolations(page);
-        return;
-      }
+      await expect(page.getByRole("heading", { level: 1, name: "Thanks, we've got your request" })).toBeVisible();
     }
-    throw new Error("the rate limit never applied");
+    await page.goto("/");
+    await fill(page, { ...VALID, subject });
+    await page.getByRole("button", { name: "Submit request" }).click();
+    await expect(
+      page.getByText("You've sent several requests in a short time. Please try again in a few minutes."),
+    ).toBeVisible();
+    await expect(page.getByLabel("Subject (required)")).toHaveValue(subject);
+    expect(countTickets(subject)).toBe(5);
+    await expectNoSeriousViolations(page);
+    clearRateLimits();
+  });
+
+  test("S1: a network failure shows the server error and keeps the input (review M1)", async ({ page }) => {
+    await page.goto("/");
+    await fill(page, VALID);
+    // Fail the Server Action's POST as if the connection dropped.
+    await page.route("**/*", (route) =>
+      route.request().method() === "POST" ? route.abort("internetdisconnected") : route.continue(),
+    );
+    await page.getByRole("button", { name: "Submit request" }).click();
+    await expect(page.getByText("We couldn't send your request. Please try again.")).toBeVisible();
+    await expect(page.getByLabel("Description (required)")).toHaveValue(VALID.description);
+    await expect(page.getByRole("button", { name: "Try again" })).toBeVisible();
+    await expectNoSeriousViolations(page);
+
+    await page.unroute("**/*");
+    await page.getByRole("button", { name: "Try again" }).click();
+    await expect(page).toHaveURL(/\/t\/[A-Za-z0-9_-]{22}\?new=1$/);
+  });
+
+  test("a double click sends one ticket, not two (review S3)", async ({ page }) => {
+    const subject = `Double click check ${Date.now()}`;
+    await page.goto("/");
+    await fill(page, { ...VALID, subject });
+    await page.getByRole("button", { name: "Submit request" }).dblclick();
+    await expect(page).toHaveURL(/\/t\/[A-Za-z0-9_-]{22}\?new=1$/);
+    expect(countTickets(subject)).toBe(1);
   });
 });
