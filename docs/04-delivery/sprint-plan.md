@@ -52,6 +52,7 @@ Sprint 2's order is planned at the Sprint 1 retro.
 | --- | --- | --- | --- | --- |
 | 1 | 0 | 0 | 6 | Plan written |
 | 1 | 0 | 1 | 5 | Item 0 (CI) merged, PR #4; `main` protected |
+| 1 | 1 | 1 | 5 | US-12 in review; Auth.js spike passed (R23 closed) |
 
 ## 6. What the user provides, and by when
 | What | Needed before | RAID |

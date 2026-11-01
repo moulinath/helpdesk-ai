@@ -38,6 +38,10 @@ jobs:
       # Throwaway CI database in the service container above: not a secret.
       DATABASE_URL: postgresql://helpdesk:helpdesk@localhost:5432/helpdesk_test
       DATABASE_URL_TEST: postgresql://helpdesk:helpdesk@localhost:5432/helpdesk_test
+      # Throwaway values for the test server only: not the production secrets.
+      AUTH_SECRET: ci-only-auth-secret-not-used-anywhere-else-0123456789
+      RATE_LIMIT_SECRET: ci-only-rate-limit-secret-not-used-anywhere-else-01
+      AUTH_TRUST_HOST: "true"
       NEXT_TELEMETRY_DISABLED: "1"
 
     steps:

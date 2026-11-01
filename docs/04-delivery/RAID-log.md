@@ -25,8 +25,9 @@
 | R20 | Cold starts (Neon wake-up + function start) push submit over NFR-01's 1 s p95 | M | M | Measure warm and cold separately in Phase 5; report both; customer still sees the reference with no AI wait | Claude Code | Open |
 | R21 | Status-link paths (with tokens) appear in Vercel's own request logs | M | L | Accepted. Owner-only, short-lived; Sentry and Analytics scrub `/t/<token>` (architecture §7.4) | User | Accepted |
 | R22 | A triage killed mid-call isn't retried; Neon and Vercel are single points of failure | L | L | Accepted for demo volume. Sweep moves stuck tickets to "Needs triage" within 2 min; queue service is the upgrade path (ADR 0004) | Claude Code | Accepted |
-| R23 | Auth.js v5 doesn't work cleanly with Next.js 16 | M | M | Spike at the start of US-12; fall back to a minimal signed-cookie session if blocked (new ADR) | Claude Code | Open |
+| R23 | Auth.js v5 doesn't work cleanly with Next.js 16 | M | M | Spike at the start of US-12; fall back to a minimal signed-cookie session if blocked (new ADR) | Claude Code | Closed 2026-10-31: spike passed. next-auth 5.0.0-beta.32 (pinned) works with Next 16.4 + Cache Components: Credentials sign-in, `auth()` inside Suspense (after `connection()`), `proxy.ts`, sign-out, production build. Still a beta: re-check on upgrade |
 | R24 | The owner's personal email is visible in public commit history (more spam, targeted phishing) | M | L | Accepted by the user 2026-10-31. Rewriting history wouldn't remove it (PR refs keep the old commits). New commits use the GitHub noreply address; the user turns on "Keep my email private" and "Block command line pushes that expose my email" | User | Accepted |
+| R25 | The sign-in rate limit keys on the X-Forwarded-For address. Vercel overwrites that header, but behind any other host a client could set it and get fresh limits | L | M | Accepted for the Vercel demo only. Behind another host the limit could be bypassed entirely (each spoofed address is a fresh key), so changing host means keying on a trusted address or adding a per-email limit | Claude Code | Accepted |
 
 ## Assumptions
 | ID | Assumption | Validated? |

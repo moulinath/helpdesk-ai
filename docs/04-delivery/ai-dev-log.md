@@ -270,3 +270,35 @@ and governed. Claude Code appends entries via `/log`; the user can edit them.
   `AUTH_SECRET` in it is now exposed and should be regenerated (`npx auth secret`), that it held two
   `DATABASE_URL` lines (local and Neon), and that Neon's URLs belong in Vercel's env vars. I didn't
   repeat the secret anywhere. RAID D2 partly met (Neon exists).
+
+### 2026-10-31 · Phase 4 · US-12 Agent sign-in
+- **User asked:** merge PR #5, then `/story US-12`; approved the plan.
+- **Produced:** Auth.js v5 (5.0.0-beta.32, pinned) Credentials sign-in with Argon2id, an absolute
+  8-hour JWT session, `proxy.ts` first check, page/API guards that re-read the agent from the
+  database, S4 sign-in page, placeholder queue and dashboard, a real HTTP 403 for agents on the
+  dashboard, `/api/agent/me`, idempotent demo seed, `src/lib/env.ts` (Zod) and a shared
+  `src/lib/rate-limit.ts` (HMAC keys, atomic upsert). 42 Vitest + 8 Playwright tests. RAID R23
+  closed (spike passed), R25 added.
+- **Human changes / corrections:** none to the plan. The user pasted their `.env.local` into chat
+  earlier; I asked them to regenerate `AUTH_SECRET`.
+- **What went wrong / caught:**
+  - With Cache Components, `forbidden()` inside Suspense rendered the 403 page with HTTP 200, and
+    Next ignores a status on rewrites. `proxy.ts` now serves the static `/no-access` page with 403,
+    falling back to inline HTML if that fetch fails.
+  - Auth.js calls `crypto.getRandomValues()` before reading cookies, which Next refuses while
+    prerendering; fixed with `await connection()` first.
+  - **My first rate limit counted successful sign-ins too**, so honest users could lock themselves
+    out; a success now clears the per-email count.
+  - **My first RAID R25 wording claimed the email in the key still limited a spoofed-address
+    attacker.** It doesn't; corrected before committing.
+  - **The `code-reviewer` subagent found 4 Must-fix items in my first version, all real:**
+    1. Auth.js re-signs the JWT on every read, so my "8-hour session" never expired while in use.
+    2. Nothing tested the rate-limit message end to end.
+    3. A repeated error wasn't re-announced to screen readers.
+    4. Database or configuration faults showed "Email or password is incorrect."
+
+    Also 5 Should-fix (fragile 403 fetch, guards untested without the proxy, a cold-start timing
+    gap, focus lost while submitting, AC2's deferred half not recorded), all fixed. Of 9 Consider
+    items, 7 were applied; a redirect away from sign-in when already signed in, and sign-in event
+    logging, are left for later.
+- **Standup:** done US-12 / next: merge it, then US-01 / blocked: nothing
